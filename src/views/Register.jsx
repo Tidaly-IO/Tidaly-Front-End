@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import logo from '../assets/LogoTidaly.png';
 import axios from 'axios';
+import '../App.css';
 
 const instance = axios.create({
     baseURL: 'http://localhost:3333/api/v1',

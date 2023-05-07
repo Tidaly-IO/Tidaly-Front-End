@@ -6,21 +6,23 @@ import { AccountSetup } from './views/AccountSetup';
 import { WaterMeterSetup } from './views/WaterMeterSetup';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import SensorDetails from "./views/SensorDetails.jsx";
+import { HomePage } from "./views/HomePage.jsx";
 
 
 function App() {
 
   return (
     <div className="App">
-    <Router>
+      <Router>
         <Routes>
           <Route exact path="/" element={<Login/>}/>
           <Route exact path="/Register" element={<Register/>}/>
           <Route exact path="/AccountSetup" element={<AccountSetup/>}/>
           <Route exact path="/WaterMeterSetup" element={<WaterMeterSetup/>}/>
           <Route exact path="/SensorDetails" element={<SensorDetails />} />
+          <Route exact path="/HomePage" element={<HomePage />} />
         </Routes>
-    </Router>
+      </Router>
     </div>
   );
 }
