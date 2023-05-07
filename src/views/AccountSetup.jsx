@@ -7,6 +7,7 @@ export const AccountSetup = () => {
     const [sexe, setSexe] = useState("");
     const [adresse, setAdresse] = useState("");
     const [pays, setPays] = useState("");
+    const [isValid, setIsValid] = useState(false);
 
     useEffect(() => {
         const firstNameStorage = localStorage.getItem('firstName');
@@ -35,6 +36,12 @@ export const AccountSetup = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(name, firstName);
+        if (!name || !firstName || !sexe || !adresse || !pays) {
+            alert("S'il vous plaît, remplissez tous les champs obligatoires.");
+            return;
+        } else {
+            setIsValid(true);
+        }
     }
 
     const handleFirstNameChange = (e) => {
@@ -83,10 +90,13 @@ export const AccountSetup = () => {
 
                 <label htmlFor="pays">Pays</label>
                 <input className="inputClass" value={pays} onChange={handleCountryChange} type="text" placeholder="Votre pays" id="pays" name="pays"/>
-
-                <Link to="/WaterMeterSetup">
+                {isValid ? (
+                    <Link to="/WaterMeterSetup">
+                        <button className="btn-register" type="submit">Continuer</button>
+                    </Link>
+                ) : (
                     <button className="btn-register" type="submit">Continuer</button>
-                </Link>
+                )}
             </form>
         </div>
     )

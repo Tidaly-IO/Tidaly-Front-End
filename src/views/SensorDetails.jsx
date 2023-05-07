@@ -6,11 +6,11 @@ function SensorDetails() {
 
   const getSquareColor = (type) => {
     if (type === "Toilette") {
-      return "red";
+      return "rgba(255, 0, 0, 0.5)";
     } else if (type === "Douche") {
-      return "yellow";
+      return "rgba(255, 255, 0, 0.5)";
     } else if (type === "Robinet") {
-      return "blue";
+      return "rgba(0, 0, 255, 0.5)";
     } else {
       return "#ccc";
     }
@@ -50,15 +50,18 @@ function SensorDetails() {
 
 
   const addSquare = () => {
-    const type = prompt("Choose a type: Toilette, Douche or Robinet");
+    const type = prompt("Choisissez un type: Toilette, Douche ou Robinet");
     const percentage = Math.floor(Math.random() * 100);
-    const random = Math.floor(Math.random() * 100);
+    const random = Math.floor(Math.random() * 100) + " L";
     setSquares([...squares, { type: type, percentage: percentage, color: getSquareColor(type), value: getRandomValue(), random: random }]);
   };
 
 
   return (
-    <div className="App">
+    <div className="">
+      <div style={{ textAlign: "center" }}>
+       <h1 style={{ color: "white" }}>Liste des capteurs</h1> 
+      </div>
       <div style={{ position: "absolute", left: "50%", bottom: "10px", transform: "translate(-50%)" }}>
         <button onClick={addSquare}>Ajouter un capteur</button>
       </div>
