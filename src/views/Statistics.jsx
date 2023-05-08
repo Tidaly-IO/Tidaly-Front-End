@@ -160,7 +160,7 @@ export const Statistics = () => {
           <canvas ref={chartRef} id='myChart' />
         </div>
         <div className='rectangle2'>
-        <h5 style={{ fontFamily: 'Arial', marginRight: "10px", color: "rgb(102, 102, 102)" }}>Résumé de ma consommation</h5>
+        <h5 style={{ fontFamily: 'Arial', marginRight: "10px", color: "rgb(102, 102, 102)", marginTop:"50px" }}>Résumé de ma consommation</h5>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
           <div className='blue-square'>
             <img src={fleche_bas}  className ="image"/>
