@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Link } from 'react-router-dom';
 
 export const WaterMeterSetup = () => {
     const [consumption, setConsumption] = useState(0);

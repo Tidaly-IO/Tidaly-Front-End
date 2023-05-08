@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Link } from 'react-router-dom';
 import logo from '../assets/LogoTidaly.png';
 import axios from 'axios';
 import '../App.css';
