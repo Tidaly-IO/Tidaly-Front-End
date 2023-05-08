@@ -117,7 +117,7 @@ export const Statistics = () => {
       <SideBar />
       <div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h1 style={{fontFamily: 'Arial', marginRight: "20px" }}>Statistiques</h1>
+          <h1 className="titre" style={{fontFamily: 'Arial', marginRight: "20px" }}>Statistiques</h1>
           <div className="select-container" style={{ display: "inline-flex"}}>
             <select id="options" name="options" value={selectedOption} onChange={handleOptionChange} style={{ marginRight: "10px" }}>
               <option value="Année">Année</option>

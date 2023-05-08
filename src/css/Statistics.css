@@ -11,18 +11,12 @@ canvas {
     height: 100%;
 }
 
-h1 {
+.titre {
     margin-top: 60px;
     text-align: left;
     padding-left: 65px;
 }
 
-
-h2{
-    margin-top: 30px;
-    text-align: left;
-    padding-left: 25px;
-}
 
 .rectangle1 {
     width: 1350px;
