@@ -1,0 +1,79 @@
+.HomePage {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(237, 237, 237);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+canvas {
+    width: 200%;
+    height: 100%;
+}
+
+h1 {
+    margin-top: 60px;
+    text-align: left;
+    padding-left: 65px;
+}
+
+
+h2{
+    margin-top: 30px;
+    text-align: left;
+    padding-left: 25px;
+}
+
+.rectangle1 {
+    width: 1350px;
+    max-height: 400px;
+    background-color: white;
+    margin: 0 auto;
+    margin-left: 65px;
+    margin-top: 20px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.rectangle2 {
+    width: 1350;
+    height: 330px;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-left: 65px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.select-container {
+  width: 300px;
+}
+
+
+.blue-square {
+    width: 500px;
+    height: 250px;
+    background-color: rgb(75, 171, 240);
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-left: 85px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    position: relative;
+}
+
+
+
+.image {
+    left: 30px;
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+}
+.image2 {
+    left: 30px;
+    position: absolute;
+    top: 73%;
+    transform: translateY(-50%);
+}

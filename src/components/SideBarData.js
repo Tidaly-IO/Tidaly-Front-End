@@ -15,7 +15,7 @@ export const SideBarData = [
     {
         title: "Statistiques",
         icon: <QueryStatsIcon />,
-        link: "/HomePages"
+        link: "/Statistics"
     },
     {
         title: "Mes capteurs",
