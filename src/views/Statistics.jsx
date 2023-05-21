@@ -165,14 +165,14 @@ export const Statistics = () => {
           <div className='blue-square'>
             <img src={fleche_bas}  className ="image"/>
             <img src={fleche_bas}  className ="image2"/>
-            <h3 style={{ fontFamily: 'Arial', marginRight: "100px", marginTop: "100px", color: 'white' }}>Économies : {Math.floor(Math.random() * 100)} €</h3>
-            <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres économisés : {total} L</h3>
+            <h3 style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {Math.floor(Math.random() * 100)} €</h3>
+            <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommé : {total} L</h3>
           </div>
           <div className='blue-square'>
             <img src={fleche_haut}  className ="image"/>
             <img src={fleche_haut}  className ="image2"/>
             <h3 style={{ fontFamily: 'Arial', marginRight: "100px", marginTop: "100px", color: 'white' }}>Économies : {Math.floor(Math.random() * 100)} €</h3>
-            <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres économisés : {total} L</h3>
+            <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres économisés : {Math.floor(Math.random() * 100)} L</h3>
           </div>
         </div>
       </div>

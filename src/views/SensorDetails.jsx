@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import SideBar from '../components/SideBar';
+import "../css/SensorDetails.css"
 
 function SensorDetails() {
   const [squares, setSquares] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredSquares = squares.filter(square =>
+    square.type.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getSquareColor = (type) => {
     if (type === "Toilette") {
@@ -58,27 +65,41 @@ function SensorDetails() {
 
 
   return (
-    <div className="">
-      <div style={{ textAlign: "center" }}>
-       <h1 style={{ color: "white" }}>Liste des capteurs</h1> 
-      </div>
-      <div style={{ position: "absolute", left: "50%", bottom: "10px", transform: "translate(-50%)" }}>
-        <button onClick={addSquare}>Ajouter un capteur</button>
-      </div>
-      <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-start", marginTop: "50px" }}>
-        {squares.map((square, index) => (
-          <div key={index} style={{ width: "150px", height: "200px", backgroundColor: square.color, margin: "10px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", borderRadius: "10px" }}>
-            {renderCircle(square.percentage)}
-            <span>{square.type}</span>
-            <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation actuelle</span>
-            <span style={{ fontSize: "20px", fontWeight: "bold" }}>{square.value}</span>
-            <hr style={{ width: "80%", margin: "10px 0" }} />
-            <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation moyenne</span>
-            <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.average}</span>
-            <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.random}</span>
+    <div className="HomePage">
+      <SideBar />
+
+      <div>
+        <div className="titre-container">
+          <h1 className="titre" style={{ fontFamily: 'Arial' }}>Mes capteurs</h1>
+        </div>
+
+        <div className="rectangle">
+          {/* Barre de recherche */}
+          <input type="text" placeholder="Rechercher un capteur..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} style={{ marginBottom: '20px' }}/>
+          <div className="rectangle-content">
+
+            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-start", marginTop: "50px" }}>
+              {filteredSquares.map((square, index) => (
+                <div key={index} style={{ width: "150px", height: "200px", backgroundColor: square.color, margin: "10px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", borderRadius: "10px" }}>
+                  {renderCircle(square.percentage)}
+                  <span>{square.type}</span>
+                  <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation actuelle</span>
+                  <span style={{ fontSize: "20px", fontWeight: "bold" }}>{square.value}</span>
+                  <hr style={{ width: "80%", margin: "10px 0" }} />
+                  <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation moyenne</span>
+                  <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.average}</span>
+                  <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.random}</span>
+                </div>
+              ))}
+            </div>
 
           </div>
-        ))}
+
+          <div style={{ position: "absolute", left: "55%", bottom: "25px", transform: "translate(-50%)" }}>
+            <button className="btn-submit" onClick={addSquare}>Ajouter un capteur</button>
+          </div>
+
+        </div>
       </div>
     </div>
   );

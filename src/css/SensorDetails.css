@@ -1,0 +1,34 @@
+.rectangle {
+    width: 1350px;
+    height: 700px;
+    background-color: white;
+    margin: 0 auto;
+    margin-left: 65px;
+    margin-top: 20px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow-y: auto;
+  }
+
+.titre {
+    margin-top: 60px;
+    text-align: left;
+    padding-left: 65px;
+}
+
+.rectangle-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Aligner les capteurs vers la gauche */
+    margin-top: 50px;
+    margin-left: 70px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px;
+}
