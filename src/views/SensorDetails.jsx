@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import SideBar from '../components/SideBar';
 import "../css/SensorDetails.css"
+import loupe from '../assets/loupe.png';
 
 function SensorDetails() {
   const [squares, setSquares] = useState([]);
@@ -58,9 +59,20 @@ function SensorDetails() {
 
   const addSquare = () => {
     const type = prompt("Choisissez un type: Toilette, Douche ou Robinet");
-    const percentage = Math.floor(Math.random() * 100);
-    const random = Math.floor(Math.random() * 100) + " L";
-    setSquares([...squares, { type: type, percentage: percentage, color: getSquareColor(type), value: getRandomValue(), random: random }]);
+    if (type !== null && type !== undefined) {
+      const percentage = Math.floor(Math.random() * 100);
+      const random = Math.floor(Math.random() * 100) + " L";
+      setSquares([...squares, { type: type, percentage: percentage, color: getSquareColor(type), value: getRandomValue(), random: random }]);
+    }
+  };
+
+  const removeSquare = (index) => {
+    const confirmed = window.confirm("Êtes-vous sûr de vouloir supprimer ce capteur ?");
+    if (confirmed) {
+      const updatedSquares = [...squares];
+      updatedSquares.splice(index, 1);
+      setSquares(updatedSquares);
+    }
   };
 
 
@@ -75,24 +87,38 @@ function SensorDetails() {
 
         <div className="rectangle">
           {/* Barre de recherche */}
-          <input type="text" placeholder="Rechercher un capteur..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} style={{ marginBottom: '20px' }}/>
-          <div className="rectangle-content">
-
-            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-start", marginTop: "50px" }}>
-              {filteredSquares.map((square, index) => (
-                <div key={index} style={{ width: "150px", height: "200px", backgroundColor: square.color, margin: "10px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", borderRadius: "10px" }}>
-                  {renderCircle(square.percentage)}
-                  <span>{square.type}</span>
-                  <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation actuelle</span>
-                  <span style={{ fontSize: "20px", fontWeight: "bold" }}>{square.value}</span>
-                  <hr style={{ width: "80%", margin: "10px 0" }} />
-                  <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation moyenne</span>
-                  <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.average}</span>
-                  <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.random}</span>
-                </div>
-              ))}
+          <div className="search-bar-container">
+            <img src={loupe} alt="loupe" className="search-icon" />
+            <div className="search-bar" contentEditable="true" onInput={e => setSearchTerm(e.target.textContent)}>
+              <span className={`placeholder-text ${searchTerm ? 'hidden' : ''}`}>Rechercher un capteur...</span>
             </div>
+          </div>
 
+          <div className="rectangle-content">
+            <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-start", marginTop: "50px" }}>
+            {filteredSquares.map((square, index) => (
+              <div key={index} style={{ width: "150px", height: "200px", backgroundColor: square.color, margin: "10px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", borderRadius: "10px", position: "relative" }}>
+                {/* Bouton de suppression */}
+                <button className="delete-button" onClick={() => removeSquare(index)}>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </button>
+                {square && (
+                  <>
+                    {renderCircle(square.percentage)}
+                    <span>{square.type}</span>
+                    <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation actuelle</span>
+                    <span style={{ fontSize: "20px", fontWeight: "bold" }}>{square.value}</span>
+                    <hr style={{ width: "80%", margin: "10px 0" }} />
+                    <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation moyenne</span>
+                    <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.average}</span>
+                    <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.random}</span>
+                  </>
+                )}
+              </div>
+            ))}
+            </div>
           </div>
 
           <div style={{ position: "absolute", left: "55%", bottom: "25px", transform: "translate(-50%)" }}>
