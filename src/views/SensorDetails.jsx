@@ -3,33 +3,38 @@ import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import SideBar from '../components/SideBar';
 import "../css/SensorDetails.css"
 import loupe from '../assets/loupe.png';
+import ReactModal from 'react-modal';
 
 function SensorDetails() {
   const [squares, setSquares] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState('');
+  const [widgetName, setWidgetName] = useState('');
 
   const filteredSquares = squares.filter(square =>
-    square.type.toLowerCase().includes(searchTerm.toLowerCase())
+    square.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const getSquareColor = (type) => {
-    if (type === "Toilette") {
-      return "rgba(255, 0, 0, 0.5)";
-    } else if (type === "Douche") {
-      return "rgba(255, 255, 0, 0.5)";
-    } else if (type === "Robinet") {
-      return "rgba(0, 0, 255, 0.5)";
-    } else {
-      return "#ccc";
-    }
-  };
 
   const getRandomValue = () => {
     const value = Math.floor(Math.random() * 1000) / 10;
     return `${value} L`;
   };
 
-  function renderCircle(value) {
+  const getSquareColor = (color) => {
+    switch (color) {
+      case "red":
+        return "rgba(255, 0, 0, 0.5)";
+      case "yellow":
+        return "rgba(255, 255, 0, 0.5)";
+      case "blue":
+        return "rgba(0, 0, 255, 0.5)";
+      default:
+        return "#ccc";
+    }
+  };
+
+  const renderCircle = (value) => {
     const percentage = Math.floor((value / 100) * 100);
     const radius = 35;
     const circumference = 2 * Math.PI * radius;
@@ -54,15 +59,24 @@ function SensorDetails() {
         </text>
       </svg>
     );
-  }
+  };
 
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedColor('');
+    setWidgetName('');
+  };
 
   const addSquare = () => {
-    const type = prompt("Choisissez un type: Toilette, Douche ou Robinet");
-    if (type !== null && type !== undefined) {
+    if (widgetName && selectedColor) {
       const percentage = Math.floor(Math.random() * 100);
       const random = Math.floor(Math.random() * 100) + " L";
-      setSquares([...squares, { type: type, percentage: percentage, color: getSquareColor(type), value: getRandomValue(), random: random }]);
+      setSquares([...squares, { name: widgetName, color: getSquareColor(selectedColor), percentage, value: getRandomValue(), random }]);
+      closeModal();
     }
   };
 
@@ -74,7 +88,6 @@ function SensorDetails() {
       setSquares(updatedSquares);
     }
   };
-
 
   return (
     <div className="HomePage">
@@ -96,37 +109,64 @@ function SensorDetails() {
 
           <div className="rectangle-content">
             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-start", marginTop: "50px" }}>
-            {filteredSquares.map((square, index) => (
-              <div key={index} style={{ width: "150px", height: "200px", backgroundColor: square.color, margin: "10px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", borderRadius: "10px", position: "relative" }}>
-                {/* Bouton de suppression */}
-                <button className="delete-button" onClick={() => removeSquare(index)}>
-                  <span className="dot"></span>
-                  <span className="dot"></span>
-                  <span className="dot"></span>
-                </button>
-                {square && (
-                  <>
-                    {renderCircle(square.percentage)}
-                    <span>{square.type}</span>
-                    <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation actuelle</span>
-                    <span style={{ fontSize: "20px", fontWeight: "bold" }}>{square.value}</span>
-                    <hr style={{ width: "80%", margin: "10px 0" }} />
-                    <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation moyenne</span>
-                    <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.average}</span>
-                    <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.random}</span>
-                  </>
-                )}
-              </div>
-            ))}
+              {filteredSquares.map((square, index) => (
+                <div key={index} style={{ width: "150px", height: "200px", backgroundColor: square.color, margin: "10px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", borderRadius: "10px", position: "relative" }}>
+                  {/* Bouton de suppression */}
+                  <button className="delete-button" onClick={() => removeSquare(index)}>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                  </button>
+                  {square && (
+                    <>
+                      {renderCircle(square.percentage)}
+                      <span>{square.name}</span>
+                      <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation actuelle</span>
+                      <span style={{ fontSize: "20px", fontWeight: "bold" }}>{square.value}</span>
+                      <hr style={{ width: "80%", margin: "10px 0" }} />
+                      <span style={{ fontSize: "12px", marginTop: "5px" }}>Consommation moyenne</span>
+                      <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.average}</span>
+                      <span style={{ fontSize: "16px", fontWeight: "bold" }}>{square.random}</span>
+                    </>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
           <div style={{ position: "absolute", left: "55%", bottom: "25px", transform: "translate(-50%)" }}>
-            <button className="btn-submit" onClick={addSquare}>Ajouter un capteur</button>
+            <button className="btn-submit" onClick={openModal}>Ajouter un capteur</button>
           </div>
-
         </div>
       </div>
+      <ReactModal isOpen={modalIsOpen} onRequestClose={closeModal}>
+  <div className="form-group">
+    <label htmlFor="widgetName">Nom du capteur :</label>
+    <div>
+      <input type="text" id="widgetName" value={widgetName} onChange={e => setWidgetName(e.target.value)} />
+    </div>
+  </div>
+  <div className="form-group">
+    <label htmlFor="widgetColor">Point d'eau :</label>
+    <div>
+      <select id="widgetColor" value={selectedColor} onChange={e => setSelectedColor(e.target.value)} className="select-custom">
+        <option value="">Sélectionnez un point d'eau</option>
+        <option value="red">Toilette</option>
+        <option value="yellow">Douche</option>
+        <option value="blue">Robinet</option>
+      </select>
+    </div>
+  </div>
+  <div className="button-group">
+    <button className="btn-submit" onClick={addSquare}>Ajouter</button>
+    <button className="btn-submit btn-cancel" onClick={closeModal}>Annuler</button>
+  </div>
+</ReactModal>
+
+
+
+
+
     </div>
   );
 }
