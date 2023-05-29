@@ -30,7 +30,7 @@ export const SideBarData = [
     {
         title: "Profil utilisateur",
         icon: <PersonIcon />,
-        link: "/HomePages"
+        link: "/UserProfile"
     }
 ]
 

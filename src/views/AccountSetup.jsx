@@ -35,8 +35,7 @@ export const AccountSetup = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(name, firstName);
-        if (!name || !firstName || !sexe || !adresse || !pays) {
+        if (!name || !firstName  || !adresse || !pays) {
             alert("S'il vous plaît, remplissez tous les champs obligatoires.");
             return;
         } else {
@@ -79,11 +78,11 @@ export const AccountSetup = () => {
                 <label htmlFor="firstName">Prénom</label>
                 <input className="inputClass" value={firstName} onChange={handleFirstNameChange} type="text" placeholder="Votre prénom" id="firstName" name="firstName"/>
 
-                <label htmlFor="sexe">Sexe</label>
+                {/* <label htmlFor="sexe">Sexe</label>
                 <select className="inputClass" value={sexe} onChange={handleSexeChange}  id="sexe" name="sexe">
                     <option value="Homme">Homme</option>
                     <option value="Femme">Femme</option>
-                </select>
+                </select> */}
 
                 <label htmlFor="adresse">Adresse</label>
                 <input className="inputClass" value={adresse} onChange={handleAdresseChange} type="text" placeholder="Votre adresse" id="adresse" name="adresse"/>

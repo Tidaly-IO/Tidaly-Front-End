@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import SensorDetails from "./views/SensorDetails.jsx";
 import { HomePage } from "./views/HomePage.jsx";
 import { Statistics } from "./views/Statistics.jsx";
+import { UserProfile } from "./views/UserProfile.jsx";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route exact path="/SensorDetails" element={<SensorDetails />} />
           <Route exact path="/HomePage" element={<HomePage />} />
           <Route exact path="/Statistics" element={<Statistics />} />
+          <Route exact path="/UserProfile" element={<UserProfile />} />
         </Routes>
       </Router>
     </div>

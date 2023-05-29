@@ -25,6 +25,8 @@ export const Login = (props) => {
             email: email,
             password: password,
           });
+          localStorage.setItem("token", response.data.token.token)
+          console.log(response.data.token.token);
           console.log(response);
           setDisplayErrorMessage(false)
           window.location.href = "http://localhost:3000/AccountSetup";
