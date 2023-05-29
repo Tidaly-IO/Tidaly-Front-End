@@ -19,7 +19,7 @@ let data = {
     datasets: [
         {
             label: "Consommation en litres d'eau",
-            data: [65, 59, 80, 21, 0, 0, 0],
+            data: [65, 59, 80, 21, 100, 165, 144],
         }
     ]
 };
@@ -29,7 +29,7 @@ let dataCopy = {
   datasets: [
       {
           label: "Consommation en litres d'eau",
-          data: [65, 59, 80, 21, 0, 0, 0],
+          data: [65, 59, 80, 21, 100, 165, 144],
       }
   ]
 };
@@ -125,7 +125,7 @@ export const HomePage = () => {
             datasets: [
                 {
                     label: "Consommation en litres d'eau",
-                    data: [65, 59, 80, 21, 0, 0, 0],
+                    data: [65, 59, 80, 21, 100, 165, 144],
                 }
             ]
         };
