@@ -23,7 +23,6 @@ export const Register = (props) => {
         if (formValid == true) {
             setDisplayErrorMessage(false)
             if (password == confirmPassword) {
-                alert("request")
                 try {
                 const response = await instance.post("/register", {
                     email: email,

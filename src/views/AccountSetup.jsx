@@ -9,30 +9,6 @@ export const AccountSetup = () => {
     const [pays, setPays] = useState("");
     const [isValid, setIsValid] = useState(false);
 
-    useEffect(() => {
-        const firstNameStorage = localStorage.getItem('firstName');
-        const nameStorage = localStorage.getItem('name');
-        const sexeStorage = localStorage.getItem('sexe');
-        const adresseStorage = localStorage.getItem('adresse');
-        const paysStorage = localStorage.getItem('pays');
-
-        if (firstNameStorage != null ) {
-            setFirstName(JSON.parse(firstNameStorage));
-        }
-        if (nameStorage != null ) {
-            setName(JSON.parse(nameStorage));
-        }
-        if (sexeStorage != null ) {
-            setSexe(JSON.parse(sexeStorage));
-        }
-        if (adresseStorage != null ) {
-            setAdresse(JSON.parse(adresseStorage));
-        }
-        if (paysStorage != null ) {
-            setPays(JSON.parse(paysStorage));
-        }
-    }, []);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!name || !firstName  || !adresse || !pays) {
@@ -45,27 +21,27 @@ export const AccountSetup = () => {
 
     const handleFirstNameChange = (e) => {
         setFirstName(e.target.value);
-        localStorage.setItem('firstName', JSON.stringify(e.target.value));
+        localStorage.setItem('firstName', e.target.value);
     }
 
     const handleNameChange = (e) => {
         setName(e.target.value);
-        localStorage.setItem('name', JSON.stringify(e.target.value));
+        localStorage.setItem('name', e.target.value);
     }
 
     const handleSexeChange = (e) => {
         setSexe(e.target.value);
-        localStorage.setItem('sexe', JSON.stringify(e.target.value));
+        localStorage.setItem('sexe', e.target.value);
     }
 
     const handleAdresseChange = (e) => {
         setAdresse(e.target.value);
-        localStorage.setItem('adresse', JSON.stringify(e.target.value));
+        localStorage.setItem('adresse', e.target.value);
     }
 
     const handleCountryChange = (e) => {
         setPays(e.target.value);
-        localStorage.setItem('pays', JSON.stringify(e.target.value));
+        localStorage.setItem('pays', e.target.value);
     }
 
     return (

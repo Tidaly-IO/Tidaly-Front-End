@@ -24,7 +24,7 @@ export const WaterMeterSetup = () => {
             try {
                 const response = await instance.post("/user/profile", {
                     firstname: `${localStorage.getItem("firstName")}`,
-                    lastname: `${localStorage.getItem("token")}`,
+                    lastname: `${localStorage.getItem("name")}`,
                     address: `${localStorage.getItem("adresse")}`,
                     countryCode: `${localStorage.getItem("pays")}`,
                     waterConsumed: consumption,

@@ -17,6 +17,7 @@ export const Login = (props) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [errorMessageDisplay, setErrorMessageDisplay] = useState("");
     const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
+    var test = false;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,11 +30,30 @@ export const Login = (props) => {
           console.log(response.data.token.token);
           console.log(response);
           setDisplayErrorMessage(false)
-          window.location.href = "http://localhost:3000/AccountSetup";
+          //window.location.href = "http://localhost:3000/AccountSetup";
         } catch (error) {
             setDisplayErrorMessage(true)
             setErrorMessageDisplay("E-mail ou mot de passe incorrect")
+            test = true;
         }
+        if (test == false) {
+            try {
+                const instance2 = axios.create({
+                    baseURL: 'http://localhost:3333/api/v1',
+                    headers: { Authorization: 'Bearer ' + localStorage.getItem("token") }
+                });
+                const response = await instance2.get("/user/profile");
+                const data = response.data;
+                console.log(data);
+                if (data.firstname != null)
+                {
+                    window.location.href = "http://localhost:3000/HomePage";
+                }
+            } catch (error) {
+                window.location.href = "http://localhost:3000/AccountSetup";
+                console.error("Erreur lors de la récupération des informations :", error);
+            }
+        };
     };
 
     return (
