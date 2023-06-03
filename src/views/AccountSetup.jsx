@@ -4,14 +4,15 @@ import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 export const AccountSetup = () => {
     const [name, setName] = useState("");
     const [firstName, setFirstName] = useState("");
-    const [sexe, setSexe] = useState("");
+    const [ville, setVille] = useState("");
+    const [codePostale, setCodePostale] = useState("");
     const [adresse, setAdresse] = useState("");
     const [pays, setPays] = useState("");
     const [isValid, setIsValid] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!name || !firstName  || !adresse || !pays) {
+        if (!name || !firstName  || !adresse || !pays || !ville || !codePostale) {
             alert("S'il vous plaît, remplissez tous les champs obligatoires.");
             return;
         } else {
@@ -29,9 +30,14 @@ export const AccountSetup = () => {
         localStorage.setItem('name', e.target.value);
     }
 
-    const handleSexeChange = (e) => {
-        setSexe(e.target.value);
-        localStorage.setItem('sexe', e.target.value);
+    const handleVilleChange = (e) => {
+        setVille(e.target.value);
+        localStorage.setItem('ville', e.target.value);
+    }
+
+    const handleCodePostaleChange = (e) => {
+        setCodePostale(e.target.value);
+        localStorage.setItem('codePostale', e.target.value);
     }
 
     const handleAdresseChange = (e) => {
@@ -54,14 +60,16 @@ export const AccountSetup = () => {
                 <label htmlFor="firstName">Prénom</label>
                 <input className="inputClass" value={firstName} onChange={handleFirstNameChange} type="text" placeholder="Votre prénom" id="firstName" name="firstName"/>
 
-                {/* <label htmlFor="sexe">Sexe</label>
-                <select className="inputClass" value={sexe} onChange={handleSexeChange}  id="sexe" name="sexe">
-                    <option value="Homme">Homme</option>
-                    <option value="Femme">Femme</option>
-                </select> */}
-
                 <label htmlFor="adresse">Adresse</label>
                 <input className="inputClass" value={adresse} onChange={handleAdresseChange} type="text" placeholder="Votre adresse" id="adresse" name="adresse"/>
+
+
+                <label htmlFor="adresse">Ville</label>
+                <input className="inputClass" value={ville} onChange={handleVilleChange} type="text" placeholder="Votre ville" id="ville" name="ville"/>
+
+
+                <label htmlFor="codePostale">Code Postale</label>
+                <input className="inputClass" value={codePostale} onChange={handleCodePostaleChange} type="text" placeholder="Votre code Postale" id="codePostale" name="codePostale"/>
 
                 <label htmlFor="pays">Pays</label>
                 <input className="inputClass" value={pays} onChange={handleCountryChange} type="text" placeholder="Votre pays" id="pays" name="pays"/>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import logo from '../assets/LogoTidaly.png';
 import '../App.css';
@@ -18,6 +18,16 @@ export const Login = (props) => {
     const [errorMessageDisplay, setErrorMessageDisplay] = useState("");
     const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
     var test = false;
+
+    useEffect(() => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("firstName");
+        localStorage.removeItem("name");
+        localStorage.removeItem("adresse");
+        localStorage.removeItem("pays");
+        localStorage.removeItem("ville");
+        localStorage.removeItem("codePostale");
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();

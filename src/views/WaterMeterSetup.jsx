@@ -27,6 +27,8 @@ export const WaterMeterSetup = () => {
                     lastname: `${localStorage.getItem("name")}`,
                     address: `${localStorage.getItem("adresse")}`,
                     countryCode: `${localStorage.getItem("pays")}`,
+                    city: `${localStorage.getItem("ville")}`,
+                    postalCode: `${localStorage.getItem("codePostale")}`,
                     waterConsumed: consumption,
                     waterConsumptionTarget: objective,
                 });
