@@ -140,6 +140,12 @@ function SensorDetails() {
         </div>
       </div>
       <ReactModal isOpen={modalIsOpen} onRequestClose={closeModal}>
+      <div className="form-group">
+    <label htmlFor="test">Marque du capteur :</label>
+    <div>
+      <input type="text" id="test" />
+    </div>
+  </div>
   <div className="form-group">
     <label htmlFor="widgetName">Nom du capteur :</label>
     <div>

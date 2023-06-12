@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import logo from '../assets/LogoTidaly.png';
 import axios from 'axios';
 import '../App.css';
+import apiUrl from '../config'
 
 const instance = axios.create({
     baseURL: 'http://localhost:3333/api/v1',
@@ -21,30 +22,42 @@ export const Register = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (formValid == true) {
-            setDisplayErrorMessage(false)
-            if (password == confirmPassword) {
-                try {
-                const response = await instance.post("/register", {
-                    email: email,
-                    password: password,
-                });
-                console.log(response);
-                window.location.href = "http://localhost:3000/";
-                } catch (error) {
-                setErrorMessage(error.response.data.message);
+          setDisplayErrorMessage(false);
+          if (password == confirmPassword) {
+            try {
+              const response = await instance.post("/register", {
+                email: email,
+                password: password,
+              });
+              console.log(response);
+              window.location.href = `${apiUrl}/`;
+            } catch (error) {
+              if (
+                error.response &&
+                error.response.data &&
+                error.response.data.errors
+              ) {
+                const uniqueError = error.response.data.errors.find(
+                  (error) => error.rule === "unique" && error.field === "email"
+                );
+                if (uniqueError) {
+                  setDisplayErrorMessage(true);
+                  setErrorMessageDisplay("L'e-mail est déjà pris. Veuillez en choisir un autre.");
+                  return; // Arrêter l'exécution de la fonction handleSubmit
                 }
-            } else {
-                alert("not same password")
-                setDisplayErrorMessage(true)
-                setErrorMessageDisplay("Veuillez saisir le même mot de passe")
+              }
+              setErrorMessage(error.response.data.message);
             }
+          }
+          else {
+            setDisplayErrorMessage(true);
+            setErrorMessageDisplay("Veuillez saisir le même mot de passe");
+          }
         }
         else {
-            alert("something is empty")
-            setDisplayErrorMessage(true)
-            setErrorMessageDisplay("Tous les champs ne sont pas remplies")
+          setDisplayErrorMessage(true);
+          setErrorMessageDisplay("Tous les champs ne sont pas remplis");
         }
-
     };
 
     const checkFormValidity = () => {

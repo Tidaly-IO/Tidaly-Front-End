@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import logo from '../assets/LogoTidaly.png';
 import '../App.css';
+import apiUrl from '../config'
 
 import axios from 'axios';
 
@@ -40,7 +41,6 @@ export const Login = (props) => {
           console.log(response.data.token.token);
           console.log(response);
           setDisplayErrorMessage(false)
-          //window.location.href = "http://localhost:3000/AccountSetup";
         } catch (error) {
             setDisplayErrorMessage(true)
             setErrorMessageDisplay("E-mail ou mot de passe incorrect")
@@ -57,10 +57,10 @@ export const Login = (props) => {
                 console.log(data);
                 if (data.firstname != null)
                 {
-                    window.location.href = "http://localhost:3000/HomePage";
+                    window.location.href = `${apiUrl}/HomePage`;
                 }
             } catch (error) {
-                window.location.href = "http://localhost:3000/AccountSetup";
+                window.location.href = `${apiUrl}/AccountSetup`;
                 console.error("Erreur lors de la récupération des informations :", error);
             }
         };

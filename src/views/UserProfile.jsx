@@ -65,6 +65,39 @@ export const UserProfile = () => {
   const handleSave = async () => {
     saveButtonRef.current.disabled = true;
 
+    if (
+      prenom.length < 2 ||
+      nom.length < 2 ||
+      adresse.length < 9 ||
+      ville.length < 3 ||
+      pays.length < 2 ||
+      codePostale.length < 5
+    ) {
+      let message = "Veuillez remplir les champs suivants :";
+      if (prenom.length < 2) {
+        message += "\n- Prénom (minimum 2 caractères)";
+      }
+      if (nom.length < 2) {
+        message += "\n- Nom (minimum 2 caractères)";
+      }
+      if (adresse.length < 9) {
+        message += "\n- Adresse (minimum 9 caractères)";
+      }
+      if (ville.length < 3) {
+        message += "\n- Ville (minimum 3 caractères)";
+      }
+      if (pays.length < 2) {
+        message += "\n- Code Pays (minimum 2 caractères)";
+      }
+      if (codePostale.length < 5) {
+        message += "\n- Code Postal (minimum 5 caractères)";
+      }
+      alert(message);
+
+      saveButtonRef.current.disabled = false;
+      return;
+    }
+
     const userData = {
       firstname: prenom,
       lastname: nom,
@@ -178,11 +211,11 @@ export const UserProfile = () => {
               <h2 className="title">Coordonnées</h2>
             </div>
 
-            <div style={{ position: "absolute", left: "110%", top: "260px", transform: "translate(-50%)" }}>
+            {/* <div style={{ position: "absolute", left: "110%", top: "260px", transform: "translate(-50%)" }}>
                 <button className="btn-submit-mail" onClick={() => setEmailModalOpen(true)}>Changer son adresse email </button>
-            </div>
+            </div> */}
 
-            <div style={{ position: "absolute", left: "110%", top: "370px", transform: "translate(-50%)" }}>
+            <div style={{ position: "absolute", left: "110%", top: "260PX", transform: "translate(-50%)" }}>
                 <button className="btn-submit-mail" onClick={() => setModalOpen(true)}>Changer son mot de passe </button>
             </div>
 
