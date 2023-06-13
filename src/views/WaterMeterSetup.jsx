@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3333/api/v1',
+    baseURL: 'http://tidaly.fr:3333/api/v1',
     headers: { Authorization: 'Bearer ' + `${localStorage.getItem("token")}` }
 });
 

@@ -6,7 +6,7 @@ import '../App.css';
 import apiUrl from '../config'
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3333/api/v1',
+    baseURL: 'http://tidaly.fr:3333/api/v1',
     headers: { 'Access-Control-Allow-Origin': '*' }
   });
 

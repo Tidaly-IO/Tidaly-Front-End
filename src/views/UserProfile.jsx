@@ -25,7 +25,7 @@ export const UserProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       const instance = axios.create({
-        baseURL: 'http://localhost:3333/api/v1',
+        baseURL: 'http://tidaly.fr:3333/api/v1',
         headers: { Authorization: 'Bearer ' + localStorage.getItem("token") }
       });
 
@@ -109,7 +109,7 @@ export const UserProfile = () => {
 
     try {
       const instance = axios.create({
-        baseURL: 'http://localhost:3333/api/v1',
+        baseURL: 'http://tidaly.fr:3333/api/v1',
         headers: { Authorization: 'Bearer ' + localStorage.getItem("token") }
       });
 
@@ -134,7 +134,7 @@ export const UserProfile = () => {
         if (oldPassword === newPassword) {
             try {
                 const instance = axios.create({
-                    baseURL: 'http://localhost:3333/api/v1',
+                    baseURL: 'http://tidaly.fr:3333/api/v1',
                     headers: { Authorization: 'Bearer ' + localStorage.getItem("token") }
                 });
                 const response = await instance.put("/user", { password: newPassword });

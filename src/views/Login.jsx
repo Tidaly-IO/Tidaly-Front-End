@@ -7,7 +7,7 @@ import apiUrl from '../config'
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3333/api/v1',
+    baseURL: 'http://tidaly.fr:3333/api/v1',
     headers: { 'Access-Control-Allow-Origin': '*' }
   });
 
@@ -49,7 +49,7 @@ export const Login = (props) => {
         if (test == false) {
             try {
                 const instance2 = axios.create({
-                    baseURL: 'http://localhost:3333/api/v1',
+                    baseURL: 'http://tidaly.fr:3333/api/v1',
                     headers: { Authorization: 'Bearer ' + localStorage.getItem("token") }
                 });
                 const response = await instance2.get("/user/profile");
