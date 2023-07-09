@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden; /* Ajoutez cette ligne */
+  overflow: hidden;
 }
 
 .circle {
@@ -19,21 +19,28 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 350px;
-  height: 350px;
+  width: 20vw;
+  height: 20vw;
   border-radius: 50%;
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
 .logo {
   width: 50%;
-  height: 50%;
+  height: auto;
   object-fit: contain;
 }
 
-
-
+.circle-text {
+  font-size: 2vw;
+  margin-top: 10px;
+}
 
 .right-panel {
   flex: 3;
@@ -67,9 +74,6 @@
   box-shadow: 1px 2px 5px 3px rgba(0, 0, 0, 0.2);
 }
 
-
-
-
 .button {
   padding: 10px 20px;
   font-size: 16px;
@@ -90,10 +94,9 @@
   background-color: #2980b9;
 }
 
-
 .test {
   width: 300px;
-  margin: 0 auto; /* Centre horizontalement */
+  margin: 0 auto;
   height: 100%;
   background-color: white;
   display: flex;

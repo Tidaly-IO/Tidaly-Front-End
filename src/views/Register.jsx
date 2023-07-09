@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import logo from '../assets/LogoTidaly.png';
 import axios from 'axios';
-import '../App.css';
+import '../css/Register.css';
 import apiUrl from '../config'
 
 const instance = axios.create({
@@ -68,38 +68,49 @@ export const Register = (props) => {
         }
       };
 
-    return (
-        <div className="auth-form-container">
-
-            <div className="circle-Container">
-                <div className="circleRegister">
-                    <img className="logo" src={logo} alt="Logo"></img>
-                </div>
+      return (
+        <div className="containerRegister">
+          <div className="left-panelRegister">
+            <div className="circleRegister">
+              <img src={logo} alt="Logo" className="logo" />
+              <h2 className="circle-textRegister">TIDALY</h2>
             </div>
-
-            <h2>Page d'inscription</h2>
-
+          </div>
+          <div className="right-panelRegister">
             {displayErrorMessage && (
-            <p>{errorMessageDisplay}</p>
+              <p>{errorMessageDisplay}</p>
             )}
-
-            <form className="register-form" onSubmit={handleSubmit}>
-
-                <label htmlFor="email"> E-mail </label>
-                <input className ="BtnRegisterConnexion" value={email} onChange={(e) => {setEmail(e.target.value); checkFormValidity();}} type="email" placeholder="votremail@gmail.com" id="email" name="email" />
-
-                <label htmlFor="password"> Mot de passe </label>
-                <input className ="BtnRegisterConnexion" value={password} onChange={(e) => {setPass(e.target.value); checkFormValidity();}} type="password" placeholder="************" id="password" name="password" minlength="8"/>
-
-                <label htmlFor="passwordConfirm"> Confirmer le mot de passe </label>
-                <input className ="inputClass" value={confirmPassword} onChange={(e) => {setConfirmPassword(e.target.value); checkFormValidity();}} type="password" placeholder="************" id="passwordConfirm" name="passwordConfirm" minlength="8"/>
-
-                <button className="btn-submit" type="submit">S'inscrire</button>
-            </form>
-
+            <div className="testRegister">
+              <h1 style={{ fontFamily: "Arial", fontSize: "54px", color: "rgb(75, 171, 240)" }}>S'inscrire</h1>
+              <form onSubmit={handleSubmit}>
+                <div className="form-groupRegister">
+                  <label className="labelRegister">Adresse email</label>
+                  <input
+                    className="inputRegister"
+                    value={email} onChange={(e) => {setEmail(e.target.value); checkFormValidity();}} type="email" placeholder="votremail@gmail.com" id="email" name="email"
+                  />
+                </div>
+                <div className="form-groupRegister">
+                  <label className="labelRegister">Mot de passe</label>
+                  <input
+                    className="inputRegister"
+                    value={password} onChange={(e) => {setPass(e.target.value); checkFormValidity();}} type="password" placeholder="************" id="password" name="password" minlength="8"/>
+                </div>
+                <div className="form-groupRegister">
+                  <label className="labelRegister">Confirmer le mot de passe</label>
+                  <input
+                    className="inputRegister"
+                    value={confirmPassword} onChange={(e) => {setConfirmPassword(e.target.value); checkFormValidity();}} type="password" placeholder="************" id="passwordConfirm" name="passwordConfirm" minlength="8"/>
+                </div>
+                <div className="form-group">
+                  <button type="submit" className="buttonRegister">S'inscrire</button>
+                </div>
+              </form>
+            </div>
             <Link to="/">
-                <button className="link-button" >J'ai déjà un compte !</button>
+                    <button className="link-button" >J'ai déjà un compte !</button>
             </Link>
+          </div>
         </div>
-    )
+      );
 }

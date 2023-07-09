@@ -68,7 +68,7 @@ export const Login = (props) => {
       <div className="left-panel">
         <div className="circle">
           <img src={logo} alt="Logo" className="logo" />
-          <h2>TIDALY</h2>
+          <h2 className="circle-text">TIDALY</h2>
         </div>
       </div>
       <div className="right-panel">
