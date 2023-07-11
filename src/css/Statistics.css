@@ -1,4 +1,4 @@
-.HomePage {
+.HomePage-desktop {
     width: 100vw;
     height: 100vh;
     background-color: rgb(237, 237, 237);
@@ -6,19 +6,32 @@
     flex-wrap: wrap;
 }
 
+.HomePage-mobile {
+    width: 95vw;
+    height: 99vh;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(237, 237, 237);
+    border-radius: 10px;
+}
+
 canvas {
     width: 200%;
     height: 100%;
 }
 
-.titre {
+.titre-desktop {
     margin-top: 60px;
     text-align: left;
     padding-left: 65px;
 }
 
+.titre-mobile {
+    text-align: center;
+    padding: 10px 10px 10px 25px;
+}
 
-.rectangle1 {
+.rectangle1-desktop {
     width: 1350px;
     max-height: 400px;
     background-color: white;
@@ -29,7 +42,17 @@ canvas {
     border-radius: 10px;
 }
 
-.rectangle2 {
+.rectangle1-mobile {
+    width: 90vw;
+    max-height: 25vh;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 20px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.rectangle2-desktop {
     width: 1350;
     height: 330px;
     background-color: white;
@@ -40,12 +63,28 @@ canvas {
     border-radius: 10px;
 }
 
-.select-container {
+.rectangle2-mobile {
+    width: 90vw;
+    max-height: 25vh;
+    background-color: white;
+    padding-bottom: 20px;
+    margin: 0 auto;
+    margin-top: 20px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: scroll;
+}
+
+.select-container-desktop {
   width: 300px;
 }
 
+.select-container-mobile {
+    width: 100px;
+    padding: 0px 20px 0px 0px;
+}  
 
-.blue-square {
+.blue-square-desktop {
     width: 500px;
     height: 250px;
     background-color: rgb(75, 171, 240);
@@ -57,17 +96,45 @@ canvas {
     position: relative;
 }
 
+.blue-square-mobile {
+    width: 80vw;
+    height: 20vh;
+    padding-left: 35px;
+    background-color: rgb(75, 171, 240);
+    margin: 0 auto;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: 50px 50px;
+    margin-bottom: 10px;
+}
 
-
-.image {
+.image-desktop {
     left: 30px;
     position: absolute;
     top: 45%;
     transform: translateY(-50%);
 }
-.image2 {
+
+.image-mobile {
+    position: relative;
+    top: 95px;
+    right: 20px;
+    margin-left: 0px;
+    margin-right: 10px;
+}
+
+.image2-desktop {
     left: 30px;
     position: absolute;
     top: 73%;
     transform: translateY(-50%);
+}
+
+.image2-mobile {
+    position: relative;
+    top: 95px;
+    margin-left: 10px;
+    margin-right: 30px;
 }

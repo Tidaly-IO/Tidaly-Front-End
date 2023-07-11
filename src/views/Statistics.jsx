@@ -5,10 +5,21 @@ import Chart from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 import fleche_haut from '../assets/fleche-haut.png';
 import fleche_bas from '../assets/fleche-bas.png';
+import { useMediaQuery } from 'react-responsive'
 
 
 Chart.defaults.plugins.legend.display = false;
 Chart.defaults.scale.category = Chart.defaults.scale.linear;
+
+let data = {
+  labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
+  datasets: [
+      {
+          label: "Consommation en litres d'eau",
+          data: [65, 59, 80, 21, 100, 165, 144],
+      }
+  ]
+};
 
 const options = {
   maintainAspectRatio: false,
@@ -112,71 +123,118 @@ export const Statistics = () => {
     }
   }
 
-  return (
-    <div className='HomePage'>
-      <SideBar />
-      <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h1 className="titre" style={{fontFamily: 'Arial', marginRight: "20px" }}>Statistiques</h1>
-          <div className="select-container" style={{ display: "inline-flex"}}>
-            <select id="options" name="options" value={selectedOption} onChange={handleOptionChange} style={{ marginRight: "10px" }}>
-              <option value="Année">Année</option>
-              <option value="Mois">Mois</option>
-            </select>
-            {selectedOption === 'Année' &&
-              <select>
-                {Array.from({ length: 24 }, (_, i) => i + 2000).map((year) => (
-                  <option key={year} value={year}>{year}</option>
-                ))}
-              </select>
-            }
-            {selectedOption === 'Mois' &&
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <select
-                  style={{ marginRight: "10px", width: "100px" }}
-                  value={selectedMonth}
-                  onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                >
-                  {Array.from({ length: 12 }, (_, i) => i).map((monthIndex) => (
-                    <option key={monthIndex} value={monthIndex + 7}>
-                      {new Date(selectedYear, monthIndex, 1).toLocaleString('default', { month: 'long' })}
-                    </option>
-                  ))}
+  const Main = ({ uiProperties }) => {
+    return (
+      <div className={uiProperties.homePage}>
+          {uiProperties.compute && <SideBar />}
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h1 className={uiProperties.title} style={{fontFamily: 'Arial', marginRight: "20px" }}>Statistiques</h1>
+              <div className={uiProperties.selectContainer}>
+                <select id="options" name="options" value={selectedOption} onChange={handleOptionChange} style={{ marginRight: "10px" }}>
+                  <option value="Année">Année</option>
+                  <option value="Mois">Mois</option>
                 </select>
-                <select
-                  style={{ marginRight: "10px", width: "100px" }}
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                >
-                  {Array.from({ length: 24 }, (_, i) => i + 2000).map((year) => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
+                {selectedOption === 'Année' &&
+                  <select>
+                    {Array.from({ length: 24 }, (_, i) => i + 2000).map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>}
+                {selectedOption === 'Mois' &&
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <select
+                      style={{ marginRight: "10px", width: "100px" }}
+                      value={selectedMonth}
+                      onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                    >
+                      {Array.from({ length: 12 }, (_, i) => i).map((monthIndex) => (
+                        <option key={monthIndex} value={monthIndex + 7}>
+                          {new Date(selectedYear, monthIndex, 1).toLocaleString('default', { month: 'long' })}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      style={{ marginRight: "10px", width: "100px" }}
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                    >
+                      {Array.from({ length: 24 }, (_, i) => i + 2000).map((year) => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                  </div>
+                }
               </div>
-            }
+            </div>
+            <div className={uiProperties.rectangle1}>
+              {/* <canvas ref={chartRef} id='myChart' /> */}
+              <Bar data={data} options={options} />
+            </div>
+            <div className={uiProperties.rectangle2}>
+            <h5 style={{ fontFamily: 'Arial', marginRight: "10px", color: "rgb(102, 102, 102)", marginTop:"50px" }}>Résumé de ma consommation</h5>
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
+              <div className={uiProperties.blueSquare}>
+                <img src={fleche_bas}  className ={uiProperties.image}/>
+                <img src={fleche_bas}  className ={uiProperties.image2}/>
+                <h3 style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {Math.floor(Math.random() * 100)} €</h3>
+                <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommé : {total} L</h3>
+              </div>
+              <div className={uiProperties.blueSquare}>
+                <img src={fleche_haut}  className ={uiProperties.image}/>
+                <img src={fleche_haut}  className ={uiProperties.image2}/>
+                <h3 style={{ fontFamily: 'Arial', marginRight: "100px", marginTop: "100px", color: 'white' }}>Économies : {Math.floor(Math.random() * 100)} €</h3>
+                <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres économisés : {Math.floor(Math.random() * 100)} L</h3>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className='rectangle1'>
-          <canvas ref={chartRef} id='myChart' />
-        </div>
-        <div className='rectangle2'>
-        <h5 style={{ fontFamily: 'Arial', marginRight: "10px", color: "rgb(102, 102, 102)", marginTop:"50px" }}>Résumé de ma consommation</h5>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
-          <div className='blue-square'>
-            <img src={fleche_bas}  className ="image"/>
-            <img src={fleche_bas}  className ="image2"/>
-            <h3 style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {Math.floor(Math.random() * 100)} €</h3>
-            <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommé : {total} L</h3>
-          </div>
-          <div className='blue-square'>
-            <img src={fleche_haut}  className ="image"/>
-            <img src={fleche_haut}  className ="image2"/>
-            <h3 style={{ fontFamily: 'Arial', marginRight: "100px", marginTop: "100px", color: 'white' }}>Économies : {Math.floor(Math.random() * 100)} €</h3>
-            <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres économisés : {Math.floor(Math.random() * 100)} L</h3>
-          </div>
+            {!uiProperties.compute && <SideBar />}
         </div>
       </div>
+    );
+  };
+
+  const Desktop = () => {
+    const isDesktop = useMediaQuery({ minWidth: 992 });
+    let uiProperties = {};
+    uiProperties.homePage = "HomePage-desktop";
+    uiProperties.title = "titre-desktop";
+    uiProperties.rectangle1 = "rectangle1-desktop";
+    uiProperties.rectangle2 = "rectangle2-desktop";
+    uiProperties.selectContainer = "select-container-desktop";
+    uiProperties.blueSquare = "blue-square-desktop";
+    uiProperties.image = "image-desktop";
+    uiProperties.image2 = "image2-desktop";
+    uiProperties.compute = true;
+    return isDesktop ? <Main uiProperties={uiProperties} /> : null;
+  }
+  
+  const Tablet = () => {
+    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
+   let uiProperties = {};
+    return isTablet ? <Main uiProperties={uiProperties} /> : null;
+  }
+  
+  const Mobile = () => {
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+    let uiProperties = {};
+    uiProperties.homePage = "HomePage-mobile";
+    uiProperties.title = "titre-mobile";
+    uiProperties.rectangle1 = "rectangle1-mobile";
+    uiProperties.rectangle2 = "rectangle2-mobile";
+    uiProperties.selectContainer = "select-container-mobile";
+    uiProperties.blueSquare = "blue-square-mobile";
+    uiProperties.image = "image-mobile";
+    uiProperties.image2 = "image2-mobile";
+    uiProperties.compute = false;
+    return isMobile ? <Main uiProperties={uiProperties} /> : null;
+  }
+
+  return (
+    <div>
+      <Desktop />
+      <Tablet />
+      <Mobile />
     </div>
-  </div>
   );
 };

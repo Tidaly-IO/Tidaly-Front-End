@@ -10,6 +10,7 @@ import CircleChart from '../components/CircleChart.js';
 import "../components/DayOfTheWeek.js"
 import DayOfTheWeek from '../components/DayOfTheWeek.js';
 // import CircleChart from '../components/CircleChart.js';
+import { useMediaQuery } from 'react-responsive'
 
 Chart.defaults.plugins.legend.display = false;
 Chart.defaults.scale.category = Chart.defaults.scale.linear;
@@ -157,27 +158,69 @@ export const HomePage = () => {
       }
     }, [chartRef]);
 
-    return (
-      <div className='HomePage'>
-        <SideBar />
-        <div>
-
-          <h1 className="titre" style={{fontFamily: 'Arial', marginRight: "20px" }}>Accueil</h1>
-          <div className='rectangle2'>
-          <h3 style={{ fontFamily: 'Arial', color: "rgb(102, 102, 102)" , marginLeft:"20px", paddingTop:"15px", textAlign:"left"}}>Consommation du jour</h3>
-          <h4 style={{ fontFamily: 'Arial', color: "rgb(102, 102, 102)", marginLeft:"20px", textAlign:"left"}}><DayOfTheWeek/> - {getCurrentDate()}</h4>
-          <CircleChart data={dataCopy.datasets.at(0).data.at(getIndexDay())}></CircleChart>
-          </div>
-          <div className='rectangle1'>
-            <div className="select-container" style={{ display: "inline-flex", textAlign:"right", position:"absolute", marginLeft:"20%", marginTop:"20px"}}>
-              <select id="options" name="options" value={selectedOption} onChange={handleOptionChange} style={{ marginBottom: "0px" }}>
-                <option value="Semaine">Semaine</option>
-                <option value="Mois">Mois</option>
-              </select>
+    const Main = ({ uiProperties }) => {
+      return (
+        <div className={uiProperties.homePage}>
+            {uiProperties.compute && <SideBar />}
+            <div>
+              <h1 className={uiProperties.title} style={{fontFamily: 'Arial', marginRight: "20px" }}>Accueil</h1>
+              <div className={uiProperties.rectangle2}>
+              <h3 style={{ fontFamily: 'Arial', color: "rgb(102, 102, 102)" , marginLeft:"20px", paddingTop:"15px", textAlign:"left"}}>Consommation du jour</h3>
+              <h4 style={{ fontFamily: 'Arial', color: "rgb(102, 102, 102)", marginLeft:"20px", textAlign:"left"}}><DayOfTheWeek/> - {getCurrentDate()}</h4>
+              <div className={uiProperties.circleChart} ><CircleChart data={dataCopy.datasets.at(0).data.at(getIndexDay())}></CircleChart></div>
+              </div>
+              <div className={uiProperties.rectangle1}>
+                <div className={uiProperties.selectContainer} style={{ display: "inline-flex", textAlign:"right", position:"absolute", marginLeft:"20%", marginTop:"20px"}}>
+                  <select id="options" name="options" value={selectedOption} onChange={handleOptionChange} style={{ marginBottom: "0px" }}>
+                    <option value="Semaine">Semaine</option>
+                    <option value="Mois">Mois</option>
+                  </select>
+                </div>
+              <Bar data={data} options={options} />
+              </div>
             </div>
-          <Bar data={data} options={options} />
+            {!uiProperties.compute && <SideBar />}
           </div>
-        </div>
+      );
+    };
+
+    const Desktop = () => {
+      const isDesktop = useMediaQuery({ minWidth: 992 });
+      let uiProperties = {};
+      uiProperties.homePage = "HomePage-desktop";
+      uiProperties.title = "titre-desktop";
+      uiProperties.circleChart = "circleChart-desktop";
+      uiProperties.rectangle1 = "rectangle1-desktop";
+      uiProperties.rectangle2 = "rectangle2-desktop";
+      uiProperties.selectContainer = "select-container-desktop";
+      uiProperties.compute = true;
+      return isDesktop ? <Main uiProperties={uiProperties} /> : null;
+    }
+    
+    const Tablet = () => {
+      const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
+     let uiProperties = {};
+      return isTablet ? <Main uiProperties={uiProperties} /> : null;
+    }
+    
+    const Mobile = () => {
+      const isMobile = useMediaQuery({ maxWidth: 767 });
+      let uiProperties = {};
+      uiProperties.homePage = "HomePage-mobile";
+      uiProperties.title = "titre-mobile";
+      uiProperties.circleChart = "circleChart-mobile";
+      uiProperties.rectangle1 = "rectangle1-mobile";
+      uiProperties.rectangle2 = "rectangle2-mobile";
+      uiProperties.selectContainer = "select-container-mobile";
+      uiProperties.compute = false;
+      return isMobile ? <Main uiProperties={uiProperties} /> : null;
+    }
+
+    return (
+      <div>
+        <Desktop />
+        <Tablet />
+        <Mobile />
       </div>
     );
 };
