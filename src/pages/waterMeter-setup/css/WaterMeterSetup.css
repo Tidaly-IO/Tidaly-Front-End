@@ -1,0 +1,107 @@
+.containerWaterMeterSetup {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+
+.left-panelWaterMeterSetup {
+  flex: 1;
+  background-color: rgb(75, 171, 240);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.circleWaterMeterSetup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20vw;
+  height: 20vw;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.logoWaterMeterSetup {
+  width: 50%;
+  height: auto;
+  object-fit: contain;
+}
+
+.circle-textWaterMeterSetup {
+  font-size: 2vw;
+  margin-top: 10px;
+}
+
+.right-panelWaterMeterSetup {
+  flex: 3;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.right-panelWaterMeterSetup > * {
+  margin-bottom: 20px;
+}
+
+.form-groupWaterMeterSetup {
+  margin-bottom: 20px;
+}
+
+.labelWaterMeterSetup {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.inputWaterMeterSetup {
+  width: 300px;
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 1px 2px 5px 3px rgba(0, 0, 0, 0.2);
+}
+
+.buttonWaterMeterSetup {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  background: rgb(75, 171, 240);
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 2px 5px 5px 1px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.buttonWaterMeterSetup:hover {
+  background-color: #3498db;
+}
+
+.buttonWaterMeterSetup:active {
+  background-color: #2980b9;
+}
+
+.testWaterMeterSetup {
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
