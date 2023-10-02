@@ -5,6 +5,7 @@ import EdgesensorHighIcon from '@mui/icons-material/EdgesensorHigh';
 import HistoryIcon from '@mui/icons-material/History';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
+import SensorsIcon from '@mui/icons-material/Sensors';
 
 interface SidebarItem {
     title: string;
@@ -37,6 +38,16 @@ export const SideBarData: SidebarItem[] = [
         title: "Profil utilisateur",
         icon: <PersonIcon />,
         link: "/UserProfile"
+    },
+    {
+        title: "Conssommation global des capteurs",
+        icon: <SensorsIcon />,
+        link: "/SharedSensorConsumption"
+    },
+    {
+        title: "Répartition de la consommation des capteurs",
+        icon: <SensorsIcon />,
+        link: "/SensorConsumption"
     }
 ];
 

@@ -9,6 +9,8 @@ import SensorDetails from "./pages/sensorDetails/SensorDetails";
 import { HomePage } from "./pages/homePage/HomePage";
 import { Statistics } from "./pages/statistics/Statistics";
 import { UserProfile } from "./pages/userProfile/UserProfile";
+import SharedSensorConsumption from './pages/sharedSensorConsumption/SharedSensorConsumption';
+import SensorConsumption from './pages/sensorConsumption/SensorConsumption';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path="/HomePage" element={<HomePage />} />
           <Route path="/Statistics" element={<Statistics />} />
           <Route path="/UserProfile" element={<UserProfile />} />
+          <Route path="/SharedSensorConsumption" element={<SharedSensorConsumption data={[]} />} />
+          <Route path="/SensorConsumption" element={<SensorConsumption data={[]} />} />
         </Routes>
       </Router>
     </div>

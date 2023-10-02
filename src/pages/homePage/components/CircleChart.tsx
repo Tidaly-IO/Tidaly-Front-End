@@ -42,7 +42,7 @@ const CircleChart: React.FC<CircleChartProps> = ({ data }) => {
         style={{ strokeDasharray: circumference, strokeDashoffset }}
       />
       <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central">
-        {fillPercentage}L / 100L
+        {fillPercentage.toFixed(1)} L / 100L
       </text>
     </svg>
   );
