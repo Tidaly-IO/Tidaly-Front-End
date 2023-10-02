@@ -21,21 +21,21 @@ const Login: React.FC<LoginProps> = (props) => {
   } = useLogin();
 
   return (
-    <div className="container">
-      <div className="left-panel">
-        <div className="circle">
+    <div className="containerRegister">
+      <div className="left-panelRegister">
+        <div className="circleRegister">
           <img src={logo} alt="Logo" className="logo" />
-          <h2 className="circle-text">TIDALY</h2>
+          <h2 className="circle-textRegister">TIDALY</h2>
         </div>
       </div>
-      <div className="right-panel">
+      <div className="right-panelRegister">
         {displayErrorMessage && (
           <p>{errorMessageDisplay}</p>
         )}
-        <div className="test">
+        <div className="testRegister">
           <h1 style={{ fontFamily: "Arial", fontSize: "54px", color: "rgb(75, 171, 240)" }}>S'identifier</h1>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div className="form-groupRegister">
               <label className="label">Adresse email</label>
               <input
                 type="email"
@@ -46,7 +46,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 placeholder="votremail@gmail.com"
               />
             </div>
-            <div className="form-group">
+            <div className="form-groupRegister">
               <label className="label">Mot de passe</label>
               <input
                 type="password"
@@ -57,7 +57,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 placeholder="************"
               />
             </div>
-            <div className="form-group">
+            <div className="form-groupRegister">
               <button type="submit" className="button">Se connecter</button>
             </div>
           </form>

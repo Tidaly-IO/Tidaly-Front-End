@@ -76,7 +76,7 @@ function SensorDetails() {
           </div>
 
           <div style={{ position: "absolute", left: "55%", bottom: "25px", transform: "translate(-50%)" }}>
-            <button className="btn-submit" onClick={openModal}>Ajouter un capteur</button>
+            <button className="TEST" onClick={openModal}>Ajouter un capteur</button>
           </div>
         </div>
       </div>

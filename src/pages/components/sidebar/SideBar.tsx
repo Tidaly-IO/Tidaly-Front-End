@@ -5,13 +5,16 @@ import { SideBarData2 } from './SideBarData';
 import logo from '../../../assets/tidaly/LogoTidaly.png';
 
 function SideBar() {
-    return (
-        <div className='SideBar'>
+    const isSmallScreen = window.innerWidth <= 768; // Vérifie si l'écran est petit
 
+    return (
+        <div className={`SideBar ${isSmallScreen ? 'small-screen' : ''}`}>
             <div className="circle-Container2">
                 <div className="circle2">
+                    <div className={`logo-container ${isSmallScreen ? 'small-screen' : ''}`}>
                         <img className="logo" src={logo} alt="Cloudy Sky"></img>
-                        <h2>TIDALY</h2>
+                        <h2 className="logo-text">TIDALY</h2>
+                    </div>
                 </div>
             </div>
             <ul className='SideBarList'>
@@ -24,8 +27,8 @@ function SideBar() {
                             onClick={() => {window.location.pathname = val.link}}
                         >
                             <div>
-                                <div id ="icon"> {val.icon} </div>
-                                <div id="title"> {val.title} </div>
+                                <div id="icon"> {val.icon} </div>
+                                <div className="title-text"> {val.title} </div>
                             </div>
                         </li>
                     );
@@ -40,8 +43,8 @@ function SideBar() {
                             onClick={() => {window.location.pathname = val.link}}
                         >
                             <div>
-                                <div id ="icon"> {val.icon} </div>
-                                <div id="title"> {val.title} </div>
+                                <div id="icon"> {val.icon} </div>
+                                <div className="title-text"> {val.title} </div>
                             </div>
                         </li>
                     );

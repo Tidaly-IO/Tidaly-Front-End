@@ -1,3 +1,5 @@
+/* Styles par défaut */
+
 .HomePage {
     width: 100vw;
     height: 100vh;
@@ -17,7 +19,6 @@ canvas {
     padding-left: 65px;
 }
 
-
 .rectangle1 {
     width: 1350px;
     max-height: 400px;
@@ -30,7 +31,7 @@ canvas {
 }
 
 .rectangle2 {
-    width: 1350;
+    width: 1350px;
     height: 330px;
     background-color: white;
     margin: 0 auto;
@@ -41,9 +42,8 @@ canvas {
 }
 
 .select-container {
-  width: 300px;
+    width: 300px;
 }
-
 
 .blue-square {
     width: 500px;
@@ -57,17 +57,67 @@ canvas {
     position: relative;
 }
 
-
-
 .image {
     left: 30px;
     position: absolute;
     top: 45%;
     transform: translateY(-50%);
 }
+
 .image2 {
     left: 30px;
     position: absolute;
     top: 73%;
     transform: translateY(-50%);
+}
+
+/* Media queries pour la mise en page responsive */
+
+@media (max-width: 1680px) {
+    .HomePage {
+        flex-direction: column;
+    }
+
+    .rectangle1,
+    .rectangle2 {
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 20px;
+        margin-left: 0;
+    }
+
+    .titre {
+        padding-left: 20px;
+        margin-top: 20px;
+    }
+
+    /* Styles pour les carrés bleus à l'intérieur du rectangle2 */
+    .blue-square {
+        width: 40%;
+        margin: 0 auto;
+        margin-top: 20px;
+        margin-left: 5;
+    }
+
+    .blue-square:nth-child(odd) {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .blue-square:nth-child(even) {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+    .select-container {
+        width: 40%;
+        margin-right: auto;
+    }
+    .titre {
+        font-size: 20px;
+    }
 }

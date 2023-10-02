@@ -67,3 +67,24 @@
     box-shadow: 2px 5px 5px 1px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease-in-out;
   }
+
+
+  @media (max-width: 1680px) {
+    .rectangleUserProfile {
+        width: 80%; /* Adjust the width for smaller screens */
+        margin-right: 70vw; /* Center the content */
+    }
+
+    .profile-photo {
+        width: 150px;
+        height: 150px;
+    }
+
+    .input-userProfile, .input-image {
+        width: 70%;
+    }
+
+    .btn-submit-mail {
+        width: 70%;
+    }
+}

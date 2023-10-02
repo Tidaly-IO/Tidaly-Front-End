@@ -1,7 +1,10 @@
+/* Default styles for larger screens */
 .SideBar {
     height: 100%;
     width: 250px;
     background-color: rgb(75, 171, 240);
+    display: block;
+    transition: width 0.5s; /* Ajoutez une transition de largeur */
 }
 
 .SideBarList {
@@ -13,12 +16,12 @@
 }
 
 .SideBarList #active {
-    background-color: rgb(0, 149, 255);;
+    background-color: rgb(0, 149, 255);
 }
 
 .SideBarList .row:hover {
-    cursor:pointer;
-    background-color: rgb(0, 149, 255);;
+    cursor: pointer;
+    background-color: rgb(0, 149, 255);
 }
 
 .SideBarList .row {
@@ -40,10 +43,21 @@
     place-items: center;
 }
 
-.row #title {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    flex: 70%;
+/* Condition pour réduire la largeur de la sidebar sur les petits écrans */
+@media (max-width: 1000px) {
+    .SideBar {
+        width: 60px;
+    }
+
+    /* Condition pour masquer le logo et le texte du logo sur les petits écrans */
+    .circle2 {
+        display: none;
+    }
+
+    /* Condition pour masquer le texte des icônes sur les petits écrans */
+    .title-text {
+        display: none;
+    }
 }
 
 .circle-container2 {
@@ -51,16 +65,17 @@
     align-items: center;
 }
 
+/* Styles pour le cercle du logo sur les petits écrans */
 .circle2 {
     position: absolute;
     top: 40px;
     left: 40px;
-
     width: 170px;
     height: 170px;
     border-radius: 50%;
     background-color: white;
     box-shadow: 1px 2px 5px 3px rgba(0, 0, 0, 0.3);
+    transition: display 0.5s; /* Ajoutez une transition pour la visibilité */
 }
 
 .addSpace {
