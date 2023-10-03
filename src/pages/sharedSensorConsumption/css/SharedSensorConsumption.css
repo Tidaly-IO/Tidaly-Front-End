@@ -1,3 +1,16 @@
+h1 {
+    display: flex;
+    margin-left: 75px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.layout-blank {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(237, 237, 237);
+}
+
 .layout {
     width: 1250px;
     height: 425px;
@@ -7,9 +20,20 @@
     margin-top: 20px;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
+    overflow: scroll;
 }
 
 .layout-minor {
+    height: 330px;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 40px;
+    margin-left: 65px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.layout-minor-no-scroll {
     width: 1350;
     height: 330px;
     background-color: white;
@@ -18,7 +42,6 @@
     margin-left: 65px;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    /* overflow: scroll; */
 }
 
 .chart {
@@ -64,7 +87,6 @@
     grid-column-gap: 20px;
     grid-row-gap: 20px;
     justify-content: space-evenly;
-    /* background-color: red; */
 }
 
 .feed-content{
@@ -141,4 +163,122 @@
     width: 10px;
     border-radius: 30px;
     background-color: #d9d9d9;
+}
+
+/* Condition pour réduire la largeur de la sidebar sur les petits écrans */
+@media (max-width: 412px) {
+    h1 {
+        display: block;
+        font-size: 2em;
+        margin-block-start: 0.67em;
+        margin-block-end: 0.67em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
+
+    h4 {
+        margin: 8px;
+        padding: 0px;
+        font-size: 14px;
+    }
+
+    .title {
+        /* margin: ; */
+        padding: 0px 5px 0px 5px;
+        font-family: Arial;
+        font-size: 18px;
+    }
+
+    .layout-blank {
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .layout {
+        width: 350px;
+        flex: 2;
+        background-color: white;
+        margin: 0 auto;
+        margin-left: 15px;
+        margin-right: 5px;
+        margin-top: 20px;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    /* Condition pour masquer le logo et le texte du logo sur les petits écrans */
+    .layout-minor {
+        width: 350px;
+        flex: 2;
+        background-color: white;
+        margin: 0 auto;
+        margin-left: 15px;
+        margin-top: 10px;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .layout-minor-no-scroll {
+        width: 350px;
+        flex: 2;
+        background-color: white;
+        margin: 0 auto;
+        margin-left: 15px;
+        margin-top: 10px;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+    }
+
+    .chart {
+        height: 60%;
+        max-width: 200px;
+        max-height: 200px;
+        padding: 20px 20px;
+        margin-top: 20px;
+    }
+
+    .feed {
+        padding: 20px;
+    }
+    
+    .feed-logo {
+        height: 40px;
+        width: 30px;
+        margin: 20px;
+    }
+    
+    .feed{
+        margin: 0px 0px 0px 0px;
+        display: grid;
+        grid-template-columns: 0px;
+        grid-row: auto auto;
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
+        justify-content: space-evenly;
+    }
+    
+    .feed-content{
+        width: 500px;
+        height: 100px;
+        font-size: 20px;
+        color: black;
+        display: flex;
+        align-items: center;
+    }
+
+    .spacer-vertical {
+        margin-left: 10px;
+    }
+
+    .divider {
+        height: 425px;
+        width: 10px;
+        border-radius: 30px;
+        background-color: #d9d9d9;
+    }
 }

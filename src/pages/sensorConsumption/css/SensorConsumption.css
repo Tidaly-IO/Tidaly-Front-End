@@ -1,4 +1,10 @@
-.layout {
+.layout-blank-unique {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(237, 237, 237);
+}
+
+.layout-unique {
     width: 1250px;
     height: 425px;
     background-color: white;
@@ -9,8 +15,7 @@
     border-radius: 10px;
 }
 
-.layout-minor {
-    width: 1350;
+.layout-minor-unique {
     height: 330px;
     background-color: white;
     margin: 0 auto;
@@ -40,10 +45,10 @@
     margin-bottom: 20px;
 }
 
-.spacer-vertical {
+/* .spacer-vertical {
     margin-left: 55px;
     margin-right: 10px;
-}
+} */
 
 .feed {
     padding: 20px;
@@ -55,7 +60,7 @@
     margin: 20px;
 }
 
-.feed{
+/* .feed{
     margin: 0px 0px 0px 0px;
     display: grid;
     grid-template-columns: 500px 500px;
@@ -72,7 +77,7 @@
     color: black;
     display: flex;
     align-items: center;
-}
+} */
 
 .legend {
     padding: 20px;
@@ -147,4 +152,75 @@
     width: 10px;
     border-radius: 30px;
     background-color: #d9d9d9;
+}
+
+/* Condition pour réduire la largeur de la sidebar sur les petits écrans */
+@media (max-width: 412px) {
+    h4 {
+        margin: 8px;
+        padding: 0px;
+        font-size: 14px;
+    }
+
+    .title-unique {
+        /* margin: ; */
+        padding: 0px 5px 0px 5px;
+        font-family: Arial;
+        font-size: 18px;
+    }
+
+    .layout-blank-unique {
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .layout-unique {
+        width: 350px;
+        flex: 2;
+        background-color: white;
+        margin: 0 auto;
+        margin-left: 15px;
+        margin-right: 5px;
+        margin-top: 20px;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    /* Condition pour masquer le logo et le texte du logo sur les petits écrans */
+    .layout-minor-unique {
+        width: 350px;
+        flex: 2;
+        background-color: white;
+        margin: 0 auto;
+        margin-left: 15px;
+        margin-top: 10px;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .layout-minor-no-scroll-unique {
+        width: 350px;
+        flex: 2;
+        background-color: white;
+        margin: 0 auto;
+        margin-left: 15px;
+        margin-top: 10px;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+    }
+
+    .spacer-vertical-unique {
+        margin-left: 10px;
+    }
+
+    .divider-unique {
+        height: 425px;
+        width: 10px;
+        border-radius: 30px;
+        background-color: #d9d9d9;
+    }
 }

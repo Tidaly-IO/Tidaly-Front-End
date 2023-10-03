@@ -75,61 +75,57 @@ const SharedSensorConsumption: React.FC<SharedSensorConsumptionProps> = ({ data 
     console.log(`TIMELINE: ${timeline}`);
 
     return (
-        <div className="HomePage" >
+        <div className="layout-blank row" >
             <SideBar />
             <div>
 
-                <h1 className="titre" style={{ fontFamily: 'Arial', marginRight: "20px" }}>Consommation global des capteurs</h1>
+                <h1 className="title" style={{ fontFamily: 'Arial', marginRight: "20px" }}>Consommation global des capteurs</h1>
 
                 <div className="layout" >
-                    <div className="median">
-                        <Grid container direction="row" justifyContent="space-between">
-                            <div className="legend" >
-                                <Grid container direction="column" justifyContent="center" alignItems="flex-start" padding={ "20px" } margin={ "20px 0px" }>
+                    <Grid container direction="row" justifyContent="space-between">
+                        <div className="legend" >
+                            <Grid container direction="column" justifyContent="center" alignItems="flex-start" padding={ "20px" } margin={ "20px 0px" }>
+                                <div className="row">
+                                    <div className="global-consumption-rect"></div>
+                                    <h4>Consommation global</h4>
+                                </div>
+                                <div className="row">
+                                    <div className="sensor-consumption-rect"></div>
+                                    <h4>Consommation des capteurs</h4>
+                                </div>
+                            </Grid>
+                        </div>
+                        <div className="chart" >
+                            <Pie data={chartData} />
+                        </div>
+                        <div>
+                            <div className="dropdown">
+                                <Button sx={{ m: 0, p: 0, minWidth:0 }} style={{
+                                    width: "300px",
+                                    height: "40px",
+                                    backgroundColor: "#57a0e5",
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                    fontFamily: "monospace",
+                                    color: "black",
+                                    justifyContent: "flex-start",
+                                }}
+                                variant="contained" onClick={() => setDisplay(!display)} >
                                     <div className="row">
-                                        <div className="global-consumption-rect"></div>
-                                        <h4>Consommation global</h4>
-                                    </div>
-                                    <div className="row">
-                                        <div className="sensor-consumption-rect"></div>
-                                        <h4>Consommation des capteurs</h4>
-                                    </div>
-                                </Grid>
-                            </div>
-
-                            <div className="chart" >
-                                <Pie data={chartData} />
-                            </div>
-
-                            <div>
-                                <div className="dropdown">
-                                    <Button sx={{ m: 0, p: 0, minWidth:0 }} style={{
-                                        width: "300px",
-                                        height: "40px",
-                                        backgroundColor: "#57a0e5",
-                                        fontSize: "14px",
-                                        fontWeight: "bold",
-                                        fontFamily: "monospace",
-                                        color: "black",
-                                        justifyContent: "flex-start",
-                                    }}
-                                    variant="contained" onClick={() => setDisplay(!display)} >
-                                        <div className="row">
-                                            <div>
-                                                <ArrowDropDownIcon style={{ fontSize: "50px" }} />
-                                            </div>
-                                            <div>{timeline}</div>
+                                        <div>
+                                            <ArrowDropDownIcon style={{ fontSize: "50px" }} />
                                         </div>
-                                    </Button>
-                                    <div className={!display ? "hide" : "column selector"}>
-                                        <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Année"); setDisplay(!display); }}>Année</Button>
-                                        <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Mois" ); setDisplay(!display); }}>Mois</Button>
-                                        <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Semaine"); setDisplay(!display); }}>Semaine</Button>
+                                        <div>{timeline}</div>
                                     </div>
+                                </Button>
+                                <div className={!display ? "hide" : "column selector"}>
+                                    <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Année"); setDisplay(!display); }}>Année</Button>
+                                    <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Mois" ); setDisplay(!display); }}>Mois</Button>
+                                    <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Semaine"); setDisplay(!display); }}>Semaine</Button>
                                 </div>
                             </div>
-                        </Grid>
-                    </div>
+                        </div>
+                    </Grid>
                 </div>
 
                 <div className="layout-minor" >

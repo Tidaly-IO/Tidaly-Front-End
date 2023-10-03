@@ -82,89 +82,84 @@ const SensorConsumption: React.FC<SensorConsumptionProps> = ({ data }) => {
     console.log(`TIMELINE: ${timeline}`);
 
     return (
-        <div className="HomePage" >
+        <div className="layout-blank-unique row" >
             <SideBar />
             <div>
+                <h1 className="title" style={{ fontFamily: 'Arial', marginRight: "20px" }}>Répartition de la consommation des capteurs</h1>
 
-                <h1 className="titre" style={{ fontFamily: 'Arial', marginRight: "20px" }}>Répartition de la consommation des capteurs</h1>
-
-                <div className="layout" >
-                    <div className="median">
-                        <Grid container direction="row" justifyContent="space-between">
+                <div className="layout-unique" >
+                    <Grid container direction="row" justifyContent="space-between">
+                        <div className="dropdown">
+                                <Button sx={{ m: 0, p: 0, minWidth:0 }} style={{
+                                    width: "250px",
+                                    height: "35px",
+                                    backgroundColor: "#57a0e5",
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                    fontFamily: "monospace",
+                                    color: "black",
+                                    justifyContent: "flex-start",
+                                }}
+                                variant="contained" onClick={() => setSensorSelectorDisplay(!sensorSelectorDisplay)} >
+                                    <div className="row">
+                                        <div>
+                                            <ArrowDropDownIcon style={{ fontSize: "50px" }} />
+                                        </div>
+                                        <div style={{ marginLeft: "30px" }}>Mes capteurs</div>
+                                    </div>
+                                </Button>
+                                <div className={!sensorSelectorDisplay ? "hide" : "selector-sensor-list"}>
+                                    <div className='row'>
+                                        <div className='divider' style={{ height: "25vh", marginRight: "5px", marginLeft: "5px" }}/>
+                                        <div className='column'>
+                                            {pieData.labels.map((element, index) => {
+                                                return pieData.datasets.map((sets) => {
+                                                    return (
+                                                        <div className='row' style={{ padding: "5px", margin: "8px 0px" }}>
+                                                            <div style={{ width: "20px", height: "20px", backgroundColor: sets.backgroundColor[index], marginRight: "10px" }}></div>
+                                                            <div style={{ fontWeight: "bold" }}>{element}</div>
+                                                        </div>
+                                                    );
+                                                })
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div className="chart" >
+                            <Pie data={chartData} />
+                        </div>
+                        <div>
                             <div className="dropdown">
-                                    <Button sx={{ m: 0, p: 0, minWidth:0 }} style={{
-                                        width: "250px",
-                                        height: "35px",
-                                        backgroundColor: "#57a0e5",
-                                        fontSize: "14px",
-                                        fontWeight: "bold",
-                                        fontFamily: "monospace",
-                                        color: "black",
-                                        justifyContent: "flex-start",
-                                    }}
-                                    variant="contained" onClick={() => setSensorSelectorDisplay(!sensorSelectorDisplay)} >
-                                        <div className="row">
-                                            <div>
-                                                <ArrowDropDownIcon style={{ fontSize: "50px" }} />
-                                            </div>
-                                            <div style={{ marginLeft: "30px" }}>Mes capteurs</div>
+                                <Button sx={{ m: 0, p: 0, minWidth:0 }} style={{
+                                    width: "300px",
+                                    height: "40px",
+                                    backgroundColor: "#57a0e5",
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                    fontFamily: "monospace",
+                                    color: "black",
+                                    justifyContent: "flex-start",
+                                }}
+                                variant="contained" onClick={() => setTimelineDisplay(!timelinedisplay)} >
+                                    <div className="row">
+                                        <div>
+                                            <ArrowDropDownIcon style={{ fontSize: "50px" }} />
                                         </div>
-                                    </Button>
-                                    <div className={!sensorSelectorDisplay ? "hide" : "selector-sensor-list"}>
-                                        <div className='row'>
-                                            <div className='divider' style={{ height: "25vh", marginRight: "5px", marginLeft: "5px" }}/>
-                                            <div className='column'>
-                                                {pieData.labels.map((element, index) => {
-                                                    return pieData.datasets.map((sets) => {
-                                                        return (
-                                                            <div className='row' style={{ padding: "5px", margin: "8px 0px" }}>
-                                                                <div style={{ width: "20px", height: "20px", backgroundColor: sets.backgroundColor[index], marginRight: "10px" }}></div>
-                                                                <div style={{ fontWeight: "bold" }}>{element}</div>
-                                                            </div>
-                                                        );
-                                                    })
-                                                })}
-                                            </div>
-                                        </div>
+                                        <div>{timeline}</div>
                                     </div>
-                                </div>
-
-                            <div className="chart" >
-                                <Pie data={chartData} />
-                            </div>
-
-                            <div>
-                                <div className="dropdown">
-                                    <Button sx={{ m: 0, p: 0, minWidth:0 }} style={{
-                                        width: "300px",
-                                        height: "40px",
-                                        backgroundColor: "#57a0e5",
-                                        fontSize: "14px",
-                                        fontWeight: "bold",
-                                        fontFamily: "monospace",
-                                        color: "black",
-                                        justifyContent: "flex-start",
-                                    }}
-                                    variant="contained" onClick={() => setTimelineDisplay(!timelinedisplay)} >
-                                        <div className="row">
-                                            <div>
-                                                <ArrowDropDownIcon style={{ fontSize: "50px" }} />
-                                            </div>
-                                            <div>{timeline}</div>
-                                        </div>
-                                    </Button>
-                                    <div className={!timelinedisplay ? "hide" : "column selector"}>
-                                        <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Année"); setTimelineDisplay(!timelinedisplay); }}>Année</Button>
-                                        <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Mois" ); setTimelineDisplay(!timelinedisplay); }}>Mois</Button>
-                                        <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Semaine"); setTimelineDisplay(!timelinedisplay); }}>Semaine</Button>
-                                    </div>
+                                </Button>
+                                <div className={!timelinedisplay ? "hide" : "column selector"}>
+                                    <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Année"); setTimelineDisplay(!timelinedisplay); }}>Année</Button>
+                                    <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Mois" ); setTimelineDisplay(!timelinedisplay); }}>Mois</Button>
+                                    <Button style={{ color: "black", justifyContent: "flex-start", fontSize: "14px", fontWeight: "bold", fontFamily: "monospace", }} onClick={() => { setTimeline("Semaine"); setTimelineDisplay(!timelinedisplay); }}>Semaine</Button>
                                 </div>
                             </div>
-                        </Grid>
-                    </div>
+                        </div>
+                    </Grid>
                 </div>
 
-                <div className="layout-minor" >
+                <div className="layout-minor-unique" >
                     <h2 className="titre" style={{ fontFamily: 'Arial', marginRight: "20px"}}>Dernières activités</h2>
                     <div className="row spacer-vertical">
                         <div className="divider"></div>
