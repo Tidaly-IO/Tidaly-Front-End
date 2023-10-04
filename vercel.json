@@ -1,9 +1,9 @@
 {
   "routes": [
     {
-      "src": "/api/*", // Correspondra à toutes les URL commençant par "/api/"
-      "dest": "http://20.111.43.70:3333/api/:splat", // L'URL cible avec :splat pour capturer la partie de l'URL
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"] // Méthodes HTTP autorisées
+      "src": "/api/*",
+      "dest": "http://20.111.43.70:3333/api/:splat",
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
     }
   ]
 }
