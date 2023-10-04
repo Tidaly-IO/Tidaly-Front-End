@@ -3,7 +3,7 @@ import apiUrl from '../../components/config/config.tsx';
 import axios, { AxiosResponse } from 'axios';
 
 const instance = axios.create({
-    baseURL: '/api/v1',
+    baseURL: 'http://20.111.43.70:3333/api/v1',
     headers: { 'Access-Control-Allow-Origin': '*' }
 });
 
