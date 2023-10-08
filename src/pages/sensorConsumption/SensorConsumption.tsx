@@ -85,7 +85,7 @@ const SensorConsumption: React.FC<SensorConsumptionProps> = ({ data }) => {
         <div className="layout-blank-unique row" >
             <SideBar />
             <div>
-                <h1 className="title" style={{ fontFamily: 'Arial', marginRight: "20px" }}>Répartition de la consommation des capteurs</h1>
+                <h1 className="title-unique">Répartition de la consommation des capteurs</h1>
 
                 <div className="layout-unique" >
                     <Grid container direction="row" justifyContent="space-between">
