@@ -7,6 +7,7 @@ interface FeedProps {
 }
 
 const Feed: React.FC<FeedProps> = ({ data }) => {
+    const MINUTE_MS = 1000;
     const [timeSpent, setTimeSpent] = useState('');
 
     const [lastUpdate, setLastUpdate] = useState(Date.now());
@@ -48,7 +49,14 @@ const Feed: React.FC<FeedProps> = ({ data }) => {
       }
     }
 
-    useEffect(() => setTimeSpent(calculateTimeSinceUpdate(lastUpdate)), []);
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setTimeSpent(calculateTimeSinceUpdate(lastUpdate));
+        console.log('timespent ' + '\'' + timeSpent + '\'');
+      }, MINUTE_MS);
+    
+      return () => clearInterval(interval);
+    }, []);
 
     return (
         <div >
@@ -56,7 +64,7 @@ const Feed: React.FC<FeedProps> = ({ data }) => {
                 {data.map(element =>
                     <div className='feed-content' >
                         <img className='feed-logo' src={logo} />
-                        <h4>{element.name} : {element.value} {timeSpent}</h4>
+                        <h4>{element.name} : {element.value} {timeSpent.length <= 1 ? 'il y a 0 seconde' : timeSpent}</h4>
                     </div>)}
             </div>
         </div>
