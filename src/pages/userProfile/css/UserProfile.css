@@ -42,6 +42,15 @@
     width: 335px;
   }
 
+  .input-userProfileTEST {
+    margin: 0.5rem 0;
+    padding: 1.1rem;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 1px 2px 5px 3px rgba(0, 0, 0, 0.2);
+    width: 335px;
+  }
+
 .input-image {
     width: 335px;
     background-color: rgb(75, 171, 240);
@@ -66,10 +75,10 @@
     width: 400px;
     box-shadow: 2px 5px 5px 1px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease-in-out;
-  }
+}
 
 
-  @media (max-width: 1680px) {
+@media (max-width: 1680px) {
     .rectangleUserProfile {
         width: 80%; /* Adjust the width for smaller screens */
         margin-right: 70vw; /* Center the content */
@@ -81,10 +90,55 @@
     }
 
     .input-userProfile, .input-image {
-        width: 70%;
+        width: 100%;
+    }
+
+    .input-userProfileTEST {
+        width: 500%;
     }
 
     .btn-submit-mail {
-        width: 70%;
+        margin-top : 50%;
+        width: 250%;
+    }
+}
+
+
+@media (max-width: 650px) {
+    .rectangleUserProfile {
+        width: 80%;
+        margin: 0;
+        height: 650px;
+        margin-right: 50vw;
+        margin-left: 5vw;
+    }
+
+    .titleCoordonées {
+        margin-left: 35%;
+    }
+
+    .btn-submit {
+        width: 100%;
+    }
+
+    .profile-photo-container {
+        top : 10%;
+        left: 10%;
+    }
+
+    .input-userProfile, .input-image, .input-userProfileTEST {
+        width: 90%; /* Ajuster la largeur des champs de saisie */
+        margin: 0 auto; /* Centrer les champs de saisie horizontalement */
+    }
+
+    .btn-submit-mail {
+        width: 90%;
+    }
+
+    .profile-photo {
+        margin-top : 10%;
+        width: 70px;
+        height: 70px;
+        right: 50%;
     }
 }

@@ -3,3 +3,57 @@
     height: 100vh;
     background-color: rgb(237, 237, 237);
 }
+
+.select-container-homePage {
+    width: 100px;
+    position: absolute;
+    top: 20px;
+    left: 93%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.rectangle1-homePage {
+    width: 1350px;
+    max-height: 400px;
+    background-color: white;
+    margin: 0 auto;
+    margin-left: 65px;
+    margin-top: 20px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.rectangle2-homePage {
+    width: 1350px;
+    height: 330px;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-left: 65px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+
+
+@media (max-width: 1680px) {
+    .rectangle1-homePage,
+    .rectangle2-homePage {
+        width: 80%;
+        margin-top: 20px;
+        margin-left: 0;
+    }
+}
+@media (max-width: 600px) {
+    .rectangle1-homePage,
+    .rectangle2-homePage {
+        width: 90%;
+        margin-top: 40px;
+        margin-left: 0;
+    }
+
+    .select-container-homePage {
+
+    }
+}

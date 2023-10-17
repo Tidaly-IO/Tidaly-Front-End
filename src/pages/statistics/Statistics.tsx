@@ -76,14 +76,14 @@ export const Statistics: React.FC = () => {
             <div className='blue-square'>
               <img src={fleche_bas} className="image" alt="Flèche bas" />
               <img src={fleche_bas} className="image2" alt="Flèche bas" />
-              <h3 style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {Math.floor(Math.random() * 100)} €</h3>
-              <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommés : {total} L</h3>
+              <h3 className="moneySpent" style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {Math.floor(Math.random() * 100)} €</h3>
+              <h3 className="literSpent" style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommés : {total} L</h3>
             </div>
             <div className='blue-square'>
               <img src={fleche_haut} className="image" alt="Flèche haut" />
               <img src={fleche_haut} className="image2" alt="Flèche haut" />
-              <h3 style={{ fontFamily: 'Arial', marginRight: "100px", marginTop: "100px", color: 'white' }}>Économies : {Math.floor(Math.random() * 100)} €</h3>
-              <h3 style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres économisés : {Math.floor(Math.random() * 100)} L</h3>
+              <h3 className="moneySave" style={{ fontFamily: 'Arial', marginRight: "100px", marginTop: "100px", color: 'white' }}>Économies : {Math.floor(Math.random() * 100)} €</h3>
+              <h3 className="literSave"style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres économisés : {Math.floor(Math.random() * 100)} L</h3>
             </div>
           </div>
         </div>

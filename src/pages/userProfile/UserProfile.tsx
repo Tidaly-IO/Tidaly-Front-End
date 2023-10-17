@@ -66,13 +66,13 @@ export const UserProfile = () => {
             </div>
 
             <div style={{ position: "absolute", left: "110%", bottom: "70px", transform: "translate(-50%)" }}>
-              <input className="input-userProfile" type="text" placeholder="Nom" id="nom" name="nom" value={nom} onChange={(e: ChangeEvent<HTMLInputElement>) => setNom(e.target.value)} />
+              <input className="input-userProfileTEST" type="text" placeholder="Nom" id="nom" name="nom" value={nom} onChange={(e: ChangeEvent<HTMLInputElement>) => setNom(e.target.value)} />
             </div>
 
             <div style={{ position: "absolute", left: "90%", top: "200px", transform: "translate(-50%)", width: "90%", borderTop: "2px solid #000000" }}></div>
 
             <div style={{ fontFamily: 'Arial', position: "absolute", left: "52%", top: "200px", transform: "translate(-50%)", textAlign: "left" }}>
-              <h2 className="title">Coordonnées</h2>
+              <h2 className="titleCoordonées">Coordonnées</h2>
             </div>
 
             <div style={{ position: "absolute", left: "110%", top: "260px", transform: "translate(-50%)" }}>

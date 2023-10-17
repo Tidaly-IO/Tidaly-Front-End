@@ -5,6 +5,7 @@ import DayOfTheWeek from './components/DayOfTheWeek.tsx';
 import SideBar from '.././components/sidebar/SideBar.tsx';
 import { Bar } from 'react-chartjs-2';
 import ".././statistics/css/Statistics.css";
+import "./css/HomePage.css";
 import { options, dataCopy, getCurrentDate, getIndexDay } from './components/Chart.js';
 
 type Option = "Semaine" | "Mois";
@@ -64,19 +65,19 @@ export const HomePage = () => {
     <div className='HomePage'>
       <SideBar />
       <div>
+      <div className="select-container-homePage">
+            <select id="options" name="options" value={selectedOption} onChange={handleOptionChange}>
+              <option value="Semaine">Semaine</option>
+              <option value="Mois">Mois</option>
+            </select>
+        </div>
         <h1 className="titre" style={{ fontFamily: 'Arial', marginRight: "20px" }}>Accueil</h1>
-        <div className='rectangle2'>
+        <div className='rectangle2-homePage'>
           <h3 style={{ fontFamily: 'Arial', color: "rgb(102, 102, 102)", marginLeft: "20px", paddingTop: "15px", textAlign: "left" }}>Consommation du jour</h3>
           <h4 style={{ fontFamily: 'Arial', color: "rgb(102, 102, 102)", marginLeft: "20px", textAlign: "left" }}><DayOfTheWeek /> - {getCurrentDate()}</h4>
           <CircleChart data={dataCopy.datasets[0].data[getIndexDay()]}></CircleChart>
         </div>
-        <div className='rectangle1'>
-          <div className="select-container" style={{ display: "inline-flex", textAlign: "right", position: "absolute", marginLeft: "20%", marginTop: "20px" }}>
-            <select id="options" name="options" value={selectedOption} onChange={handleOptionChange} style={{ marginBottom: "0px" }}>
-              <option value="Semaine">Semaine</option>
-              <option value="Mois">Mois</option>
-            </select>
-          </div>
+        <div className='rectangle1-homePage'>
           <Bar data={dataCopy} options={options} />
         </div>
       </div>

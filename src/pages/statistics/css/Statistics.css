@@ -93,7 +93,7 @@ canvas {
 
     /* Styles pour les carrés bleus à l'intérieur du rectangle2 */
     .blue-square {
-        width: 40%;
+        width: 50%;
         margin: 0 auto;
         margin-top: 20px;
         margin-left: 5;
@@ -109,6 +109,37 @@ canvas {
         margin-bottom: 20px;
     }
 
+    .moneySpent {
+        font-size: 10px;
+        margin-left: 50%;
+        display: inline-block;
+    }
+    .moneySave {
+        font-size: 10px;
+        margin-left: 50%;
+        display: inline-block;
+    }
+    .literSpent {
+        font-size: 10px;
+        margin-left: 50%;
+        display: inline-block;
+        margin-bottom: 30%;
+    }
+    .literSave {
+        font-size: 10px;
+        margin-left: 50%;
+        display: inline-block;
+        margin-bottom: 0px;
+    }
+    .image {
+        width: 30px;
+        height: 30px;
+    }
+    .image2 {
+        width: 30px;
+        height: 30px;
+    }
+
 }
 
 
@@ -119,5 +150,45 @@ canvas {
     }
     .titre {
         font-size: 20px;
+    }
+    .blue-square {
+        width: 50%;
+    }
+    .moneySpent {
+        font-size: 10px;
+        margin-left: 50%;
+        display: inline-block;
+    }
+    .moneySave {
+        font-size: 10px;
+        margin-left: 50%;
+        display: inline-block;
+    }
+    .literSpent {
+        font-size: 10px;
+        margin-left: 50%;
+        display: inline-block;
+    }
+    .literSave {
+        font-size: 10px;
+        margin-left: 50%;
+        display: inline-block;
+        margin-bottom: 0px;
+    }
+    .image {
+        width: 20px;
+        height: 20px;
+    }
+    .image2 {
+        width: 20px;
+        height: 20px;
+    }
+    .rectangle1,
+    .rectangle2 {
+        width: 78%;
+        margin: 0;
+        margin-top: 20px;
+        margin-left: 5vw;
+        margin-right: 5vw;
     }
 }
