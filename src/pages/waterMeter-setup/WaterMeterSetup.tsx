@@ -1,23 +1,53 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import axios from "axios";
 import logo from '../../assets/tidaly/LogoTidaly.png';
-import { useWaterMeterSetupLogic } from './components/Query.tsx';
 import './css/WaterMeterSetup.css';
 
-export const WaterMeterSetup = () => {
-  const {
-    consumption,
-    objective,
-    isValid,
-    setConsumption,
-    setObjective,
-    handleSubmit,
-  } = useWaterMeterSetupLogic();
+const instance = axios.create({
+  baseURL: 'http://20.111.43.70:3333/api/v1',
+  headers: { Authorization: 'Bearer ' + `${localStorage.getItem("token")}` }
+});
 
-  // Fonction pour convertir une chaîne de caractères en nombre
+export const WaterMeterSetup = () => {
+  const [consumption, setConsumption] = useState<number>(0);
+  const [objective, setObjective] = useState<number>(0);
+  const [isValid, setIsValid] = useState<boolean>(false);
+
   const parseNumber = (value: string): number => {
     const parsedValue = parseInt(value, 10);
     return isNaN(parsedValue) ? 0 : parsedValue;
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const parsedConsumption = parseNumber(consumption.toString());
+    const parsedObjective = parseNumber(objective.toString());
+
+    if (parsedConsumption > 9999999 || parsedObjective > 9999999) {
+      alert("Les valeurs de consommation et/ou d'objectif ne peuvent pas dépasser 9999999.");
+      setIsValid(false);
+    } else if (!/^\d+$/.test(consumption.toString()) || !/^\d+$/.test(objective.toString())) {
+      alert("Les valeurs de consommation et/ou d'objectif ne peuvent contenir que des chiffres.");
+      setIsValid(false);
+    } else {
+      try {
+        const response = await instance.post("/user/profile", {
+          firstname: `${localStorage.getItem("firstName")}`,
+          lastname: `${localStorage.getItem("name")}`,
+          address: `${localStorage.getItem("adresse")}`,
+          countryCode: `${localStorage.getItem("pays")}`,
+          city: `${localStorage.getItem("ville")}`,
+          postalCode: `${localStorage.getItem("codePostale")}`,
+          waterConsumed: parsedConsumption,
+          waterConsumptionTarget: parsedObjective,
+        });
+        setIsValid(true);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -37,7 +67,7 @@ export const WaterMeterSetup = () => {
               <input
                 className="inputWaterMeterSetup"
                 value={consumption}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setConsumption(parseNumber(e.target.value))}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setConsumption(e.target.value)}
                 type="number"
                 placeholder="Consommation actuelle"
                 id="consumption"
@@ -51,7 +81,7 @@ export const WaterMeterSetup = () => {
               <input
                 className="inputWaterMeterSetup"
                 value={objective}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setObjective(parseNumber(e.target.value))}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setObjective(e.target.value)}
                 type="number"
                 placeholder="Objectif de consommation"
                 id="objective"
