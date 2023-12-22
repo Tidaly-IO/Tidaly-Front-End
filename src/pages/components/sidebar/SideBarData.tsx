@@ -29,11 +29,11 @@ export const SideBarData: SidebarItem[] = [
         icon: <EdgesensorHighIcon />,
         link: "/SensorDetails"
     },
-    {
-        title: "Historiques de consommation",
-        icon: <HistoryIcon />,
-        link: "/HomePages"
-    },
+    // {
+    //     title: "Historiques de consommation",
+    //     icon: <HistoryIcon />,
+    //     link: "/HomePages"
+    // },
     {
         title: "Profil utilisateur",
         icon: <PersonIcon />,

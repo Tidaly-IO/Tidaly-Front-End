@@ -105,3 +105,16 @@
   align-items: center;
   padding: 20px;
 }
+
+.info-icon {
+  margin-left: 5px;
+  cursor: pointer;
+  color: #3498db; /* Blue color */
+  font-size: 16px; /* Adjust the font size as needed */
+  transition: color 0.3s ease; /* Add a smooth color transition on hover */
+
+  /* Additional styles on hover */
+  &:hover {
+    color: #1a78c2; /* Darker blue on hover */
+  }
+}

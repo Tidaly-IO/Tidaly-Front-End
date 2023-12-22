@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 const FormLogic: React.FC = () => {
   const [name, setName] = useState("");
@@ -10,13 +11,32 @@ const FormLogic: React.FC = () => {
   const [pays, setPays] = useState("");
   const [isValid, setIsValid] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const instance = axios.create({
+    baseURL: 'http://20.111.43.70:3333/api/v1',
+    headers: { Authorization: 'Bearer ' + `${localStorage.getItem("token")}` }
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !firstName || !adresse || !pays || !ville || !codePostale) {
       alert("S'il vous plaît, remplissez tous les champs obligatoires.");
       return;
     } else {
-      setIsValid(true);
+        try {
+          const response = await instance.post("/user/profile", {
+            firstname: `${localStorage.getItem("firstName")}`,
+            lastname: `${localStorage.getItem("name")}`,
+            address: `${localStorage.getItem("adresse")}`,
+            countryCode: `${localStorage.getItem("pays")}`,
+            city: `${localStorage.getItem("ville")}`,
+            postalCode: `${localStorage.getItem("codePostale")}`,
+            waterConsumed: 0,
+            waterConsumptionTarget: 0,
+          });
+          setIsValid(true);
+        } catch (error) {
+          console.log(error);
+        }
     }
   };
 
@@ -126,7 +146,7 @@ const FormLogic: React.FC = () => {
           />
         </div>
         {isValid ? (
-          <Link to="/WaterMeterSetup">
+          <Link to="/WaterMeter">
             <button className="buttonAccountSetup" type="submit">Continuer</button>
           </Link>
         ) : (

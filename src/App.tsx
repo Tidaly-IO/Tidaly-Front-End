@@ -11,6 +11,7 @@ import { Statistics } from "./pages/statistics/Statistics";
 import { UserProfile } from "./pages/userProfile/UserProfile";
 import SharedSensorConsumption from './pages/sharedSensorConsumption/SharedSensorConsumption';
 import SensorConsumption from './pages/sensorConsumption/SensorConsumption';
+import WaterMeter from './pages/waterMeter/WaterMeter';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/UserProfile" element={<UserProfile />} />
           <Route path="/SharedSensorConsumption" element={<SharedSensorConsumption data={[]} />} />
           <Route path="/SensorConsumption" element={<SensorConsumption data={[]} />} />
+          <Route path="/WaterMeter" element={<WaterMeter />} />
         </Routes>
       </Router>
     </div>

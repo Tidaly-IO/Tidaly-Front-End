@@ -13,7 +13,7 @@ interface UserProfile {
 }
 
 const instance = axios.create({
-  baseURL: 'http://20.111.43.70:3333/api/v1',
+  baseURL: 'https://tidaly-api-backend.onrender.com/api/v1',
   headers: { 'Access-Control-Allow-Origin': '*' }
 });
 
@@ -54,13 +54,12 @@ export const useLogin = () => {
     if (test === false) {
       try {
         const instance2 = axios.create({
-          baseURL: 'http://20.111.43.70:3333/api/v1',
+          baseURL: 'https://tidaly-api-backend.onrender.com/api/v1',
           headers: { Authorization: 'Bearer ' + localStorage.getItem("token") }
         });
         const response: AxiosResponse<UserProfile> = await instance2.get("/user/profile");
         const data = response.data;
         console.log(data);
-        alert(JSON.stringify(data));
         if (data.firstname != null) {
           window.location.href = `${apiUrl}/HomePage`;
         }

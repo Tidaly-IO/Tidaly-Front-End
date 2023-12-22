@@ -35,8 +35,8 @@ export const Statistics: React.FC = () => {
               <option value="Mois">Mois</option>
             </select>
             {selectedOption === 'Année' &&
-              <select>
-                {Array.from({ length: 24 }, (_, i) => i + 2000).map((year) => (
+              <select value={selectedYear} onChange={handleYearChange}>
+                {Array.from({ length: 1 }, (_, i) => i + 2023).map((year) => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
@@ -59,7 +59,7 @@ export const Statistics: React.FC = () => {
                   value={selectedYear}
                   onChange={handleYearChange}
                 >
-                  {Array.from({ length: 24 }, (_, i) => i + 2000).map((year) => (
+                  {Array.from({ length: 1 }, (_, i) => i + 2023).map((year) => (
                     <option key={year} value={year}>{year}</option>
                   ))}
                 </select>
@@ -76,7 +76,7 @@ export const Statistics: React.FC = () => {
             <div className='blue-square'>
               <img src={fleche_bas} className="image" alt="Flèche bas" />
               <img src={fleche_bas} className="image2" alt="Flèche bas" />
-              <h3 className="moneySpent" style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {Math.floor(Math.random() * 100)} €</h3>
+              <h3 className="moneySpent" style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {(total / 1000 * 3.5).toFixed(2)} €</h3>
               <h3 className="literSpent" style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommés : {total} L</h3>
             </div>
             <div className='blue-square'>

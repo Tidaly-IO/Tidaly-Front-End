@@ -25,6 +25,10 @@ export const dataCopy = {
     {
       label: "Consommation en litres d'eau",
       data: [65, 59, 80, 21, 100, 165, 144],
+    },
+    {
+      label: "Consommation en euros",
+      data: [65, 59, 80, 21, 100, 165, 144],
     }
   ]
 };
@@ -39,6 +43,19 @@ export function getCurrentDate(separator = '') {
   const monthFormatZeroBegin = date.toString().length === 1 ? '0' + date.toString() : date.toString();
 
   return `${dateFormatZeroBegin} / ${monthFormatZeroBegin} /  ${year} `;
+}
+
+export function getWeeksInMonth(year, month) {
+  console.log('year', year);
+  console.log('month', month);
+  const firstDay = new Date(year, month - 1, 1);
+  const lastDay = new Date(year, month, 0);
+  const daysInMonth = lastDay.getDate();
+
+  const firstWeekDay = firstDay.getDay(); // 0 (Sunday) to 6 (Saturday)
+  const remainingDays = daysInMonth - (7 - firstWeekDay);
+
+  return Math.ceil(remainingDays / 7) + 1;
 }
 
 export function getIndexDay() {

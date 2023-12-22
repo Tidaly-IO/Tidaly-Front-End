@@ -26,7 +26,7 @@ export const useStatisticsLogic = () => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>('Année');
   const [selectedMonth, setSelectedMonth] = useState<number>(1);
-  const [selectedYear, setSelectedYear] = useState<number>(2000);
+  const [selectedYear, setSelectedYear] = useState<number>(2023);
   const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
@@ -61,21 +61,41 @@ export const useStatisticsLogic = () => {
   // function to get data based on selected options
   const getData = () => {
     if (selectedOption === 'Année') {
-      const data = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100));
 
-      setTotal(data.reduce((acc, curr) => acc + curr, 0));
-      return {
-        labels: [
-          'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
-          'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
-        ],
-        datasets: [
-          {
-            label: "Consommation en litres d'eau",
-            data: data,
-          },
-        ],
-      };
+      if (selectedYear === 2023) {
+        const data = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100));
+
+        setTotal(250);
+        return {
+          labels: [
+            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
+            'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
+          ],
+          datasets: [
+            {
+              label: "Consommation en litres d'eau",
+              data: [0, 0, 0, 0, 0, 0, 0,0, 0, 0, 250, 0],
+            },
+          ],
+        };
+      }
+      else {
+        const data = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100));
+
+        setTotal(data.reduce((acc, curr) => acc + curr, 0));
+        return {
+          labels: [
+            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
+            'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
+          ],
+          datasets: [
+            {
+              label: "Consommation en litres d'eau",
+              data: data,
+            },
+          ],
+        };
+      }
     } else {
       // Données pour le mois sélectionné
       const startDate = new Date(selectedYear, selectedMonth - 1, 1);

@@ -35,6 +35,35 @@
     border-radius: 10px;
 }
 
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.modal-title {
+  margin-bottom: 120px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+.wide-input {
+    width: 30vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.month-selected .select-container-homePage {
+    margin-left: -50px; /* Adjust the value as needed to move the dropdown to the left */
+}
 
 
 @media (max-width: 1680px) {
