@@ -10,7 +10,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 const instance = axios.create({
-  baseURL: 'http://20.111.43.70:3333/api/v1',
+  baseURL: 'https://tidaly-api-backend.onrender.com/api/v1',
   headers: { Authorization: 'Bearer ' + `${localStorage.getItem("token")}` }
 });
 

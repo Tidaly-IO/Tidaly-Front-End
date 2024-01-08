@@ -59,7 +59,7 @@ export const HomePage = () => {
 
   const getWeeklyConsumption = async () => {
     const instance = axios.create({
-      baseURL: 'http://20.111.43.70:3333',
+      baseURL: 'https://tidaly-api-backend.onrender.com',
       headers: { Authorization: 'Bearer ' + localStorage.getItem("token") }
     });
     try {
@@ -74,7 +74,7 @@ export const HomePage = () => {
 
   const getTodayConsumption = async () => {
     const instance = axios.create({
-      baseURL: 'http://20.111.43.70:3333',
+      baseURL: 'https://tidaly-api-backend.onrender.com',
       headers: { Authorization: 'Bearer ' + localStorage.getItem("token") }
     });
     try {
@@ -130,7 +130,7 @@ export const HomePage = () => {
   const updateObjectifConsommation = async () => {
     if (objectifConsommation !== null) {
       const instance = axios.create({
-        baseURL: 'http://20.111.43.70:3333',
+        baseURL: 'https://tidaly-api-backend.onrender.com',
         headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
       });
 

@@ -1,9 +1,0 @@
-{
-  "routes": [
-    {
-      "src": "/api/*",
-      "dest": "http://20.111.43.70:3333/api/:splat",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    }
-  ]
-}

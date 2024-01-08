@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-const baseURL = 'http://20.111.43.70:3333/api/v1';
+const baseURL = 'https://tidaly-api-backend.onrender.com/api/v1';
 
 // Fonction pour récupérer les informations de profil de l'utilisateur
 export const fetchUserProfile = async (token: string): Promise<any> => {

@@ -70,12 +70,12 @@ const ParentComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       const instance = axios.create({
-        baseURL: 'http://20.111.43.70:3333',
+        baseURL: 'https://tidaly-api-backend.onrender.com',
         headers: { Authorization: 'Bearer ' + localStorage.getItem("token") }
       });
 
       try {
-        // Récupérer water_consumption_target depuis http://20.111.43.70:3333/api/v1/hub
+        // Récupérer water_consumption_target depuis https://tidaly-api-backend.onrender.com/api/v1/hub
         const targetResponse = await instance.get("/api/v1/hub");
         const targetData = targetResponse.data;
         const updatedTarget = targetData.water_consumption_target;
