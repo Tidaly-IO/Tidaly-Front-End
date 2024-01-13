@@ -1,11 +1,22 @@
 import { useState } from "react";
 import { useSensorDetailsModal } from "./Modal";
+import axios from 'axios';
 
 export const useSensorDetailsLogic = () => {
   const [squares, setSquares] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [updateWaterMeter, setUpdateWaterMeter] = useState<boolean>(false);
 
-  const { modalIsOpen, selectedColor, widgetName, openModal, closeModal, setSelectedColor, setWidgetName } = useSensorDetailsModal();
+  const { modalIsOpen, selectedColor, widgetName, openModal, closeModal, setSelectedColor, setWidgetName, sensorType,
+    setSensorType,
+    objectifConsommation,
+    setObjectifConsommation,
+    ville,
+    setVille,
+    codePostal,
+    setCodePostal,
+    uuid,
+    setUuid, } = useSensorDetailsModal();
 
   const getRandomValue = () => {
     const value = Math.floor(Math.random() * 1000) / 10;
@@ -52,11 +63,68 @@ export const useSensorDetailsLogic = () => {
     );
   };
 
+  const createHub = async () => {
+    console.log('Création du hub...');
+    const instance = axios.create({
+      baseURL: 'https://tidaly-api-backend.onrender.com',
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+    });
+
+    try {
+      const response = await instance.post('/api/v1/hub', {
+        postalCode: codePostal,
+        uuid: uuid,
+        city: ville,
+        waterConsumptionTarget: objectifConsommation,
+      });
+
+      console.log('Objectif de consommation mis à jour.');
+      closeModal();
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour :', error);
+    }
+  };
+
+  const updateHub = async () => {
+    console.log('modification du hub...');
+    const instance = axios.create({
+      baseURL: 'https://tidaly-api-backend.onrender.com',
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+    });
+
+    try {
+      const response = await instance.put('/api/v1/hub', {
+        postalCode: codePostal,
+        uuid: uuid,
+        city: ville,
+        waterConsumptionTarget: objectifConsommation,
+      });
+
+      console.log('Objectif de consommation mis à jour.');
+      closeModal();
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour :', error);
+    }
+  };
+  
+
   const addSquare = () => {
-    if (widgetName && selectedColor) {
+    if (sensorType === "waterMeter") {
+      console.log(updateWaterMeter);
+      if (updateWaterMeter) {
+        updateHub();
+        setUpdateWaterMeter(false);
+        closeModal();
+      }
+      else {
+        createHub();
+        closeModal();
+      }
+    }
+    else {
       const percentage = Math.floor(Math.random() * 100);
       const random = Math.floor(Math.random() * 100) + " L";
-      setSquares([...squares, { name: widgetName, color: getSquareColor(selectedColor), percentage, value: getRandomValue(), random }]);
+      setSquares([...squares, { name: widgetName, color: getSquareColor(selectedColor), percentage, value: getRandomValue(), random}]);
       closeModal();
     }
   };
@@ -68,6 +136,15 @@ export const useSensorDetailsLogic = () => {
       updatedSquares.splice(index, 1);
       setSquares(updatedSquares);
     }
+  };
+
+  const modifyWaterMeter = () => {
+    const confirmed = window.confirm("Voulez-vous modifier ce capteur ?");
+    if (confirmed) {
+      openModal();
+      setUpdateWaterMeter(true);
+    }
+    console.log(updateWaterMeter);
   };
 
   return {
@@ -87,5 +164,17 @@ export const useSensorDetailsLogic = () => {
     renderCircle,
     addSquare,
     removeSquare,
+    sensorType,
+    setSensorType,
+    objectifConsommation,
+    setObjectifConsommation,
+    ville,
+    setVille,
+    codePostal,
+    setCodePostal,
+    uuid,
+    setUuid,
+    modifyWaterMeter,
+    updateWaterMeter,
   };
 };
