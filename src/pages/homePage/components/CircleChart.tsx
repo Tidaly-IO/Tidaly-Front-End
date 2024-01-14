@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';  // Assurez-vous d'importer Axios.
+import axios from 'axios';
 import { Console } from 'console';
 
 // Composant CircleChart
@@ -59,7 +59,6 @@ const getNumberOfDaysInMonth = () => {
   return new Date(year, month, 0).getDate();
 }
 
-// Composant parent qui fait la requête pour récupérer les données
 // Composant parent qui fait la requête pour récupérer les données
 const ParentComponent = () => {
   const [data, setData] = useState({
