@@ -136,42 +136,7 @@ export const useSensorDetailsLogic = () => {
   };
 
   const removeSquare = async (index: number) => {
-    const { isConfirmed } = await Swal.fire({
-      title: 'Que voulez-vous faire avec ce capteur ?',
-      showCancelButton: true,
-      showConfirmButton: true,
-      confirmButtonText: 'Modifier',
-      cancelButtonText: 'Supprimer',
-      showCloseButton: true,
-      focusConfirm: false,
-      focusCancel: false,
-      reverseButtons: false,
-    });
-
-    if (isConfirmed) {
-      console.log("L'utilisateur a choisi de modifier le capteur.");
-    } else {
-      const { isConfirmed: confirmDelete } = await Swal.fire({
-        title: 'Confirmation',
-        text: 'Voulez-vous vraiment supprimer ce capteur ?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Oui, supprimer',
-        cancelButtonText: 'Annuler',
-        reverseButtons: false,
-      });
-      if (confirmDelete) {
-        const updatedSquares = [...squares];
-        updatedSquares.splice(index, 1);
-        setSquares(updatedSquares);
-      } else {
-        console.log("L'utilisateur a annulé la suppression.");
-      }
-    }
-  };
-
-  const modifyWaterMeter = async () => {
-    const { isConfirmed } = await Swal.fire({
+    const { isConfirmed, dismiss } = await Swal.fire({
       title: 'Que voulez-vous faire avec ce capteur ?',
       showCancelButton: true,
       showConfirmButton: true,
@@ -187,7 +152,48 @@ export const useSensorDetailsLogic = () => {
       openModal();
       setUpdateWaterMeter(true);
       console.log("L'utilisateur a choisi de modifier le capteur.");
+    } else if (dismiss === Swal.DismissReason.cancel) {
+      const { isConfirmed: confirmDelete } = await Swal.fire({
+        title: 'Confirmation',
+        text: 'Voulez-vous vraiment supprimer ce capteur ?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, supprimer',
+        cancelButtonText: 'Annuler',
+        reverseButtons: false,
+      });
+  
+      if (confirmDelete) {
+        const updatedSquares = [...squares];
+        updatedSquares.splice(index, 1);
+        setSquares(updatedSquares);
+        console.log("L'utilisateur a choisi de supprimer le capteur.");
+      } else {
+        console.log("L'utilisateur a annulé la suppression.");
+      }
     } else {
+      console.log("L'utilisateur a annulé l'action.");  
+    }
+  };
+
+  const modifyWaterMeter = async () => {
+    const { isConfirmed, dismiss } = await Swal.fire({
+      title: 'Que voulez-vous faire avec ce capteur ?',
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Modifier',
+      cancelButtonText: 'Supprimer',
+      showCloseButton: true,
+      focusConfirm: false,
+      focusCancel: false,
+      reverseButtons: false,
+    });
+
+    if (isConfirmed) {
+      openModal();
+      setUpdateWaterMeter(true);
+      console.log("L'utilisateur a choisi de modifier le capteur.");
+    } else if (dismiss === Swal.DismissReason.cancel) {
       const { isConfirmed: confirmDelete } = await Swal.fire({
         title: 'Confirmation',
         text: 'Voulez-vous vraiment supprimer ce capteur ?',
@@ -203,6 +209,8 @@ export const useSensorDetailsLogic = () => {
       } else {
         console.log("L'utilisateur a annulé la suppression.");
       }
+    } else {
+      console.log("L'utilisateur a annulé l'action.");  
     }
   };
 
