@@ -9,6 +9,7 @@ export const useSensorDetailsModal = () => {
   const [ville, setVille] = useState("");
   const [codePostal, setCodePostal] = useState("");
   const [uuid, setUuid] = useState("");
+  const [consommationActuelle, setConsommationActuelle] = useState("");
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -52,5 +53,7 @@ export const useSensorDetailsModal = () => {
     setCodePostal,
     uuid,
     setUuid,
+    consommationActuelle,
+    setConsommationActuelle
   };
 };

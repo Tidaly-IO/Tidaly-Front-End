@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSensorDetailsModal } from "./Modal";
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export const useSensorDetailsLogic = () => {
   const [squares, setSquares] = useState<any[]>([]);
@@ -16,7 +17,10 @@ export const useSensorDetailsLogic = () => {
     codePostal,
     setCodePostal,
     uuid,
-    setUuid, } = useSensorDetailsModal();
+    setUuid,
+    consommationActuelle,
+    setConsommationActuelle
+     } = useSensorDetailsModal();
 
   const getRandomValue = () => {
     const value = Math.floor(Math.random() * 1000) / 10;
@@ -65,6 +69,7 @@ export const useSensorDetailsLogic = () => {
 
   const createHub = async () => {
     console.log('Création du hub...');
+    console.log(consommationActuelle);
     const instance = axios.create({
       baseURL: 'https://tidaly-api-backend.onrender.com',
       headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
@@ -87,6 +92,7 @@ export const useSensorDetailsLogic = () => {
 
   const updateHub = async () => {
     console.log('modification du hub...');
+    console.log(consommationActuelle);
     const instance = axios.create({
       baseURL: 'https://tidaly-api-backend.onrender.com',
       headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
@@ -129,22 +135,75 @@ export const useSensorDetailsLogic = () => {
     }
   };
 
-  const removeSquare = (index: number) => {
-    const confirmed = window.confirm("Êtes-vous sûr de vouloir supprimer ce capteur ?");
-    if (confirmed) {
-      const updatedSquares = [...squares];
-      updatedSquares.splice(index, 1);
-      setSquares(updatedSquares);
+  const removeSquare = async (index: number) => {
+    const { isConfirmed } = await Swal.fire({
+      title: 'Que voulez-vous faire avec ce capteur ?',
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Modifier',
+      cancelButtonText: 'Supprimer',
+      showCloseButton: true,
+      focusConfirm: false,
+      focusCancel: false,
+      reverseButtons: false,
+    });
+
+    if (isConfirmed) {
+      console.log("L'utilisateur a choisi de modifier le capteur.");
+    } else {
+      const { isConfirmed: confirmDelete } = await Swal.fire({
+        title: 'Confirmation',
+        text: 'Voulez-vous vraiment supprimer ce capteur ?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, supprimer',
+        cancelButtonText: 'Annuler',
+        reverseButtons: false,
+      });
+      if (confirmDelete) {
+        const updatedSquares = [...squares];
+        updatedSquares.splice(index, 1);
+        setSquares(updatedSquares);
+      } else {
+        console.log("L'utilisateur a annulé la suppression.");
+      }
     }
   };
 
-  const modifyWaterMeter = () => {
-    const confirmed = window.confirm("Voulez-vous modifier ce capteur ?");
-    if (confirmed) {
+  const modifyWaterMeter = async () => {
+    const { isConfirmed } = await Swal.fire({
+      title: 'Que voulez-vous faire avec ce capteur ?',
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Modifier',
+      cancelButtonText: 'Supprimer',
+      showCloseButton: true,
+      focusConfirm: false,
+      focusCancel: false,
+      reverseButtons: false,
+    });
+
+    if (isConfirmed) {
       openModal();
       setUpdateWaterMeter(true);
+      console.log("L'utilisateur a choisi de modifier le capteur.");
+    } else {
+      const { isConfirmed: confirmDelete } = await Swal.fire({
+        title: 'Confirmation',
+        text: 'Voulez-vous vraiment supprimer ce capteur ?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, supprimer',
+        cancelButtonText: 'Annuler',
+        reverseButtons: false,
+      });
+  
+      if (confirmDelete) {
+        console.log("L'utilisateur a choisi de supprimer le capteur.");
+      } else {
+        console.log("L'utilisateur a annulé la suppression.");
+      }
     }
-    console.log(updateWaterMeter);
   };
 
   return {
@@ -176,5 +235,7 @@ export const useSensorDetailsLogic = () => {
     setUuid,
     modifyWaterMeter,
     updateWaterMeter,
+    consommationActuelle,
+    setConsommationActuelle,
   };
 };

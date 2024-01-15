@@ -26,6 +26,7 @@ export const WaterMeterSetup = () => {
 
     const parsedConsumption = parseNumber(consumption.toString());
     const parsedObjective = parseNumber(objective.toString());
+    console.log(consumption);
 
     if (parsedConsumption > 9999999 || parsedObjective > 9999999) {
       alert("Les valeurs de consommation et/ou d'objectif ne peuvent pas dépasser 9999999.");

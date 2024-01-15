@@ -40,12 +40,15 @@ function SensorDetails() {
     uuid,
     setUuid,
     modifyWaterMeter,
+    consommationActuelle,
+    setConsommationActuelle,
   } = useSensorDetailsLogic();
 
   const [data, setData] = useState({
     city: "",
     postalCode: "",
     waterConsumptionTarget: 0,
+    // consommationActuelle: 0,
   });
 
   useEffect(() => {
@@ -108,6 +111,7 @@ function SensorDetails() {
 
             <img src={compteurEauLogo} alt="Logo Compteur d'eau" style={{ width: "50px", height: "50px" }} /> {/* Ajout du logo ici */}
               <span style={{ fontSize: "12px", marginTop: "5px" }}>Objectif de consommation</span>
+              {/* ajouter ici data.consommationAcutelle */}
               <span style={{ fontSize: "14px" }}>{data.waterConsumptionTarget}</span>
               <hr style={{ width: "80%", margin: "10px 0" }} />
               <span style={{ fontSize: "12px", marginTop: "5px" }}>Ville</span>
@@ -185,6 +189,12 @@ function SensorDetails() {
         </>
       ) : (
         <>
+        <div className="form-group">
+          <label htmlFor="consommationActuelle">Consommation actuelle :</label>
+          <div>
+            <input type="number" id="consommationActuelle" value={consommationActuelle} onChange={(e) => setConsommationActuelle(e.target.value)} />
+          </div>
+        </div>
         <div className="form-group">
           <label htmlFor="objectifConsommation">Objectif de consommation du mois :</label>
           <div>
