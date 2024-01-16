@@ -31,6 +31,8 @@ function SensorDetails() {
     removeSquare,
     sensorType,
     setSensorType,
+    jointWaterMeter,
+    setjointWaterMeter,
     objectifConsommation,
     setObjectifConsommation,
     ville,
@@ -48,7 +50,7 @@ function SensorDetails() {
     city: "",
     postalCode: "",
     waterConsumptionTarget: 0,
-    // consommationActuelle: 0,
+    consommationActuelle: 0,
   });
 
   useEffect(() => {
@@ -66,6 +68,7 @@ function SensorDetails() {
           city : targetData.city,
           postalCode: targetData.postal_code,
           waterConsumptionTarget: targetData.water_consumption_target,
+          consommationActuelle: targetData.base_water_consumption,
         });
         console.log("Informations récupérées :", test);
       } catch (error) {
@@ -109,15 +112,17 @@ function SensorDetails() {
               <span className="dot"></span>
             </button>
 
-            <img src={compteurEauLogo} alt="Logo Compteur d'eau" style={{ width: "50px", height: "50px" }} /> {/* Ajout du logo ici */}
-              <span style={{ fontSize: "12px", marginTop: "5px" }}>Objectif de consommation</span>
-              {/* ajouter ici data.consommationAcutelle */}
+            <img src={compteurEauLogo} alt="Logo Compteur d'eau" style={{ width: "50px", height: "50px" }} />
+            <span style={{ fontSize: "12px", marginTop: "0px" }}>Consommation acutelle</span>
+              <span style={{ fontSize: "14px" }}>{data.consommationActuelle}</span>
+              <hr style={{ width: "80%", margin: "3px 0" }} />
+              <span style={{ fontSize: "12px", marginTop: "0px" }}>Objectif de consommation</span>
               <span style={{ fontSize: "14px" }}>{data.waterConsumptionTarget}</span>
-              <hr style={{ width: "80%", margin: "10px 0" }} />
-              <span style={{ fontSize: "12px", marginTop: "5px" }}>Ville</span>
+              <hr style={{ width: "80%", margin: "3px 0" }} />
+              <span style={{ fontSize: "12px", marginTop: "0px" }}>Ville</span>
               <span style={{ fontSize: "14px"}}>{data.city}</span>
-              <hr style={{ width: "80%", margin: "10px 0" }} />
-              <span style={{ fontSize: "12px", marginTop: "5px" }}>Code Postale</span>
+              <hr style={{ width: "80%", margin: "3px 0" }} />
+              <span style={{ fontSize: "12px", marginTop: "0px" }}>Code Postale</span>
               <span style={{ fontSize: "14px" }}>{data.postalCode}</span>
             </div>
             )}
@@ -189,6 +194,21 @@ function SensorDetails() {
         </>
       ) : (
         <>
+
+      <div className="form-group">
+        <label htmlFor="joinWaterMeter">Rejoindre un compteur d'eau existant ?</label>
+        <div>
+          <select id="joinWaterMeter" value={jointWaterMeter} onChange={(e) => setjointWaterMeter(e.target.value)} className="select-custom">
+            <option value="">Sélectionnez le type de capteur</option>
+            <option value="No">Non</option>
+            <option value="Yes">Oui</option>
+          </select>
+        </div>
+      </div>
+
+      {jointWaterMeter === 'No' ? (
+        <>
+
         <div className="form-group">
           <label htmlFor="consommationActuelle">Consommation actuelle :</label>
           <div>
@@ -220,10 +240,28 @@ function SensorDetails() {
           </div>
         </div>
           </>
-          )}
+      ) : (
+        <>
+        <div className="form-group">
+          <label htmlFor="uuid">Uuid :</label>
+          <div>
+            <input type="text" id="uuid" value={uuid} onChange={(e) => setUuid(e.target.value)} />
+          </div>
+        </div>
+        </>
+      )}
+      </>
+      
+      )}
           <div className="button-group">
+          {jointWaterMeter === 'No' ? (
+        <>
             <button className="btn-submit" onClick={addSquare}>Ajouter</button>
-            <button className="btn-submit btn-cancel" onClick={closeModal}>Annuler</button>
+        </>
+      ) : (
+            <button className="btn-submit" onClick={addSquare}>Ajouter</button>
+      )}
+       <button className="btn-submit btn-cancel" onClick={closeModal}>Annuler</button>
           </div>
         </ReactModal>
        </div>

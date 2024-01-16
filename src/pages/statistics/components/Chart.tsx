@@ -30,6 +30,7 @@ export const useStatisticsLogic = () => {
   const [selectedYear, setSelectedYear] = useState<number>(2024);
   const [total, setTotal] = useState<number>(0);
   const [consumption2, setData] = useState<number>(0);
+  const [isCurrentMonth, setIsCurrentMonth] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,7 +85,8 @@ export const useStatisticsLogic = () => {
   // function to get data based on selected options
   const getData = () => {
     if (selectedOption === 'Année') {
-      setData(250)
+      //setData(250)
+      setIsCurrentMonth(true);
       if (selectedYear === 2024) { // a la place de 2024, mettre l'année actuelle
 
         const data = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100));
@@ -102,7 +104,8 @@ export const useStatisticsLogic = () => {
         };
       }
       else {
-        setData(0)
+        //setData(0)
+        setIsCurrentMonth(false);
         const data = Array.from({ length: 12 }, () => Math.floor(Math.random() * 100));
 
         setTotal(data.reduce((acc, curr) => acc + curr, 0));
@@ -142,9 +145,9 @@ export const useStatisticsLogic = () => {
       // Créer un tableau des étiquettes des semaines
       const labels = dataByWeek.map((week, index) => `Semaine ${index + 1}`);
 
-      if (selectedMonth === 0) { // a la place de 0, mettre le mois actuel
-        console.log(selectedMonth);
-        setData(250)
+      if (selectedMonth === 0 && selectedYear === 2024) { // a la place de 0, mettre le mois actuel
+        //setData(250)
+        setIsCurrentMonth(true);
         return {
           labels: labels,
           datasets: [
@@ -156,7 +159,7 @@ export const useStatisticsLogic = () => {
         };
       }
       else {
-        setData(0)
+        setIsCurrentMonth(false);
         console.log(selectedMonth);
         return {
           labels: labels,
@@ -182,5 +185,7 @@ export const useStatisticsLogic = () => {
     handleMonthChange,
     handleYearChange,
     getData,
+    isCurrentMonth,
+    setIsCurrentMonth,
   };
 };

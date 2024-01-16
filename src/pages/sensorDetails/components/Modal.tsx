@@ -5,6 +5,7 @@ export const useSensorDetailsModal = () => {
   const [selectedColor, setSelectedColor] = useState('');
   const [widgetName, setWidgetName] = useState('');
   const [sensorType, setSensorType] = useState('waterMeter');
+  const [jointWaterMeter, setjointWaterMeter] = useState('No');
   const [objectifConsommation, setObjectifConsommation] = useState("");
   const [ville, setVille] = useState("");
   const [codePostal, setCodePostal] = useState("");
@@ -20,6 +21,7 @@ export const useSensorDetailsModal = () => {
     setSelectedColor('');
     setWidgetName('');
     setSensorType('waterMeter');
+    setjointWaterMeter('No');
     setObjectifConsommation("");
     setVille("");
     setCodePostal("");
@@ -45,6 +47,8 @@ export const useSensorDetailsModal = () => {
     modalStyle,
     sensorType,
     setSensorType,
+    jointWaterMeter,
+    setjointWaterMeter,
     objectifConsommation,
     setObjectifConsommation,
     ville,

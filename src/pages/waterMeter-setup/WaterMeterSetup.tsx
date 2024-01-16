@@ -42,6 +42,7 @@ export const WaterMeterSetup = () => {
           postalCode: postalCode,
           uuid : localStorage.getItem("hubId"),
           waterConsumptionTarget: parsedObjective,
+          baseWaterConsumption: parsedConsumption,
         });
         setIsValid(true);
       } catch (error) {

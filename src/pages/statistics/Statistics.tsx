@@ -22,6 +22,8 @@ export const Statistics: React.FC = () => {
     handleOptionChange,
     handleMonthChange,
     handleYearChange,
+    isCurrentMonth,
+    setIsCurrentMonth
   } = useStatisticsLogic();
 
   return (
@@ -77,8 +79,21 @@ export const Statistics: React.FC = () => {
             <div className='blue-square'>
               <img src={fleche_bas} className="image" alt="Flèche bas" />
               <img src={fleche_bas} className="image2" alt="Flèche bas" />
-              <h3 className="moneySpent" style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {(consumption2 / 1000 * 3.5).toFixed(2)} €</h3>
+
+              {isCurrentMonth ?
+              <>
+               <h3 className="moneySpent" style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {(consumption2 / 1000 * 3.5).toFixed(2)} €</h3>
               <h3 className="literSpent" style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommés : {consumption2} L</h3>
+              </>
+              :
+              <>
+               <h3 className="moneySpent" style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {0} €</h3>
+              <h3 className="literSpent" style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommés : {0} L</h3>
+              </>
+
+            }
+              {/* <h3 className="moneySpent" style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {(consumption2 / 1000 * 3.5).toFixed(2)} €</h3>
+              <h3 className="literSpent" style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommés : {consumption2} L</h3> */}
             </div>
             <div className='blue-square'>
               <img src={fleche_haut} className="image" alt="Flèche haut" />

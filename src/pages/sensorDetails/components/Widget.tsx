@@ -10,6 +10,8 @@ export const useSensorDetailsLogic = () => {
 
   const { modalIsOpen, selectedColor, widgetName, openModal, closeModal, setSelectedColor, setWidgetName, sensorType,
     setSensorType,
+    jointWaterMeter,
+    setjointWaterMeter,
     objectifConsommation,
     setObjectifConsommation,
     ville,
@@ -81,6 +83,44 @@ export const useSensorDetailsLogic = () => {
         uuid: uuid,
         city: ville,
         waterConsumptionTarget: objectifConsommation,
+        baseWaterConsumption: consommationActuelle,
+      });
+
+      console.log('Objectif de consommation mis à jour.');
+      closeModal();
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour :', error);
+    }
+  };
+
+
+  const createHub2 = async () => {
+    console.log('Création du hub...');
+    console.log(consommationActuelle);
+
+    if (jointWaterMeter === "Yes") {
+      console.log("jointWaterMeter = Yes");
+        setCodePostal("00000");
+        setVille("////");
+        setObjectifConsommation("0");
+        setConsommationActuelle("0");
+        console.log(ville);
+        console.log(codePostal);
+        console.log(objectifConsommation);
+        console.log(consommationActuelle);
+    }
+    const instance = axios.create({
+      baseURL: 'https://tidaly-api-backend.onrender.com',
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+    });
+
+    try {
+      const response = await instance.post('/api/v1/hub', {
+        postalCode: "00000",
+        uuid: uuid,
+        city: "/////",
+        waterConsumptionTarget: 0,
+        baseWaterConsumption: 0,
       });
 
       console.log('Objectif de consommation mis à jour.');
@@ -104,6 +144,7 @@ export const useSensorDetailsLogic = () => {
         uuid: uuid,
         city: ville,
         waterConsumptionTarget: objectifConsommation,
+        baseWaterConsumption: consommationActuelle,
       });
 
       console.log('Objectif de consommation mis à jour.');
@@ -123,7 +164,12 @@ export const useSensorDetailsLogic = () => {
         closeModal();
       }
       else {
-        createHub();
+        if (jointWaterMeter === "Yes") {
+          createHub2();
+        }
+        else {
+          createHub();
+        }
         closeModal();
       }
     }
@@ -182,8 +228,8 @@ export const useSensorDetailsLogic = () => {
       showCancelButton: true,
       showConfirmButton: true,
       confirmButtonText: 'Modifier',
-      cancelButtonText: 'Supprimer',
-      showCloseButton: true,
+      cancelButtonText: 'Annuler',
+      //showCloseButton: true,
       focusConfirm: false,
       focusCancel: false,
       reverseButtons: false,
@@ -193,24 +239,6 @@ export const useSensorDetailsLogic = () => {
       openModal();
       setUpdateWaterMeter(true);
       console.log("L'utilisateur a choisi de modifier le capteur.");
-    } else if (dismiss === Swal.DismissReason.cancel) {
-      const { isConfirmed: confirmDelete } = await Swal.fire({
-        title: 'Confirmation',
-        text: 'Voulez-vous vraiment supprimer ce capteur ?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Oui, supprimer',
-        cancelButtonText: 'Annuler',
-        reverseButtons: false,
-      });
-  
-      if (confirmDelete) {
-        console.log("L'utilisateur a choisi de supprimer le capteur.");
-      } else {
-        console.log("L'utilisateur a annulé la suppression.");
-      }
-    } else {
-      console.log("L'utilisateur a annulé l'action.");  
     }
   };
 
@@ -233,6 +261,8 @@ export const useSensorDetailsLogic = () => {
     removeSquare,
     sensorType,
     setSensorType,
+    jointWaterMeter,
+    setjointWaterMeter,
     objectifConsommation,
     setObjectifConsommation,
     ville,
