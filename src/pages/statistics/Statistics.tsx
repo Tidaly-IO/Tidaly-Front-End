@@ -23,7 +23,8 @@ export const Statistics: React.FC = () => {
     handleMonthChange,
     handleYearChange,
     isCurrentMonth,
-    setIsCurrentMonth
+    setIsCurrentMonth,
+    priceM3,
   } = useStatisticsLogic();
 
   return (
@@ -82,7 +83,7 @@ export const Statistics: React.FC = () => {
 
               {isCurrentMonth ?
               <>
-               <h3 className="moneySpent" style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {(consumption2 / 1000 * 3.5).toFixed(2)} €</h3>
+               <h3 className="moneySpent" style={{ fontFamily: 'Arial', marginRight: "67px", marginTop: "100px", color: 'white' }}>Argent dépensé : {(consumption2 / 1000 * priceM3).toFixed(2)} €</h3>
               <h3 className="literSpent" style={{ fontFamily: 'Arial', marginRight: "30px", marginTop: "50px", color: 'white' }}>Litres consommés : {consumption2} L</h3>
               </>
               :

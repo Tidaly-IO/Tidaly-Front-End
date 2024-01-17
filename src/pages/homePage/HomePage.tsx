@@ -20,6 +20,7 @@ export const HomePage = () => {
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMonthSelected, setIsMonthSelected] = useState(false);
+  const [priceM3, setPriceM3] = useState(0);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -80,6 +81,7 @@ export const HomePage = () => {
     try {
       const response = await instance.get("/consumption/global");
       const userData = response.data;
+      setPriceM3(userData.priceM3);
       console.log("Informations récupérées :", userData.consumption);
       return(Math.round(userData.consumption))
     } catch (error) {
@@ -94,12 +96,12 @@ export const HomePage = () => {
         const currentIndexDay = getIndexDay();
         let todayConsumption = await getTodayConsumption();
         dataCopy.datasets[0].data = Array.from({ length: generateChartLabels().length }, (_, index) => (index === currentIndexDay ? todayConsumption : 0));
-        dataCopy.datasets[1].data = Array.from({ length: generateChartLabels().length }, (_, index) => (index === currentIndexDay ? (todayConsumption / 1000 * 3.5).toFixed(2)  : 0));
+        dataCopy.datasets[1].data = Array.from({ length: generateChartLabels().length }, (_, index) => (index === currentIndexDay ? (todayConsumption / 1000 * priceM3).toFixed(2)  : 0));
       } else if (selectedOption === 'Mois') {
         const currentIndexWeek = getWeekOfMonth(new Date()) - 1;
         const weeklyConsumption = await getWeeklyConsumption();
         dataCopy.datasets[0].data =  Array.from({ length: generateChartLabels().length }, (_, index) => (index === currentIndexWeek ? weeklyConsumption : 0));
-        dataCopy.datasets[1].data = Array.from({ length: generateChartLabels().length }, (_, index) => (index === currentIndexWeek ? (weeklyConsumption / 1000 * 3.5).toFixed(2) : 0));
+        dataCopy.datasets[1].data = Array.from({ length: generateChartLabels().length }, (_, index) => (index === currentIndexWeek ? (weeklyConsumption / 1000 * priceM3).toFixed(2) : 0));
       }
   
       if (chartRef.current.chart) {

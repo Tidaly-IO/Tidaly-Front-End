@@ -31,6 +31,7 @@ export const useStatisticsLogic = () => {
   const [total, setTotal] = useState<number>(0);
   const [consumption2, setData] = useState<number>(0);
   const [isCurrentMonth, setIsCurrentMonth] = useState<boolean>(true);
+  const [priceM3, setPriceM3] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +44,7 @@ export const useStatisticsLogic = () => {
         const consumptionResponse = await instance.get("/consumption/global");
         const userData = consumptionResponse.data;
         setData(userData.consumption);
+        setPriceM3(userData.priceM3);
         console.log(consumption2);
         console.log("Informations récupérées :", userData.consumption);
       } catch (error) {
@@ -187,5 +189,6 @@ export const useStatisticsLogic = () => {
     getData,
     isCurrentMonth,
     setIsCurrentMonth,
+    priceM3,
   };
 };
