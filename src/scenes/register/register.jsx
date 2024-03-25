@@ -32,7 +32,7 @@ const Register = () => {
 
             console.log('Réponse du serveur:', response.data);
 
-            navigate('/login');
+            navigate('/');
 
         } catch (error) {
             console.error('Erreur lors de la requête :', error);
