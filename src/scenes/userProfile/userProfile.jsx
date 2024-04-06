@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import axios from "axios";
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { Link } from 'react-router-dom';
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -189,7 +190,6 @@ const UserProfile = () => {
 
             if (response.status === 201) {
                 alert("L'image de profil a été mise à jour avec succès");
-                // Actualisez l'image de profil si nécessaire
             }
         } catch (error) {
             console.error("Erreur lors de la mise à jour de l'image de profil: ", error);
@@ -269,6 +269,9 @@ const UserProfile = () => {
                             onChange={handleProfilePictureChange}
                         />
                     </label>
+                    <Link to="/tutorial" style={{ textDecoration: 'none' }}>
+                        <Button variant="contained" sx={{ ml: 2 }} style={{ backgroundColor: colors.tidaly[100], color: '#fff'}}>Tutoriel</Button>
+                    </Link>
                     <Button color="error" variant="contained" sx={{ ml: 2 }} onClick={handleOpenDeleteAccountModal}>Supprimer son compte</Button>
                 </Box>
             </Box>
@@ -321,9 +324,9 @@ const UserProfile = () => {
                         type="text"
                         required
                         fullWidth
-                        multiline // Cette prop permet de rendre le TextField multi-lignes
-                        rows={4} // Vous pouvez ajuster le nombre de lignes selon vos besoins
-                        inputProps={{ maxLength: 250 }} // Limite à 250 caractères
+                        multiline
+                        rows={4}
+                        inputProps={{ maxLength: 250 }}
                     />
                     <TextField
                         autoFocus

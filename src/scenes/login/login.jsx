@@ -49,7 +49,7 @@ const Login = () => {
                 isAlreadySetup = true;
 
             } catch (error) {
-                navigate("/AccountSetup");
+                navigate("/tutorial");
                 console.error('Erreur lors de la requête get:', error);
 
             }

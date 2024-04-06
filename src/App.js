@@ -15,12 +15,13 @@ import SharedSensorConsumption from "./scenes/sharedSensorConsumption";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import SensorDetails from "./scenes/sensorDetails/sensorDetails";
+import Tutorial from "./scenes/tutorial/tutorial";
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const location = useLocation();
-  const hideSidebarRoutes = ["/", "/register", "/AccountSetup", "/WaterMeter", "/WaterMeterSetup"];
+  const hideSidebarRoutes = ["/", "/register", "/AccountSetup", "/WaterMeter", "/WaterMeterSetup", "/tutorial"];
   const shouldShowSidebar = !hideSidebarRoutes.includes(location.pathname);
 
   return (
@@ -42,6 +43,7 @@ function App() {
                 <Route path={"/sensorDetails"} element={<SensorDetails />} />
                 <Route path="/sharedSensorConsumption" element={<SharedSensorConsumption />} />
                 <Route path="/statistics" element={<Statistics/>} />
+                <Route path="/tutorial" element={<Tutorial/>} />
                 <Route path="/home" element={<Home />} />
               </Routes>
             </main>
