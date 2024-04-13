@@ -9,33 +9,61 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
-import photo from '../assets/tuto.png';
+import home from '../assets/home.png';
+import accountSetup from "../assets/accountSetup.png";
+import capteur from "../assets/capteurs.png";
+import consoGlobaleCapteurs  from "../assets/conso_globale_des_capteurs.png";
+import profile from "../assets/profile.png";
+import repartitionConsoCapteurs from "../assets/répartition_de_la_conso_des_capteurs.png";
+import stats from "../assets/stats.png";
+import waterMeter from "../assets/waterMeter.png";
+import waterMeterSetup from "../assets/waterMeterSetup.png";
 
 
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+//const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
+const AutoPlaySwipeableViews = SwipeableViews;
+
 
 const images = [
     {
-        label: 'Dans ce tutoriel, nous allons vous montrer comment installer votre compteur d\'eau Tidaly. Pour commencer, vous devez vous rendre sur l\'application Tidaly et cliquer sur le bouton "Ajouter un compteur d\'eau".',
-        imgPath:
-        photo,
+        label: 'Après avoir suivi ce tutoriel, vous serez dirigé vers cette page pour renseigner vos informations personnelles.',
+        imgPath: accountSetup,
     },
     {
-        label: 'Bird',
-        imgPath:
-            'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
+        label: 'Une fois vos informations renseignées, vous devrez entrer l\'identifiant de votre hub. Si celui-ci est déjà enregistré, vous serez redirigé vers la page d\'accueil; sinon, vous accéderez à la configuration de votre hub.',
+        imgPath: waterMeter,
     },
     {
-        label: 'Bali, Indonesia',
-        imgPath:
-            'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250',
+        label: 'Ici, vous pouvez configurer votre hub en saisissant votre consommation actuelle, votre objectif de consommation, votre ville et votre code postal, pour obtenir le prix de l\'eau correspondant à votre région.',
+        imgPath: waterMeterSetup,
     },
     {
-        label: 'Goč, Serbia',
-        imgPath:
-            'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
+        label: 'La page d\'accueil affiche votre consommation d\'eau en temps réel pour la journée en cours, ainsi que la consommation de la semaine actuelle et des semaines précédentes du mois.',
+        imgPath: home,
+    },
+    {
+        label: 'La page de profil vous permet de consulter et modifier vos informations personnelles, de changer votre mot de passe, de supprimer votre compte, et d\'accéder au tutoriel si nécessaire.',
+        imgPath: profile,
+    },
+    {
+        label: 'Sur la page des statistiques, vous pouvez visualiser votre historique de consommation d\'eau sur la journée, la semaine, le mois et l\'année en cours, ainsi que sur toutes les périodes précédentes disposant d\'un historique. Vous y trouverez également un résumé de votre consommation et de vos économies réalisées.',
+        imgPath: stats,
+    },
+    {
+        label: 'Sur la page "Mes capteurs", ajoutez votre compteur d\'eau si vous avez omis cette étape lors de votre connexion. Vous pouvez également ajouter un nouveau capteur par point d\'eau, ainsi que modifier ou supprimer un capteur existant.',
+        imgPath: capteur,
+    },
+    {
+        label: 'Sur la page de consommation globale des capteurs, vous pourrez consultez votre consommation d\'eau par rapport à votre consommation globale et par capteurs. Vous pourrez également consulter les dernieres cativitées de vos capteurs par point d\'eau.',
+        imgPath: consoGlobaleCapteurs,
+    },
+    {
+        label: 'Sur la page de répartiton de la consommation des capteurs, vous pourrez consulter la repartition de votre consommation d\'eau par rapport à vos capteurs par point d\'eau. Vous pourrez également consulter les dernieres cativitées de vos capteurs par point d\'eau.',
+        imgPath: repartitionConsoCapteurs,
     },
 ];
+
 
 function Caroussel() {
     const theme = useTheme();

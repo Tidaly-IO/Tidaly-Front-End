@@ -1,17 +1,16 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
-import { mockBarData as data } from "../data/mockData";
 
-const BarChart = ({ isDashboard = false }) => {
+const BarChart = ({ data = [], isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
 
   return (
     <ResponsiveBar
       data={data}
       theme={{
-        // added
         axis: {
           domain: {
             line: {
@@ -39,13 +38,14 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["Eau en L"]}
+      keys={["Eau en L", "Prix en €"]}
       indexBy="country"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
+      groupMode="grouped"
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={colors.tidaly[100]}
+      colors={[colors.tidaly[100], colors.tidaly[200]]}
       defs={[
         {
           id: "dots",
