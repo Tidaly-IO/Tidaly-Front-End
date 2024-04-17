@@ -10,7 +10,7 @@ import WaterMeterSetup from "./scenes/waterMeterSetup/waterMeterSetup";
 import UserProfile from "./scenes/userProfile/userProfile";
 import SensorConsumption from "./scenes/sensorConsumption/sensorConsumption";
 import Home from "./scenes/home";
-import Statistics from "./scenes/statistics";
+import Statistics from "./scenes/statistics/statistics";
 import SharedSensorConsumption from "./scenes/sharedSensorConsumption";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";

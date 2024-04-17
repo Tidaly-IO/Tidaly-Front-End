@@ -20,7 +20,7 @@ const separatorStyle = {
     marginBottom: '8px',
 };
 
-export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId }) {
+export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId, SensorToUserList }) {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [openModal, setOpenModal] = React.useState(false);
@@ -161,7 +161,9 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
         return (
             <Card sx={{ backgroundColor: colors.tidaly[100], borderRadius: "10px", marginRight: 2, marginBottom: 2 }}>
                 <CardContent style={{ textAlign: 'center' }}>
-                    <GasMeterIcon sx={{ fontSize: 50, mb: 1 }} />
+                    <Button onClick={SensorToUserList}>
+                        <GasMeterIcon sx={{ fontSize: 50, mb: 1 }} />
+                    </Button>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary">
                         Consommation actuelle
                     </Typography>

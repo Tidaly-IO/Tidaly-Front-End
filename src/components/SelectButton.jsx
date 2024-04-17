@@ -4,12 +4,16 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { useState } from 'react';
 
-export default function SelectButton() {
-  const [time, setTime] = React.useState('Semaine');
+const SelectButton = ({ updateFromChild }) => {
+  const [value, setValue] = useState('Semaine');
 
   const handleChange = (event) => {
-    setTime(event.target.value);
+    const newValue = event.target.value;
+
+    setValue(newValue);
+    updateFromChild(newValue);
   };
 
   return (
@@ -19,7 +23,7 @@ export default function SelectButton() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={time}
+          value={value}
           label="Temps"
           onChange={handleChange}
         >
@@ -30,3 +34,5 @@ export default function SelectButton() {
     </Box>
   );
 }
+
+export default SelectButton;

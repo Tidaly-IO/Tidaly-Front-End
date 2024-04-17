@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import axios from "axios";
 import SensorCard from "../../components/SensorCard";
 import Typography from "@mui/material/Typography";
+import HubInfo from "../hubInfo/hubInfo";
 
 const SensorDetails = () => {
     const theme = useTheme();
@@ -27,6 +28,7 @@ const SensorDetails = () => {
     const [getPostalCode, setGetPostalCode] = useState('');
     const [getWaterPointName, setGetWaterPointName] = useState([]);
     const [waterPoints, setWaterPoints] = useState([]);
+    const [showUserList, setShowUserList] = useState(false);
     const handleSensorDetails = async (e) => {
         e.preventDefault();
         console.log(waterPointName, waterPointLocation, selectedSensor, joinWaterMeter, uuid , currentConsumption, consumptionGoal, city, postalCode);
@@ -213,6 +215,10 @@ const SensorDetails = () => {
         getWaterPoint();
     }, []);
 
+    const SensorToUserList = () => {
+        setShowUserList(!showUserList);
+    };
+
 
     return (
         <Box m="20px">
@@ -222,9 +228,10 @@ const SensorDetails = () => {
             <Box gridColumn="span 12" gridRow="span 2" backgroundColor={colors.primary[400]} p="20px" borderRadius="10px" height={660} overflowY="auto">
                 <Box display="flex" flexDirection="row" alignItems="center" mt={2} flexWrap="wrap" style={{ maxHeight: '100%', overflowY: 'auto' }}>
                     {isWaterMeter && (
-                        <>
-                            <SensorCard typOfSensor={"WaterMeter"} currentConsumption={getCurrentConsumption} consumptionGoal={getConsumptionGoal} city={getCity} postalCode={getPostalCode} />
-                        </>
+                        // <SensorCard typOfSensor={"WaterMeter"} currentConsumption={getCurrentConsumption} consumptionGoal={getConsumptionGoal} city={getCity} postalCode={getPostalCode} SensorToUserList={SensorToUserList} />
+                        !showUserList ? 
+                                <SensorCard typOfSensor={"WaterMeter"} currentConsumption={getCurrentConsumption} consumptionGoal={getConsumptionGoal} city={getCity} postalCode={getPostalCode} SensorToUserList={SensorToUserList} />
+                            : <HubInfo SensorToUserList={SensorToUserList} />
                     )}
                     {waterPoints.map((waterPoint, index) => (
                         <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} />

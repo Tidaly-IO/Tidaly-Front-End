@@ -5,17 +5,105 @@ import BarChart from "../../components/BarChart";
 import SelectButton from "../../components/SelectButton";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import axios from "axios";
+import { useEffect, useState } from "react";
+// import { Transmit } from '@adonisjs/transmit-client'
 
 const Statistics = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const [isLoading, setIsLoading] = useState(true);
+    const [time, setTime] = useState('Semaine');
+    const [data, setData] = useState(null);
+
+    const updateFromChild = (value) => {
+      setTime(value);
+      console.log(time)
+    };
+
+    const setDataFromTime = () => {
+        switch (time) {
+            case 'Semaine': return data.week.consumption; 
+            case 'Mois': return data.month.consumption;
+            default: return data.week.consumption;
+        }
+    }
+
+    useEffect(() => {
+        const fetchStatistics = async () => {
+            try {
+                const week = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=week', 
+                    { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+
+                // Format week time data
+                week.data.consumption.map((item) => {
+                    const date = new Date(item.time);
+                    return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+                });
+                
+                const month = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=month', 
+                    { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+                
+                // Format month time data
+                month.data.consumption.map((item) => {
+                    const date = new Date(item.time);
+                    return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+
+                });
+                
+                setData({ month: month.data, week: week.data });
+                setIsLoading(false);
+                // console.log(`[STATISTICS]: `, { month: month.data, week: week.data });
+            } catch (error) {
+                console.log(`[STATISTICS ERROR]: ${error}`);
+            }
+        };
+
+        fetchStatistics();
+    }, []);
+
+    const getRealtimeData = (data) => {
+        // process the data here,
+        // then pass it to the state to be rendered
+        console.log('[SSE]: ', data);
+    }
+
+    useEffect(() => {
+        const serverSentEvent = async () => {
+            try {
+
+                const sse = new EventSource(`https://tidaly-api-backend.onrender.com/consumption/global?period=${time === 'Semaine' ? 'week' : 'month'}`, 
+                { 
+                    withCredentials: true, 
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
+                
+                sse.onmessage = event => getRealtimeData(JSON.parse(event.data));
+                
+                sse.onerror = () => {
+                    // error log here 
+                    console.log('[SSE]: ERROR');
+                    sse.close();
+                }
+                
+                sse.close();
+
+            } catch (error) {
+                console.log(`[SSE ERROR]: ${error}`);
+            }
+        };
+
+        // serverSentEvent();
+    }, [time]);
+
+    // getRealtimeData();
 
     return (
-        <Box m="20px">
+        !isLoading ? <Box m="20px">
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="STATISTIQUES" subtitle="Consultez vos différentes statistiques" />
                 <Box>
-                    <SelectButton/>
+                    <SelectButton updateFromChild={updateFromChild} />
                 </Box>
             </Box>
 
@@ -38,7 +126,7 @@ const Statistics = () => {
                         </Typography>
                     </Box>
                     <Box height="250px" m="-20px 0 0 0">
-                        <BarChart isDashboard={true} />
+                        <BarChart data={setDataFromTime()} isDashboard={true} />
                     </Box>
                 </Box>
 
@@ -94,7 +182,7 @@ const Statistics = () => {
                     </Box>
                 </Box>
             </Box>
-        </Box>
+        </Box> : null
     );
 };
 

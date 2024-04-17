@@ -2,7 +2,7 @@ import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
 
-const BarChart = ({ data = [], isDashboard = false }) => {
+const BarChart = ({ data, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -38,8 +38,8 @@ const BarChart = ({ data = [], isDashboard = false }) => {
           },
         },
       }}
-      keys={["Eau en L", "Prix en €"]}
-      indexBy="country"
+      keys={["value"]}
+      indexBy="time"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
       groupMode="grouped"

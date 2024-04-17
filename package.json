@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@adonisjs/transmit-client": "^0.2.1",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@fullcalendar/core": "^5.11.3",
@@ -16,7 +17,7 @@
     "@mui/x-charts": "^6.19.3",
     "@mui/x-data-grid": "^5.17.2",
     "@nivo/bar": "^0.80.0",
-    "@nivo/core": "^0.79.0",
+    "@nivo/core": "^0.80.0",
     "@nivo/geo": "^0.80.0",
     "@nivo/line": "^0.79.1",
     "@nivo/pie": "^0.80.0",
