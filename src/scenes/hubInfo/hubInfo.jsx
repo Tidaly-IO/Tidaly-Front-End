@@ -30,18 +30,18 @@ const HubInfo = ({ SensorToUserList }) => {
     }, []);
 
     const getUserList = () => {
-        return data.users.map((item) => {
+        return data !== null && data.users.map((item) => {
             return (
                 <Grid container spacing={1}>
                     <Grid container item xs={12} spacing={3}>
                         <Grid item xs={20} mb={1} overflow={'scroll'} maxHeight={205} width={230}>
                             <Paper style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Avatar src={item.profile.picture} sx={{ width: 18, height: 18 }} cov />
+                                <Avatar src={item !== null ? item.profile.picture : null} sx={{ width: 18, height: 18 }} cov />
                                 <Typography ml={1} sx={{ fontSize: 12 }} color="text.secondary">
-                                    { item.profile.firstname }
+                                    { item !== null ? item.profile.firstname : 'Not' }
                                 </Typography>
                                 <Typography ml={1} sx={{ fontSize: 12 }} color="text.secondary">
-                                    { item.profile.lastname }
+                                    { item !== null ? item.profile.lastname : 'Found' }
                                 </Typography>
                             </Paper>
                         </Grid>
