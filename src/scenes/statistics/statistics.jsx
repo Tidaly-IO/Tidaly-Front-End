@@ -16,24 +16,37 @@ const Statistics = () => {
     const [time, setTime] = useState('Semaine');
     const [data, setData] = useState(null);
 
-    const updateFromChild = (value) => {
+    const getSelectedTimeScale = async (value) => {
       setTime(value);
-      console.log(time)
     };
 
-    const setDataFromTime = () => {
-        switch (time) {
-            case 'Semaine': return data.week.consumption; 
-            case 'Mois': return data.month.consumption;
-            default: return data.week.consumption;
+    const fetchFromInput = async (event) => {
+        if (!isNaN(event.target.value) && event.keyCode === 13 && event.target.value.length > 0) {
+            const response = await fetchDays(event.target.value);
+            setTime('Jour');
+            setData(response);
+            console.log('enter ', response);
         }
-    }
+    };
+
+    const fetchDays = async (time) => {
+        const day = await axios.get(`https://tidaly-api-backend.onrender.com/consumption/global?day=${time}`, 
+        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+
+        // Format day time data
+        day.data.result.map((item) => {
+            const date = new Date(item.time);
+            return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+        });
+        
+        return { day: day.data };
+    };
 
     useEffect(() => {
         const fetchStatistics = async () => {
             try {
                 const week = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=week', 
-                    { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
                 // Format week time data
                 week.data.consumption.map((item) => {
@@ -50,17 +63,27 @@ const Statistics = () => {
                     return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
 
                 });
+
+                const year = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year', 
+                    { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+
+                // Format month time data
+                year.data.consumption.map((item) => {
+                    const date = new Date(item.time);
+                    return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+
+                });
                 
-                setData({ month: month.data, week: week.data });
+                setData({ year: year.data, month: month.data, week: week.data });
                 setIsLoading(false);
-                // console.log(`[STATISTICS]: `, { month: month.data, week: week.data });
+                console.log(`[STATISTICS]: `, { year: year.data, month: month.data, week: week.data });
             } catch (error) {
                 console.log(`[STATISTICS ERROR]: ${error}`);
             }
         };
 
-        fetchStatistics();
-    }, []);
+        if (time !== 'Jour') fetchStatistics();
+    }, [time]);
 
     const getRealtimeData = (data) => {
         // process the data here,
@@ -98,12 +121,15 @@ const Statistics = () => {
 
     // getRealtimeData();
 
+    console.log('DATA -> ', data);
+    console.log('TIME -> ', time);
+
     return (
         !isLoading ? <Box m="20px">
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="STATISTIQUES" subtitle="Consultez vos différentes statistiques" />
                 <Box>
-                    <SelectButton updateFromChild={updateFromChild} />
+                    <SelectButton getSelectedTimeScale={getSelectedTimeScale} fetchFromInput={fetchFromInput} />
                 </Box>
             </Box>
 
@@ -126,7 +152,7 @@ const Statistics = () => {
                         </Typography>
                     </Box>
                     <Box height="250px" m="-20px 0 0 0">
-                        <BarChart data={setDataFromTime()} isDashboard={true} />
+                        <BarChart data={data} time={time} isDashboard={true} />
                     </Box>
                 </Box>
 

@@ -2,14 +2,31 @@ import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
 
-const BarChart = ({ data, isDashboard = false }) => {
+const BarChart = ({ data, time, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const parseData = () => {
+    if (data.week !== undefined || 
+        data.month !== undefined || 
+        data.year !== undefined) {
+        switch (time) {
+            case 'Semaine': return data.week.consumption; 
+            case 'Mois': return data.month.consumption;
+            case 'Année': return data.year.consumption;
+            default: return data.week.consumption;
+        }
+    } else if (data.day !== undefined) {
+        return data.day.result;
+    }
+  
+    return null;
+}
 
+  console.log('[RECEIVED DATA]: ', parseData());
   return (
-    <ResponsiveBar
-      data={data}
+    data !== null && <ResponsiveBar
+      data={parseData()}
       theme={{
         axis: {
           domain: {
