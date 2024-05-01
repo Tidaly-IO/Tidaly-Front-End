@@ -2,31 +2,15 @@ import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
 
-const BarChart = ({ data, time, isDashboard = false }) => {
+const BarChart = ({ data, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const parseData = () => {
-    if (data.week !== undefined || 
-        data.month !== undefined || 
-        data.year !== undefined) {
-        switch (time) {
-            case 'Semaine': return data.week.consumption; 
-            case 'Mois': return data.month.consumption;
-            case 'Année': return data.year.consumption;
-            default: return data.week.consumption;
-        }
-    } else if (data.day !== undefined) {
-        return data.day.result;
-    }
-  
-    return null;
-}
 
-  console.log('[RECEIVED DATA]: ', parseData());
+  console.log('[BARCHART]: ', data);
   return (
     data !== null && <ResponsiveBar
-      data={parseData()}
+      data={data}
       theme={{
         axis: {
           domain: {
@@ -55,7 +39,7 @@ const BarChart = ({ data, time, isDashboard = false }) => {
           },
         },
       }}
-      keys={["value"]}
+      keys={["Eau en L"]}
       indexBy="time"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}

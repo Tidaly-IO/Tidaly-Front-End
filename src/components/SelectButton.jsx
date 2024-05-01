@@ -34,7 +34,7 @@ const SelectButton = ({ getSelectedTimeScale, fetchFromInput }) => {
           <MenuItem value={"Mois"}>Mois</MenuItem>
           <MenuItem value={"Année"}>Année</MenuItem>
           <MenuItem value={"Jour"} style={{ display: 'none' }}>Jour</MenuItem>
-          <InputLabel style={{ color: 'white', marginLeft: '15px' }}>Jour</InputLabel>
+          <InputLabel style={{ color: 'rgb(183, 182, 181)', marginLeft: '15px' }}>Jour</InputLabel>
           <Input style={{marginLeft: '15px' }} type="text" onKeyDown={fetchFromInput} onChange={handleChange} />
         </Select>
       </FormControl>

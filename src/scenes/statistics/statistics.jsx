@@ -15,6 +15,28 @@ const Statistics = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [time, setTime] = useState('Semaine');
     const [data, setData] = useState(null);
+    // const [hubPrice, setHubPrice] = useState(0);
+
+    // const transmit = new Transmit({
+    //     baseUrl: 'http://20.111.43.70:4444',
+    //     maxReconnectionAttempts: 5,
+    // });
+    
+    // const setupSSE = async () => {
+    //     const subscription = transmit.subscription('notify');
+    
+    //     await subscription.create();
+    
+    //     subscription.onMessage((message) => {
+    //         console.log("SSE", message);
+    //         setTimeout(fetchStatistics, 100000);
+    //         //setTest(JSON.parse(message.data));
+    //     });
+    
+    //     /*return () => {
+    //         subscription.delete();
+    //     };*/
+    // }
 
     const getSelectedTimeScale = async (value) => {
       setTime(value);
@@ -42,85 +64,108 @@ const Statistics = () => {
         return { day: day.data };
     };
 
-    useEffect(() => {
-        const fetchStatistics = async () => {
-            try {
-                const week = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=week', 
+    const fetchStatistics = async () => {
+        try {
+            const hub = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/hub', 
+            { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+            
+
+            const week = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=week', 
+            { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+
+            // Format week time data
+            week.data.consumption.map((item) => {
+                const date = new Date(item.time);
+                return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+            });
+            
+            const month = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=month', 
+                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+            
+            // Format month time data
+            month.data.consumption.map((item) => {
+                const date = new Date(item.time);
+                return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+
+            });
+
+            const year = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year', 
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
-                // Format week time data
-                week.data.consumption.map((item) => {
-                    const date = new Date(item.time);
-                    return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
-                });
-                
-                const month = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=month', 
-                    { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
-                
-                // Format month time data
-                month.data.consumption.map((item) => {
-                    const date = new Date(item.time);
-                    return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+            // Format month time data
+            year.data.consumption.map((item) => {
+                const date = new Date(item.time);
+                return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
 
-                });
+            });
+            
+            // setHubPrice(hub.data.m_cube_price);
+            setData({ year: year.data, month: month.data, week: week.data });
+            setIsLoading(false);
+            console.log('[HUB]: ', hub.data);
+            console.log(`[STATISTICS]: `, { year: year.data, month: month.data, week: week.data });
+        } catch (error) {
+            console.log(`[STATISTICS ERROR]: ${error}`);
+        }
+    };
 
-                const year = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year', 
-                    { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+    const parseData = () => {
+        if (!data) return;
+        if (data.week !== undefined || 
+            data.month !== undefined || 
+            data.year !== undefined) {
+            switch (time) {
+                case 'Semaine':
+                    const week = data.week.consumption.map((item) => { return { 'Eau en L': item.value, "Prix en €": (item.value / 1000 * data.week.priceM3), time: item.time } });
+                    
+                    return week; 
+                case 'Mois': 
+                    const month = data.month.consumption.map((item) => { return { 'Eau en L': item.value, "Prix en €": (item.value / 1000 * data.month.priceM3), time: item.time } });
 
-                // Format month time data
-                year.data.consumption.map((item) => {
-                    const date = new Date(item.time);
-                    return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
-
-                });
-                
-                setData({ year: year.data, month: month.data, week: week.data });
-                setIsLoading(false);
-                console.log(`[STATISTICS]: `, { year: year.data, month: month.data, week: week.data });
-            } catch (error) {
-                console.log(`[STATISTICS ERROR]: ${error}`);
+                    console.log('[MAP]: ', month);
+                    
+                    return month;
+                case 'Année': 
+                    const year = data.month.consumption.map((item) => { return { 'Eau en L': item.value, "Prix en €": (item.value / 1000 * data.year.priceM3), time: item.time } });
+                    
+                    return year;
+                default: return week;
             }
-        };
-
-        if (time !== 'Jour') fetchStatistics();
-    }, [time]);
-
-    const getRealtimeData = (data) => {
-        // process the data here,
-        // then pass it to the state to be rendered
-        console.log('[SSE]: ', data);
+        } else if (data.day !== undefined) {
+            return data.day.result;
+        }
+      
+        return null;
     }
 
     useEffect(() => {
-        const serverSentEvent = async () => {
-            try {
-
-                const sse = new EventSource(`https://tidaly-api-backend.onrender.com/consumption/global?period=${time === 'Semaine' ? 'week' : 'month'}`, 
-                { 
-                    withCredentials: true, 
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-                });
-                
-                sse.onmessage = event => getRealtimeData(JSON.parse(event.data));
-                
-                sse.onerror = () => {
-                    // error log here 
-                    console.log('[SSE]: ERROR');
-                    sse.close();
-                }
-                
-                sse.close();
-
-            } catch (error) {
-                console.log(`[SSE ERROR]: ${error}`);
-            }
-        };
-
-        // serverSentEvent();
+        if (time !== 'Jour') { fetchStatistics(); }
     }, [time]);
 
-    // getRealtimeData();
+    // export const generateWeekBarData = (weeks, pricem3) => {
+    //     if (!Array.isArray(weeks) || !weeks.length) {
+    //         return [];
+    //     }
+    
+    //     const daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+    //     const pricePerLiter = pricem3 / 1000;
+    
+    //    // console.log("dsd", weeks);
+    
+    //     return weeks.map((dayData, index) => ({
+    //         time: daysOfWeek[index],
+    //         "Eau en L": dayData / 1000,
+    //         "Prix en €": dayData / 1000 * pricem3,
+    //     }));
+    // };
 
+    // useEffect(() => {
+    //     setupSSE();
+    //     fetchStatistics();
+    //     //getConsumptionObjective();
+    // }, []);
+
+    console.log('[PARSEDDATA]: ', parseData());
     console.log('DATA -> ', data);
     console.log('TIME -> ', time);
 
@@ -152,7 +197,7 @@ const Statistics = () => {
                         </Typography>
                     </Box>
                     <Box height="250px" m="-20px 0 0 0">
-                        <BarChart data={data} time={time} isDashboard={true} />
+                        <BarChart data={parseData()} time={time} isDashboard={true} />
                     </Box>
                 </Box>
 
