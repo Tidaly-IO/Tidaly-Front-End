@@ -6,10 +6,12 @@ export const generateWeekBarData = (weeks, pricem3) => {
     const daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
     const pricePerLiter = pricem3 / 1000;
 
+   // console.log("dsd", weeks);
+
     return weeks.map((dayData, index) => ({
-        country: daysOfWeek[index],
-        "Eau en L": dayData,
-        "Prix en €": dayData * pricePerLiter,
+        time: daysOfWeek[index],
+        "Eau en L": dayData / 1000,
+        "Prix en €": dayData / 1000 * pricem3,
     }));
 };
 

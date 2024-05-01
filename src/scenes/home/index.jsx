@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { generateWeekBarData } from "../../data/mockData";
 import { useState } from "react";
+import { Transmit } from '@adonisjs/transmit-client';
 
 function getCurrentDate() {
     const currentDate = new Date();
@@ -27,10 +28,12 @@ const Home = () => {
     const [currentDayConsumption, setCurrentDayConsumption] = useState(0);
     const [consumptionObjective, setConsumptionObjective] = useState(0);
     const [maxWeekIndex, setMaxWeekIndex] = useState(0);
+    const [test, setTest] = useState(null);
 
     useEffect(() => {
+        setupSSE();
         fetchData();
-        getConsumptionObjective();
+        //getConsumptionObjective();
     }, []);
 
     const fetchData = async () => {
@@ -49,7 +52,7 @@ const Home = () => {
 
             const currentDate = new Date();
             const currentYear = currentDate.getFullYear();
-                const currentMonth = currentDate.getMonth() + 1;
+            const currentMonth = currentDate.getMonth()  ;
 
             const valuesAndDatesOfMonth = consumptionData.filter(item => {
                 const itemDate = new Date(item.time);
@@ -93,15 +96,37 @@ const Home = () => {
 
             setMaxWeekIndex(weeks.length - 1);
             setCurrentWeekIndex(weeks.length - 1);
+            setPriceM3(priceM3);
             setData(generateWeekBarData(weeks[weeks.length - 1], priceM3));
             setWeeks(weeks);
-            setPriceM3(priceM3);
             //console.log(priceM3);
 
         } catch (error) {
             console.error("Erreur lors de la récupération des informations: ", error);
         }
     }
+
+    const transmit = new Transmit({
+        baseUrl: 'http://20.111.43.70:4444',
+        maxReconnectionAttempts: 5,
+    });
+
+    const setupSSE = async () => {
+        const subscription = transmit.subscription('notify');
+
+        await subscription.create();
+
+        subscription.onMessage((message) => {
+            console.log("SSE", message);
+            setTimeout(fetchData, 100000);
+            //setTest(JSON.parse(message.data));
+        });
+
+        /*return () => {
+            subscription.delete();
+        };*/
+    }
+
 
     const getConsumptionObjective = async () => {
         try {
@@ -176,7 +201,7 @@ const Home = () => {
                         alignItems="center"
                         mt="25px"
                     >
-                        <ProgressCircle size="125" currentDayConsumption={currentDayConsumption} consumptionObjective={consumptionObjective} />
+                        <ProgressCircle size="125" currentDayConsumption={currentDayConsumption} consumptionObjective={120000} />
                     </Box>
                 </Box>
 

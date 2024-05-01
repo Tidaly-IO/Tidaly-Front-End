@@ -31,7 +31,7 @@ const images = [
         imgPath: accountSetup,
     },
     {
-        label: 'Une fois vos informations renseignées, vous devrez entrer l\'identifiant de votre hub. Si celui-ci est déjà enregistré, vous serez redirigé vers la page d\'accueil; sinon, vous accéderez à la configuration de votre hub.',
+        label: 'Une fois vos informations renseignées, vous devrez entrer l\'identifiant de votre hub. Si celui-ci est déjà enregistré, vous serez redirigé vers la page d\'accueil sinon, vous accéderez à la configuration de votre hub.',
         imgPath: waterMeter,
     },
     {

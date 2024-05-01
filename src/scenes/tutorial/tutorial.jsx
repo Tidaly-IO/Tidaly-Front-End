@@ -44,7 +44,7 @@ const Tutorial = () => {
                 <div>
                     <div style={{ width: '18vw', height: '18vw', borderRadius: '50%', backgroundColor: '#fff', position: 'relative' }}>
                         <div style={{ width: '11vw', height: '11vw', borderRadius: '50%', backgroundColor: '#fff', backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-                            <Typography variant="h1" style={{ color: '#000', marginTop: '11vw' }}>TIDALY</Typography>
+                            <Typography variant="h1" style={{ color: '#000', marginTop: '11vw', marginLeft: '40px' }}>TIDALY</Typography>
                         </div>
                     </div>
                 </div>
