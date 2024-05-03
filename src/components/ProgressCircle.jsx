@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 
-const ProgressCircle = ({ size = 40, currentDayConsumption, consumptionObjective }) => {
+const ProgressCircle = ({ size = 40, currentDayConsumption, consumptionObjective, onClick }) => {
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -18,6 +18,7 @@ const ProgressCircle = ({ size = 40, currentDayConsumption, consumptionObjective
                 width: `${size}px`,
                 height: `${size}px`,
             }}
+            onClick={onClick}
         >
             <Box
                 sx={{

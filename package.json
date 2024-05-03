@@ -17,7 +17,7 @@
     "@mui/x-charts": "^6.19.3",
     "@mui/x-data-grid": "^5.17.2",
     "@nivo/bar": "^0.80.0",
-    "@nivo/core": "^0.80.0",
+    "@nivo/core": "^0.86.0",
     "@nivo/geo": "^0.80.0",
     "@nivo/line": "^0.79.1",
     "@nivo/pie": "^0.80.0",

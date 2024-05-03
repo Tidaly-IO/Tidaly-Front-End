@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme, Modal, TextField, Button } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import BarChart from "../../components/BarChart";
@@ -26,15 +26,26 @@ const Home = () => {
     const [weeks, setWeeks] = useState([]);
     const [priceM3, setPriceM3] = useState(0);
     const [currentDayConsumption, setCurrentDayConsumption] = useState(0);
-    const [consumptionObjective, setConsumptionObjective] = useState(0);
+    const [consumptionObjective, setConsumptionObjective] = useState(120000);
     const [maxWeekIndex, setMaxWeekIndex] = useState(0);
     const [test, setTest] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [changeConsumptionObjective, setChangeConsumptionObjective] = useState(0);
+    const[isChangeConsumptionObjective, setIsChangeConsumptionObjective] = useState(false);
 
     useEffect(() => {
         setupSSE();
         fetchData();
         //getConsumptionObjective();
     }, []);
+
+    const openModal = () => {
+        console.log("openModal");
+        setIsModalOpen(true);
+    };
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const fetchData = async () => {
         try {
@@ -52,7 +63,7 @@ const Home = () => {
 
             const currentDate = new Date();
             const currentYear = currentDate.getFullYear();
-            const currentMonth = currentDate.getMonth()  ;
+            const currentMonth = currentDate.getMonth() + 1
 
             const valuesAndDatesOfMonth = consumptionData.filter(item => {
                 const itemDate = new Date(item.time);
@@ -146,6 +157,30 @@ const Home = () => {
         }
     }
 
+    const ChangeConsumptionObjective = async (e) => {
+        e.preventDefault();
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(("token"))}`
+                },
+            };
+            console.log(changeConsumptionObjective);
+            const hubData = {
+                waterConsumptionTarget: changeConsumptionObjective,
+            }
+
+            await axios.put('https://tidaly-api-backend.onrender.com/api/v1/hub', hubData, config);
+            setIsChangeConsumptionObjective(true);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des informations: ", error);
+        }
+        if (isChangeConsumptionObjective) {
+            getConsumptionObjective();
+            setIsModalOpen(false);
+        }
+    }
+
 
     const goToPreviousWeek = () => {
         if (currentWeekIndex > 0) {
@@ -201,7 +236,7 @@ const Home = () => {
                         alignItems="center"
                         mt="25px"
                     >
-                        <ProgressCircle size="125" currentDayConsumption={currentDayConsumption} consumptionObjective={120000} />
+                        <ProgressCircle size="125" currentDayConsumption={currentDayConsumption} consumptionObjective={consumptionObjective} onClick={openModal}/>
                     </Box>
                 </Box>
 
@@ -242,6 +277,34 @@ const Home = () => {
                         <BarChart data={data} isDashboard={true} />
                     </Box>
                 </Box>
+                <Modal open={isModalOpen} onClose={closeModal}>
+                    <Box
+                        sx={{
+                            backgroundColor: 'white',
+                            boxShadow: 24,
+                            padding: 4,
+                            borderRadius: '8px',
+                            width: '600px',
+                            margin: 'auto',
+                            marginTop: '200px',
+                        }}
+                    >
+                        <form onSubmit={ChangeConsumptionObjective}>
+                            <TextField
+                                label="Objectif de consommation par mois"
+                                fullWidth
+                                type="number"
+                                name="changeConsumptionObjective"
+                                value={changeConsumptionObjective}
+                                onChange={e => setChangeConsumptionObjective(e.target.value)}
+                                style={{marginTop: '10px'}}
+                            />
+                            <Button type="submit" variant="contained" style={{backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '10px'}}>
+                                Changer l'objectif
+                            </Button>
+                        </form>
+                    </Box>
+                </Modal>
             </Box>
         </Box>
     );
