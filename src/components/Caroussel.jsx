@@ -7,8 +7,6 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
 import home from '../assets/home.png';
 import accountSetup from "../assets/accountSetup.png";
 import capteur from "../assets/capteurs.png";
@@ -18,12 +16,6 @@ import repartitionConsoCapteurs from "../assets/répartition_de_la_conso_des_cap
 import stats from "../assets/stats.png";
 import waterMeter from "../assets/waterMeter.png";
 import waterMeterSetup from "../assets/waterMeterSetup.png";
-
-
-//const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-
-const AutoPlaySwipeableViews = SwipeableViews;
-
 
 const images = [
     {
@@ -71,15 +63,11 @@ function Caroussel() {
     const maxSteps = images.length;
 
     const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setActiveStep((prevActiveStep) => (prevActiveStep + 1) % maxSteps);
     };
 
     const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-
-    const handleStepChange = (step) => {
-        setActiveStep(step);
+        setActiveStep((prevActiveStep) => (prevActiveStep - 1 + maxSteps) % maxSteps);
     };
 
     return (
@@ -97,31 +85,23 @@ function Caroussel() {
             >
                 <Typography>{images[activeStep].label}</Typography>
             </Paper>
-            <AutoPlaySwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                index={activeStep}
-                onChangeIndex={handleStepChange}
-                enableMouseEvents
+
+            {/* Contenu du carrousel (image) */}
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 500,
+                    bgcolor: 'background.default',
+                }}
             >
-                {images.map((step, index) => (
-                    <div key={step.label}>
-                        {Math.abs(activeStep - index) <= 2 ? (
-                            <Box
-                                component="img"
-                                sx={{
-                                    height: 500,
-                                    display: 'block',
-                                    maxWidth: 900,
-                                    overflow: 'hidden',
-                                    width: '100%',
-                                }}
-                                src={step.imgPath}
-                                alt={step.label}
-                            />
-                        ) : null}
-                    </div>
-                ))}
-            </AutoPlaySwipeableViews>
+                <img
+                    src={images[activeStep].imgPath}
+                    alt={images[activeStep].label}
+                    style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                />
+            </Box>
             <MobileStepper
                 variant="progress"
                 steps={maxSteps}
@@ -129,7 +109,7 @@ function Caroussel() {
                 activeStep={activeStep}
                 sx={{ maxWidth: 900, flexGrow: 1 }}
                 nextButton={
-                    <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
+                    <Button size="small" onClick={handleNext}>
                         Next
                         {theme.direction === 'rtl' ? (
                             <KeyboardArrowLeft />
@@ -139,7 +119,7 @@ function Caroussel() {
                     </Button>
                 }
                 backButton={
-                    <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                    <Button size="small" onClick={handleBack}>
                         {theme.direction === 'rtl' ? (
                             <KeyboardArrowRight />
                         ) : (
@@ -154,4 +134,3 @@ function Caroussel() {
 }
 
 export default Caroussel;
-
