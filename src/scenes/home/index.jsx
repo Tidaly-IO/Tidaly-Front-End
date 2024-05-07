@@ -118,7 +118,7 @@ const Home = () => {
     }
 
     const transmit = new Transmit({
-        baseUrl: 'http://20.111.43.70:4444',
+        baseUrl: 'https://tidaly-sse.onrender.com',
         maxReconnectionAttempts: 5,
     });
 
