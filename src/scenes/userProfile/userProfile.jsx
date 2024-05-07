@@ -38,6 +38,7 @@ const UserProfile = () => {
     const [passwordChangeAlertOpen, setPasswordChangeAlertOpen] = useState(false);
     const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState(false);
     const [deleteAccountConfirmation, setDeleteAccountConfirmation] = useState("");
+    const [oldPassword, setOldPassword] = useState("");
     const [picture, setPicture] = useState("https://www.w3schools.com/howto/img_avatar.png");
 
     const handleOpenDeleteAccountModal = () => {
@@ -133,36 +134,46 @@ const UserProfile = () => {
         setVerifyPassword("");
     };
 
-    const handleChangePassword = () => {
-        if (password.length >= 8) {
-            if (password === verifyPassword) {
-                const userData = {
-                    password: password
-                }
+    const handleChangePassword = async () => {
+        if (oldPassword !== "" && password !== "" && verifyPassword !== "") {
+            if (password.length >= 8) {
+                if (password === verifyPassword) {
+                    const userData = {
+                        password: password,
+                        oldPassword: oldPassword
+                    }
 
-                try {
-                    const config = {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("token")}`
-                        },
-                    };
+                    try {
+                        const config = {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("token")}`
+                            },
+                        };
 
-                    axios.put('https://tidaly-api-backend.onrender.com/api/v1/user', userData, config);
+                        await axios.put('https://tidaly-api-backend.onrender.com/api/v1/user/password', userData, config);
 
-                    setOpenModal(false);
-                    setPasswordChangeAlertOpen(true);
+                        setOpenModal(false);
+                        setPasswordChangeAlertOpen(true);
 
-                } catch (error) {
-                    console.error("Erreur lors de la mise à jour du mot de passe: ", error);
+                    } catch (error) {
+                        if (error.response && error.response.data && error.response.data.message === "Old password is incorrect") {
+                            alert("L'ancien mot de passe est incorrect");
+                        } else {
+                            alert("Une erreur s'est produite lors de la mise à jour du mot de passe.");
+                            console.error("Erreur lors de la mise à jour du mot de passe: ", error);
+                        }
+                    }
+                } else {
+                    alert("Les mots de passe ne correspondent pas");
                 }
             } else {
-                alert("Les mots de passe ne correspondent pas")
+                alert("Le mot de passe doit contenir au moins 8 caractères");
             }
-        }
-        else {
-            alert("Le mot de passe doit contenir au moins 8 caractères")
+        } else {
+            alert("Veuillez remplir tous les champs");
         }
     };
+
 
     const handleProfilePictureChange = async (event) => {
         const file = event.target.files[0];
@@ -282,6 +293,17 @@ const UserProfile = () => {
             <Dialog open={openModal} onClose={handleCloseModal}>
                 <DialogTitle>Changer le mot de passe</DialogTitle>
                 <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="oldPassword"
+                        label="Ancien mot de passe"
+                        type="password"
+                        fullWidth
+                        required
+                        value={oldPassword}
+                        onChange={(e) => setOldPassword(e.target.value)}
+                    />
                     <TextField
                         autoFocus
                         margin="dense"
