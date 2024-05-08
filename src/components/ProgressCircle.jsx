@@ -5,7 +5,7 @@ const ProgressCircle = ({ size = 40, currentDayConsumption, consumptionObjective
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const consumptionObjectiveByDays = consumptionObjective / 30;
+    const consumptionObjectiveByDays = Math.floor(consumptionObjective / 31);
     const progress = currentDayConsumption >= consumptionObjectiveByDays ? 1 : currentDayConsumption / consumptionObjectiveByDays;
     const angle = progress * 360;
     const backgroundColor = currentDayConsumption >= consumptionObjectiveByDays ? colors.redAccent[500]: colors.tidaly[100];
