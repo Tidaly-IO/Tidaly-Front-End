@@ -7,7 +7,11 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import { Transmit } from '@adonisjs/transmit-client'
+import { Transmit } from '@adonisjs/transmit-client'
+
+// 1 semaine présente 7 jours - chacuns leur valeur individuel
+// 1 mois présente 4 semaines - chacunes, un total des 7 jours qui la composent
+// 1 année présente 12 mois - chacuns, un total des 4 semaines qui la composent
 
 const Statistics = () => {
     const theme = useTheme();
@@ -17,26 +21,26 @@ const Statistics = () => {
     const [data, setData] = useState(null);
     // const [hubPrice, setHubPrice] = useState(0);
 
-    // const transmit = new Transmit({
-    //     baseUrl: 'https://tidaly-sse.onrender.com',
-    //     maxReconnectionAttempts: 5,
-    // });
+    const transmit = new Transmit({
+        baseUrl: 'https://tidaly-sse.onrender.com',
+        maxReconnectionAttempts: 5,
+    });
     
-    // const setupSSE = async () => {
-    //     const subscription = transmit.subscription('notify');
+    const setupSSE = async () => {
+        const subscription = transmit.subscription('notify');
     
-    //     await subscription.create();
+        await subscription.create();
     
-    //     subscription.onMessage((message) => {
-    //         console.log("SSE", message);
-    //         setTimeout(fetchStatistics, 100000);
-    //         //setTest(JSON.parse(message.data));
-    //     });
+        subscription.onMessage((message) => {
+            console.log("SSE", message);
+            setTimeout(fetchStatistics, 100000);
+            //setTest(JSON.parse(message.data));
+        });
     
-    //     /*return () => {
-    //         subscription.delete();
-    //     };*/
-    // }
+        /*return () => {
+            subscription.delete();
+        };*/
+    }
 
     const getSelectedTimeScale = async (value) => {
       setTime(value);
@@ -64,6 +68,23 @@ const Statistics = () => {
         return { day: day.data };
     };
 
+    const sumObjectData = (list, keysToSum, threshold) => {
+        const objects = [];
+    
+        for (let i = 0; i < list.length; i += threshold) {
+            const sumObj = {};
+            for (let j = 0; j < threshold && i + j < list.length; j++) {
+                const currentItem = list[i + j];
+                keysToSum.forEach(key => {
+                    sumObj[key] = (sumObj[key] || 0) + currentItem[key];
+                });
+            }
+            objects.push(sumObj);
+        }
+        
+        return objects;
+    }
+
     const fetchStatistics = async () => {
         try {
             const hub = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/hub', 
@@ -83,11 +104,21 @@ const Statistics = () => {
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
             
             // Format month time data
-            month.data.consumption.map((item) => {
-                const date = new Date(item.time);
-                return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+            // month.data.consumption.map((item) => {
+            //     const date = new Date(item.time);
+            //     return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
 
-            });
+            // });
+
+            let weekList = sumObjectData(month.data.consumption, ['value'], 7)
+            weekList.map((item, index) => { item.time = `Semaine ${index + 1}` })
+
+            const weeks = { 
+                consumption: weekList, 
+                hubBaseWaterConsumption: month.data.hubBaseWaterConsumption, 
+                priceM3: month.data.priceM3, 
+                sensorsResults: month.data.sensorsResults 
+            }
 
             const year = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year', 
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
@@ -98,12 +129,37 @@ const Statistics = () => {
                 return item.time = date.toLocaleDateString('fr-FR', { weekday: 'long' });
 
             });
+
+            let monthList = sumObjectData(year.data.consumption, ['value'], 30)
+            monthList.map((item, index) => { 
+                switch (index) {
+                    case 0: item.time = "Janvier"; break;
+                    case 1: item.time = "Février"; break;
+                    case 2: item.time = "Mars"; break;
+                    case 3: item.time = "Avril"; break;
+                    case 4: item.time = "Mai"; break;
+                    case 5: item.time = "Juin"; break;
+                    case 6: item.time = "Juillet"; break;
+                    case 7: item.time = "Août"; break;
+                    case 8: item.time = "Septembre"; break;
+                    case 9: item.time = "Octobre"; break;
+                    case 10: item.time = "Novembre"; break;
+                    case 11: item.time = "Décembre"; break;
+                }
+             })
+
+            const months = { 
+                consumption: monthList, 
+                hubBaseWaterConsumption: year.data.hubBaseWaterConsumption, 
+                priceM3: year.data.priceM3, 
+                sensorsResults: year.data.sensorsResults 
+            }
             
             // setHubPrice(hub.data.m_cube_price);
-            setData({ year: year.data, month: month.data, week: week.data });
+            setData({ year: months, month: weeks, week: week.data });
             setIsLoading(false);
             console.log('[HUB]: ', hub.data);
-            console.log(`[STATISTICS]: `, { year: year.data, month: month.data, week: week.data });
+            console.log(`[STATISTICS]: `, { year: months, month: weeks, week: week.data });
         } catch (error) {
             console.log(`[STATISTICS ERROR]: ${error}`);
         }
@@ -116,17 +172,15 @@ const Statistics = () => {
             data.year !== undefined) {
             switch (time) {
                 case 'Semaine':
-                    const week = data.week.consumption.map((item) => { return { 'Eau en L': item.value, "Prix en €": (item.value / 1000 * data.week.priceM3), time: item.time } });
+                    const week = data.week.consumption.map((item) => { return { 'Eau en L': item.value / 1000, "Prix en €": (item.value / 1000 * data.week.priceM3), time: item.time } });
                     
                     return week; 
                 case 'Mois': 
-                    const month = data.month.consumption.map((item) => { return { 'Eau en L': item.value, "Prix en €": (item.value / 1000 * data.month.priceM3), time: item.time } });
+                    const month = data.month.consumption.map((item) => { return { 'Eau en L': item.value / 1000, "Prix en €": (item.value / 1000 * data.month.priceM3), time: item.time } });
 
-                    console.log('[MAP]: ', month);
-                    
                     return month;
                 case 'Année': 
-                    const year = data.month.consumption.map((item) => { return { 'Eau en L': item.value, "Prix en €": (item.value / 1000 * data.year.priceM3), time: item.time } });
+                    const year = data.year.consumption.map((item) => { return { 'Eau en L': item.value / 1000, "Prix en €": (item.value / 1000 * data.year.priceM3), time: item.time } });
                     
                     return year;
                 default: return week;
@@ -159,11 +213,10 @@ const Statistics = () => {
     //     }));
     // };
 
-    // useEffect(() => {
-    //     setupSSE();
-    //     fetchStatistics();
-    //     //getConsumptionObjective();
-    // }, []);
+    useEffect(() => {
+        setupSSE();
+        fetchStatistics();
+    }, []);
 
     console.log('[PARSEDDATA]: ', parseData());
     console.log('DATA -> ', data);
