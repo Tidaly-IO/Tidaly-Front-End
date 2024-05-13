@@ -29,6 +29,7 @@ const SensorDetails = () => {
     const [getWaterPointName, setGetWaterPointName] = useState([]);
     const [waterPoints, setWaterPoints] = useState([]);
     const [showUserList, setShowUserList] = useState(false);
+    const [consumptionGoalWaterPointAdd, setConsumptionGoalWaterPointAdd] = useState(0);
     const handleSensorDetails = async (e) => {
         e.preventDefault();
         console.log(waterPointName, waterPointLocation, selectedSensor, joinWaterMeter, uuid , currentConsumption, consumptionGoal, city, postalCode);
@@ -53,7 +54,8 @@ const SensorDetails = () => {
 
                 const waterPointData = {
                     name: waterPointName,
-                    type: waterPointLocation
+                    type: waterPointLocation,
+                    waterConsumptionTarget: consumptionGoalWaterPointAdd
                 }
 
                 await axios.post('https://tidaly-api-backend.onrender.com/api/v1/sensor', waterPointData, config);
@@ -161,6 +163,10 @@ const SensorDetails = () => {
         setUuid(event.target.value);
     };
 
+    const handleConsumptionGoalWaterPointAdd = (event) => {
+        setConsumptionGoalWaterPointAdd(event.target.value);
+    }
+
     useEffect(() => {
         const getWaterMeter = async () => {
 
@@ -197,12 +203,13 @@ const SensorDetails = () => {
 
             try {
                 const response = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/sensor', config);
-                console.log(response);
+                console.log("waterPoint", response);
 
                 const waterPointData = response.data.map(sensor => ({
                     name: sensor.name,
                     location: sensor.type,
-                    id : sensor.id
+                    id : sensor.id,
+                    water_consumption_target: sensor.water_consumption_target
                 }));
 
                 setWaterPoints(waterPointData);
@@ -234,7 +241,7 @@ const SensorDetails = () => {
                             : <HubInfo SensorToUserList={SensorToUserList} />
                     )}
                     {waterPoints.map((waterPoint, index) => (
-                        <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} />
+                        <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} water_consumption_target={waterPoint.water_consumption_target} />
                     ))}
 
                 </Box>
@@ -378,6 +385,14 @@ const SensorDetails = () => {
                                     <MenuItem value="Douche">Douche</MenuItem>
                                 </Select>
                             </FormControl>
+                            <TextField
+                                label="Objectif de consommation"
+                                fullWidth
+                                name="consumptionGoal"
+                                value={consumptionGoalWaterPointAdd}
+                                onChange={handleConsumptionGoalWaterPointAdd}
+                                style={{ marginTop: '10px', marginBottom: '10px'}}
+                            />
                         </>
                     )}
                     <Box display="flex" justifyContent="center" mt={2}>

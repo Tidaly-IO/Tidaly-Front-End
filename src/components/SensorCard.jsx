@@ -20,7 +20,7 @@ const separatorStyle = {
     marginBottom: '8px',
 };
 
-export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId, SensorToUserList }) {
+export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId, SensorToUserList, water_consumption_target }) {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [openModal, setOpenModal] = React.useState(false);
@@ -31,6 +31,7 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
     const [modifyPostalCode, setPostalCode] = useState('');
     const [newName, setNewName] = useState('');
     var [newLocation, setNewLocation] = useState('')
+    const [consumptionGoalWaterPoint, setConsumptionGoalWaterPoint] = useState(0);
 
 
     if (waterPointLocation === "toilet") {
@@ -61,6 +62,10 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
         setNewLocation('')
         setNewName('')
     };
+
+    const handleConsumptionGoalWaterPoint = (event) => {
+        setConsumptionGoalWaterPoint(event.target.value);
+    }
 
     const handleDeleteSensor = async () => {
         const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer ce capteur ?");
@@ -139,11 +144,15 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
             if (newLocation === 'Toilette') {
                 newLocation = 'toilet'
             }
+            console.log("ooooooooooooh")
+
+            console.log(consumptionGoalWaterPoint)
 
             console.log(newLocation)
             const userData = {
                 name: newName,
                 type: newLocation,
+                waterConsumptionTarget: consumptionGoalWaterPoint
             }
 
             await axios.put('https://tidaly-api-backend.onrender.com/api/v1/sensor/' + sensorId, userData, config);
@@ -285,8 +294,14 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
                     <Typography sx={{ fontSize: 12 }} color="text.secondary">
                         Consommation moyenne
                     </Typography>
-                    <Typography sx={{ fontSize: 10 }} variant="body2">
+                    <Typography sx={{ fontSize: 10 }} variant="body2" style={separatorStyle}>
                         12345
+                    </Typography>
+                    <Typography sx={{ fontSize: 12 }} color="text.secondary">
+                        Objectif de consommation
+                    </Typography>
+                    <Typography sx={{ fontSize: 12 }} color="text.secondary">
+                        {water_consumption_target}
                     </Typography>
                     <Button size="small" onClick={handleOpenModalSensor}>Modifier</Button>
                     <Button size="small" onClick={handleDeleteSensor}>Supprimer</Button>
@@ -322,6 +337,14 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
                                 <MenuItem value="Toilette">Toilette</MenuItem>
                             </Select>
                         </FormControl>
+                        <TextField
+                            label="Objectif de consommation"
+                            fullWidth
+                            name="consumptionGoal"
+                            value={consumptionGoalWaterPoint}
+                            onChange={handleConsumptionGoalWaterPoint}
+                            style={{ marginTop: '10px', marginBottom: '10px'}}
+                        />
                         <Box display="flex" justifyContent="center" marginTop={"20px"}>
                             <Button onClick={handleCloseModalSensor} sx={{ mr: 2 }}>Annuler</Button>
                             <Button variant="contained" onClick={handleSaveChangesSensor} sx={{ mr: 2 }} style={{ backgroundColor: colors.tidaly[100]}}>Enregistrer</Button>
