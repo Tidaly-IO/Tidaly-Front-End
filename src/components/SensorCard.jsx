@@ -20,7 +20,7 @@ const separatorStyle = {
     marginBottom: '8px',
 };
 
-export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId, SensorToUserList, water_consumption_target }) {
+export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId, SensorToUserList, water_consumption_target, waterPointConsumption }) {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [openModal, setOpenModal] = React.useState(false);
@@ -43,7 +43,6 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
     if (waterPointLocation === "shower") {
         waterPointLocation = "Douche";
     }
-
 
     const handleOpenModal = () => {
         setOpenModal(true);
@@ -289,7 +288,7 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
                         Consommation actuelle
                     </Typography>
                     <Typography sx={{ fontSize: 10 }} variant="body2" style={separatorStyle}>
-                        1234
+                        {waterPointConsumption}
                     </Typography>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary">
                         Consommation moyenne

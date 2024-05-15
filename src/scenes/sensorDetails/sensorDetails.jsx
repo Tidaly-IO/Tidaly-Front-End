@@ -30,6 +30,7 @@ const SensorDetails = () => {
     const [waterPoints, setWaterPoints] = useState([]);
     const [showUserList, setShowUserList] = useState(false);
     const [consumptionGoalWaterPointAdd, setConsumptionGoalWaterPointAdd] = useState(0);
+    const [waterPointConsumption, setWaterPointConsumption] = useState(0);
     const handleSensorDetails = async (e) => {
         e.preventDefault();
         console.log(waterPointName, waterPointLocation, selectedSensor, joinWaterMeter, uuid , currentConsumption, consumptionGoal, city, postalCode);
@@ -218,8 +219,39 @@ const SensorDetails = () => {
             }
         }
 
+        const getConsumptionWaterPoint = async () => {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(("token"))}`
+                },
+            };
+
+            try {
+                const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year', config);
+                console.log("waterPointConsulptionqsq", response.data.sensorsResults);
+                const sensorsResults = response.data.sensorsResults;
+
+                if (sensorsResults && sensorsResults.length > 0) {
+                    const firstResult = sensorsResults[0];
+
+                    const waterPointConsulption = firstResult.data[0].value;
+
+                    setWaterPointConsumption(waterPointConsulption)
+
+                    console.log("waterPointConsulption", waterPointConsulption);
+                } else {
+                    const waterPointConsulption = 0;
+                    setWaterPointConsumption(waterPointConsulption)
+                    console.log("Aucun résultat trouvé dans sensorsResults");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération des informations :", error);
+            }
+        }
+
         getWaterMeter();
         getWaterPoint();
+        getConsumptionWaterPoint();
     }, []);
 
     const SensorToUserList = () => {
@@ -241,7 +273,7 @@ const SensorDetails = () => {
                             : <HubInfo SensorToUserList={SensorToUserList} />
                     )}
                     {waterPoints.map((waterPoint, index) => (
-                        <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} water_consumption_target={waterPoint.water_consumption_target} />
+                        <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} water_consumption_target={waterPoint.water_consumption_target} waterPointConsumption={waterPointConsumption} />
                     ))}
 
                 </Box>

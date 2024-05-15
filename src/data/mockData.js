@@ -7,6 +7,9 @@ export const generateWeekBarData = (weeks, pricem3) => {
     const pricePerLiter = pricem3 / 1000;
 
    // console.log("dsd", weeks);
+    if (pricem3 === 0) {
+        pricem3 = 4;
+    }
 
     return weeks.map((dayData, index) => ({
         time: daysOfWeek[index],

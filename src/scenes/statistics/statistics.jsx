@@ -172,15 +172,15 @@ const Statistics = () => {
             data.year !== undefined) {
             switch (time) {
                 case 'Semaine':
-                    const week = data.week.consumption.map((item) => { return { 'Eau en L': item.value / 1000, "Prix en €": (item.value / 1000 * data.week.priceM3), time: item.time } });
+                    const week = data.week.consumption.map((item) => { return { 'Eau en L': item.value / 1000, "Prix en €": (item.value / 1000 * /*data.week.priceM3*/ 4), time: item.time } });
                     
                     return week; 
                 case 'Mois': 
-                    const month = data.month.consumption.map((item) => { return { 'Eau en L': item.value / 1000, "Prix en €": (item.value / 1000 * data.month.priceM3), time: item.time } });
+                    const month = data.month.consumption.map((item) => { return { 'Eau en L': item.value / 1000, "Prix en €": (item.value / 1000 * /*data.month.priceM3*/ 4), time: item.time } });
 
                     return month;
                 case 'Année': 
-                    const year = data.year.consumption.map((item) => { return { 'Eau en L': item.value / 1000, "Prix en €": (item.value / 1000 * data.year.priceM3), time: item.time } });
+                    const year = data.year.consumption.map((item) => { return { 'Eau en L': item.value / 1000, "Prix en €": (item.value / 1000 * /*data.year.priceM3*/ 4), time: item.time } });
                     
                     return year;
                 default: return week;
