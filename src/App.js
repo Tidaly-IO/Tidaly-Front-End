@@ -16,12 +16,13 @@ import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import SensorDetails from "./scenes/sensorDetails/sensorDetails";
 import Tutorial from "./scenes/tutorial/tutorial";
+import RecoverPassword from "./scenes/recoverPassword/recoverPassword";
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const location = useLocation();
-  const hideSidebarRoutes = ["/", "/register", "/AccountSetup", "/WaterMeter", "/WaterMeterSetup", "/tutorial"];
+  const hideSidebarRoutes = ["/", "/register", "/recoverPassword", "/AccountSetup", "/WaterMeter", "/WaterMeterSetup", "/tutorial"];
   const shouldShowSidebar = !hideSidebarRoutes.includes(location.pathname);
 
   return (
@@ -35,6 +36,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<SignIn />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/recoverPassword" element={<RecoverPassword />} />
                 <Route path="/accountSetup" element={<AccountSetup />} />
                 <Route path="/waterMeter" element={<WaterMeter />} />
                 <Route path="/waterMeterSetup" element={<WaterMeterSetup />} />

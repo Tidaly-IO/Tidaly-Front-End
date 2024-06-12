@@ -6,72 +6,30 @@ import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import logo  from '../../assets/logoTidaly.png';
 
-const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+const RecoverPassword = () => {
+    const [email, setEmail] = useState('');
     const [showAlert, setShowAlert] = useState(false);
+    const [isPasswordRecovered, setIsPasswordRecovered] = useState(false);
     const navigate = useNavigate();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    var isLogin = false;
-    var isAlreadySetup = false;
 
-    const handleLogin = async (e) => {
+    const handleRecoverPassword = async (e) => {
         e.preventDefault();
 
         try {
             const userData = {
-                email: username,
-                password: password
+                email: email
             };
 
-            const response = await axios.post('https://tidaly-api-backend.onrender.com/api/v1/login', userData);
+            const response = await axios.post('https://tidaly-api-backend.onrender.com/api/v1/forget-password', userData);
 
-            localStorage.setItem("token", response.data.token.token);
-
-            isLogin = true;
+            // localStorage.setItem("token", response.data.token.token);
+            response.status === 200 && setIsPasswordRecovered(true);
 
         } catch (error) {
             console.error('Erreur lors de la requête post:', error);
             setShowAlert(true);
-        }
-
-        if (isLogin === true) {
-            try {
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(("token"))}`
-                    }
-                };
-
-                await axios.get('https://tidaly-api-backend.onrender.com/api/v1/user/profile', config);
-
-                isAlreadySetup = true;
-
-            } catch (error) {
-                navigate("/tutorial");
-                console.error('Erreur lors de la requête get:', error);
-
-            }
-        }
-
-        if (isAlreadySetup === true) {
-
-            try {
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(("token"))}`
-                    }
-                };
-
-                await axios.get('https://tidaly-api-backend.onrender.com/api/v1/hub', config);
-
-                navigate("/home");
-
-            } catch (error) {
-                navigate("/WaterMeter");
-                console.error('Erreur lors de la requête get:', error);
-            }
         }
     };
 
@@ -93,46 +51,39 @@ const Login = () => {
             {/* Colonne pour le formulaire de connexion */}
             <Snackbar open={showAlert} autoHideDuration={6000} onClose={() => setShowAlert(false)} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
                 <Alert onClose={() => setShowAlert(false)} severity="error" sx={{ width: '100%' }}>
-                    Adresse email ou mot de passe incorrect
+                    Adresse email incorrect
+                </Alert>
+            </Snackbar>
+            
+            <Snackbar open={isPasswordRecovered} autoHideDuration={6000} onClose={() => setIsPasswordRecovered(false)} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
+                <Alert onClose={() => setIsPasswordRecovered(false)} severity="success" sx={{ width: '100%' }}>
+                    Nous vous enverrons un mail de réinitialisation de votre mot de passe sur l'adresse email saisi 
                 </Alert>
             </Snackbar>
             <Grid item xs={8}>
                 <Container maxWidth="xs" style={{ marginTop: '250px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Typography variant="h1" gutterBottom style={{ color: colors.tidaly[100] }}>
-                            Connexion
+                            Mot de passe oublier
                         </Typography>
-                        <form onSubmit={handleLogin} style={{ width: '100%' }}>
+                        <form onSubmit={handleRecoverPassword} style={{ width: '100%' }}>
                             <TextField
-                                label="Utilisateur"
+                                label="E-mail"
                                 variant="outlined"
                                 margin="normal"
                                 type="email"
                                 required
                                 fullWidth
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                            <TextField
-                                label="Mot de passe"
-                                variant="outlined"
-                                type="password"
-                                margin="normal"
-                                required
-                                fullWidth
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                             <Button type="submit" variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }} fullWidth>
-                                Se connecter
+                                Retrouver votre mot de passe
                             </Button>
+                            <Typography variant="body2" style={{ marginTop: '16px', display: 'flex', justifyContent: 'center' }}>
+                               <Link to="/">Je me connecte !</Link>
+                            </Typography>
                         </form>
-                        <Typography variant="body2" style={{ marginTop: '16px' }}>
-                            Vous n'avez pas encore de compte ? <Link to="/register">S'inscrire ici</Link>
-                        </Typography>
-                        <Typography variant="body2" style={{ marginTop: '16px' }}>
-                            Mot de passe oublier ? <Link to="/recoverPassword">Retrouvez le ici</Link>
-                        </Typography>
                     </div>
                 </Container>
             </Grid>
@@ -140,4 +91,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default RecoverPassword;
