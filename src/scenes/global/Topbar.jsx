@@ -149,7 +149,7 @@ const Topbar = () => {
                 setConsumption(hub.data?.water_consumption_target - hub.data?.base_water_consumption);
                 if (!consumption) return;
 
-                if (hub.data?.base_water_consumption < hub.data?.water_consumption_target) {
+                if (hub.data?.base_water_consumption > hub.data?.water_consumption_target) {
                     const today = new Date(hub.data?.updated_at);
                     
                     switch (notificationRecurrence) {
