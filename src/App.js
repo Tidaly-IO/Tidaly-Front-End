@@ -17,12 +17,16 @@ import Sidebar from "./scenes/global/Sidebar";
 import SensorDetails from "./scenes/sensorDetails/sensorDetails";
 import Tutorial from "./scenes/tutorial/tutorial";
 import RecoverPassword from "./scenes/recoverPassword/recoverPassword";
+import Feedback from "./scenes/feedback/feedback";
+import Hearth from "./scenes/hearth/hearth";
+import Hearth2 from "./scenes/hearth/hearth2";
+import Estimator from "./scenes/estimator/estimator";
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const location = useLocation();
-  const hideSidebarRoutes = ["/", "/register", "/recoverPassword", "/AccountSetup", "/WaterMeter", "/WaterMeterSetup", "/tutorial"];
+  const hideSidebarRoutes = ["/", "/register", "/recoverPassword", "/AccountSetup", "/WaterMeter", "/WaterMeterSetup", "/tutorial", "/feedback", "/hearth", "/hearth2"];
   const shouldShowSidebar = !hideSidebarRoutes.includes(location.pathname);
 
   return (
@@ -47,6 +51,10 @@ function App() {
                 <Route path="/statistics" element={<Statistics/>} />
                 <Route path="/tutorial" element={<Tutorial/>} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/feedback" element={<Feedback />} />
+                <Route path="/hearth" element={<Hearth />} />
+                <Route path="/hearth2" element={<Hearth2 />} />
+                <Route path="/estimator" element={<Estimator />} />
               </Routes>
             </main>
           </div>

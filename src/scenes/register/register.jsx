@@ -14,12 +14,14 @@ const Register = () => {
     const navigate = useNavigate();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    const [showAlertEmail, setShowAlertEmail] = useState(false);
 
     const handleRegister = async (e) => {
         e.preventDefault();
 
         if (password !== verifyPassword) {
             setShowAlertPassword(true);
+            return
         }
 
         const userData = {
@@ -35,7 +37,11 @@ const Register = () => {
             navigate('/');
 
         } catch (error) {
-            console.error('Erreur lors de la requête :', error);
+            if (error.response && error.response.status === 422) {
+                setShowAlertEmail(true);
+            } else {
+                console.error('Erreur lors de la requête :', error);
+            }
         }
     };
 
@@ -62,6 +68,11 @@ const Register = () => {
                         {showAlertPassword && (
                             <Alert severity="error" style={{ width: '100%', marginBottom: '16px' }}
                                    onClose={() => setShowAlertPassword(false)}>Les mots de passe ne correspondent pas.
+                            </Alert>
+                        )}
+                        {showAlertEmail && (
+                            <Alert severity="error" style={{ width: '100%', marginBottom: '16px' }}
+                                   onClose={() => setShowAlertEmail(false)}>Cet email est déjà utilisé.
                             </Alert>
                         )}
                         <form onSubmit={handleRegister} style={{ width: '100%' }}>

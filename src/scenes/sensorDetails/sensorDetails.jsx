@@ -17,6 +17,7 @@ const SensorDetails = () => {
     const [waterPointName, setWaterPointName] = useState('');
     var [waterPointLocation, setWaterPointLocation] = useState('');
     const [uuid, setUuid] = useState('');
+    const [uuidSensor, setUuidSensor] = useState('');
     const [currentConsumption, setCurrentConsumption] = useState('');
     const [consumptionGoal, setConsumptionGoal] = useState('');
     const [city, setCity] = useState('');
@@ -56,7 +57,8 @@ const SensorDetails = () => {
                 const waterPointData = {
                     name: waterPointName,
                     type: waterPointLocation,
-                    waterConsumptionTarget: consumptionGoalWaterPointAdd
+                    waterConsumptionTarget: consumptionGoalWaterPointAdd,
+                    uuid: uuidSensor
                 }
 
                 await axios.post('https://tidaly-api-backend.onrender.com/api/v1/sensor', waterPointData, config);
@@ -164,6 +166,10 @@ const SensorDetails = () => {
         setUuid(event.target.value);
     };
 
+    const handleUuidSensor = (event) => {
+        setUuidSensor(event.target.value);
+    }
+
     const handleConsumptionGoalWaterPointAdd = (event) => {
         setConsumptionGoalWaterPointAdd(event.target.value);
     }
@@ -210,7 +216,8 @@ const SensorDetails = () => {
                     name: sensor.name,
                     location: sensor.type,
                     id : sensor.id,
-                    water_consumption_target: sensor.water_consumption_target
+                    water_consumption_target: sensor.water_consumption_target,
+                    uuid: sensor.uuid
                 }));
 
                 setWaterPoints(waterPointData);
@@ -273,7 +280,7 @@ const SensorDetails = () => {
                             : <HubInfo SensorToUserList={SensorToUserList} />
                     )}
                     {waterPoints.map((waterPoint, index) => (
-                        <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} water_consumption_target={waterPoint.water_consumption_target} waterPointConsumption={waterPointConsumption} />
+                        <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} water_consumption_target={waterPoint.water_consumption_target} waterPointConsumption={waterPointConsumption} WaterPointUuid={waterPoint.uuid} />
                     ))}
 
                 </Box>
@@ -400,6 +407,7 @@ const SensorDetails = () => {
                                 value={waterPointName}
                                 onChange={handleWaterPointName}
                                 style={{ marginTop: '10px', marginBottom: '10px'}}
+                                required
                             />
                             <FormControl fullWidth>
                                 <InputLabel id="sensor-location">Emplacement du point d'eau</InputLabel>
@@ -411,6 +419,7 @@ const SensorDetails = () => {
                                     onChange={handleWaterPointLocation}
                                     label="Emplacement du point d'eau"
                                     style={{ marginTop: '10px' }}
+                                    required
                                 >
                                     <MenuItem value="Toilette">Toilette</MenuItem>
                                     <MenuItem value="Robinet">Robinet</MenuItem>
@@ -424,6 +433,16 @@ const SensorDetails = () => {
                                 value={consumptionGoalWaterPointAdd}
                                 onChange={handleConsumptionGoalWaterPointAdd}
                                 style={{ marginTop: '10px', marginBottom: '10px'}}
+                                required
+                            />
+                            <TextField
+                                label="UUID"
+                                fullWidth
+                                name="uuid"
+                                value={uuidSensor}
+                                onChange={handleUuidSensor}
+                                style={{ marginTop: '10px' }}
+                                required
                             />
                         </>
                     )}

@@ -7,7 +7,6 @@ const BarChart = ({ data, isDashboard = false }) => {
   const colors = tokens(theme.palette.mode);
 
 
-  console.log('[BARCHART]: ', data);
   return (
     data !== null && <ResponsiveBar
       data={data}
@@ -39,7 +38,7 @@ const BarChart = ({ data, isDashboard = false }) => {
           },
         },
       }}
-      keys={["Eau en L", "Prix en €"]}
+      keys={["Eau en M3", "Prix en €"]}
       indexBy="time"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}

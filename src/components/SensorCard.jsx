@@ -20,7 +20,7 @@ const separatorStyle = {
     marginBottom: '8px',
 };
 
-export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId, SensorToUserList, water_consumption_target, waterPointConsumption }) {
+export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId, SensorToUserList, water_consumption_target, waterPointConsumption, WaterPointUuid }) {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [openModal, setOpenModal] = React.useState(false);
@@ -151,7 +151,8 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
             const userData = {
                 name: newName,
                 type: newLocation,
-                waterConsumptionTarget: consumptionGoalWaterPoint
+                waterConsumptionTarget: consumptionGoalWaterPoint,
+                uuid: WaterPointUuid
             }
 
             await axios.put('https://tidaly-api-backend.onrender.com/api/v1/sensor/' + sensorId, userData, config);

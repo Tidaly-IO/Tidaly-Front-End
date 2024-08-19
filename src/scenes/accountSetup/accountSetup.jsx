@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Button, TextField, Container, Typography, Grid } from '@mui/material';
+import { Button, TextField, Container, Typography, Grid, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import logo  from '../../assets/logoTidaly.png';
-
+import logo from '../../assets/logoTidaly.png';
 
 const AccountSetup = () => {
     const navigate = useNavigate();
@@ -35,21 +34,19 @@ const AccountSetup = () => {
                 countryCode: country,
                 city: city,
                 postalCode: postalCode
-            }
+            };
 
             await axios.post('https://tidaly-api-backend.onrender.com/api/v1/user/profile', userData, config);
 
-            navigate("/WaterMeter");
+            navigate("/hearth2");
 
         } catch (error) {
             console.error('Erreur lors de la requête:', error);
         }
-
     };
 
     return (
         <Grid container>
-            {/* Colonne pour la bande bleue */}
             <Grid item xs={4} style={{ backgroundColor: colors.tidaly[100], height: '100vh', position: 'relative' }}>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
                     <div style={{ width: '18vw', height: '18vw', borderRadius: '50%', backgroundColor: '#fff', position: 'relative' }}>
@@ -60,7 +57,6 @@ const AccountSetup = () => {
                 </div>
             </Grid>
 
-            {/* Colonne pour le formulaire de setup */}
             <Grid item xs={8}>
                 <Container maxWidth="xs" style={{ marginTop: '160px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -113,15 +109,17 @@ const AccountSetup = () => {
                                 value={postalCode}
                                 onChange={(e) => setPostalCode(e.target.value)}
                             />
-                            <TextField
-                                label="Pays"
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-                                value={country}
-                                onChange={(e) => setCountry(e.target.value)}
-                            />
+                            <FormControl fullWidth variant="outlined" margin="normal" required>
+                                <InputLabel>Pays</InputLabel>
+                                <Select
+                                    value={country}
+                                    onChange={(e) => setCountry(e.target.value)}
+                                    label="Pays"
+                                >
+                                    <MenuItem value="FRA">France</MenuItem>
+                                    <MenuItem value="BEL">Belgique</MenuItem>
+                                </Select>
+                            </FormControl>
                             <Button type="submit" variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }} fullWidth>
                                 Continuer
                             </Button>
@@ -133,4 +131,4 @@ const AccountSetup = () => {
     );
 };
 
-export default  AccountSetup;
+export default AccountSetup;

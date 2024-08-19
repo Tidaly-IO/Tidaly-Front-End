@@ -2,7 +2,7 @@ export const generateWeekBarData = (weeks, pricem3) => {
     if (!Array.isArray(weeks) || !weeks.length) {
         return [];
     }
-
+    console.log("weeks", weeks);
     const daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
     const pricePerLiter = pricem3 / 1000;
 
@@ -13,8 +13,53 @@ export const generateWeekBarData = (weeks, pricem3) => {
 
     return weeks.map((dayData, index) => ({
         time: daysOfWeek[index],
-        "Eau en L": dayData / 1000,
-        "Prix en €": dayData / 1000 * pricem3,
+        "Eau en M3": dayData / 1000,
+        //"Prix en €": dayData / 1000 * pricem3 //arrondis à 2 chiffres après la virgule, pour le prix
+        "Prix en €": Math.round(dayData / 1000 * pricem3 * 100) / 100
+    }));
+};
+
+export const generateYearsStatsBarData = (years, pricem3) => {
+    if (!Array.isArray(years) || !years.length) {
+        return [];
+    }
+    console.log("years", years);
+    const monthOfYears = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    const pricePerLiter = pricem3 / 1000;
+
+    console.log(pricem3)
+
+    // console.log("dsd", weeks);
+    if (pricem3 === 0) {
+        pricem3 = 4;
+    }
+
+    return years.map((monthData, index) => ({
+        time: monthOfYears[index],
+        "Eau en M3": monthData / 1000,
+        //"Prix en €": dayData / 1000 * pricem3 //arrondis à 2 chiffres après la virgule, pour le prix
+        "Prix en €": Math.round(monthData / 1000 * pricem3 * 100) / 100
+    }));
+};
+
+export const generateWeeksStatsBarData = (weeks, pricem3) => {
+    if (!Array.isArray(weeks) || !weeks.length) {
+        return [];
+    }
+    const weekLabels = ["Semaine 1", "Semaine 2", "Semaine 3", "Semaine 4", "Semaine 5"];
+    const pricePerLiter = pricem3 / 1000;
+
+    // Utiliser une valeur par défaut si pricem3 est égal à 0
+    if (pricem3 === 0) {
+        pricem3 = 4;
+    }
+
+    console.log("weeks", weeks);
+
+    return weeks.map((weekData, index) => ({
+        time: weekLabels[index],
+        "Eau en M3": weekData / 1000, // Convertir en m³
+        "Prix en €": Math.round(weekData / 1000 * pricem3 * 100) / 100 // Calculer et arrondir le prix en €
     }));
 };
 

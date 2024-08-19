@@ -280,8 +280,17 @@ const UserProfile = () => {
                             onChange={handleProfilePictureChange}
                         />
                     </label>
+                    <Link to="/estimator" style={{ textDecoration: 'none' }}>
+                        <Button variant="contained" sx={{ ml: 2 }} style={{ backgroundColor: colors.tidaly[100], color: '#fff'}}>Estimateur de capteurs</Button>
+                    </Link>
+                    <Link to="/hearth" style={{ textDecoration: 'none' }}>
+                        <Button variant="contained" sx={{ ml: 2 }} style={{ backgroundColor: colors.tidaly[100], color: '#fff'}}>Votre foyer</Button>
+                    </Link>
                     <Link to="/tutorial" style={{ textDecoration: 'none' }}>
                         <Button variant="contained" sx={{ ml: 2 }} style={{ backgroundColor: colors.tidaly[100], color: '#fff'}}>Tutoriel</Button>
+                    </Link>
+                    <Link to="/feedback" style={{ textDecoration: 'none' }}>
+                        <Button variant="contained" sx={{ ml: 2 }} style={{ backgroundColor: colors.tidaly[100], color: '#fff'}}>Vos retours</Button>
                     </Link>
                     <Button color="error" variant="contained" sx={{ ml: 2 }} onClick={handleOpenDeleteAccountModal}>Supprimer son compte</Button>
                 </Box>
