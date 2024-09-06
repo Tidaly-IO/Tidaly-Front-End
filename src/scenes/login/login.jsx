@@ -84,8 +84,10 @@ const Login = () => {
                         <div style={{ width: '11vw', height: '11vw', borderRadius: '50%', backgroundColor: '#fff', backgroundImage: `url(${logo})`,
                             backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', position: 'absolute', top: '50%',
                             left: '50%', transform: 'translate(-50%, -50%)' }}>
-                            <Typography variant="h1" style={{ color: '#000', marginTop: '11vw' }}>TIDALY</Typography>
                         </div>
+                        <Typography variant="h1" style={{ color: '#000', position: 'absolute', bottom: '5%', left: '50%', transform: 'translateX(-50%)', fontSize: '2vw' }}>
+                            TIDALY
+                        </Typography>
                     </div>
                 </div>
             </Grid>
@@ -137,6 +139,7 @@ const Login = () => {
                 </Container>
             </Grid>
         </Grid>
+
     );
 };
 
