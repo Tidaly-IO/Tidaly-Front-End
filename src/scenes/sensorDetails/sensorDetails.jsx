@@ -174,6 +174,16 @@ const SensorDetails = () => {
         setConsumptionGoalWaterPointAdd(event.target.value);
     }
 
+    const generateDemoId = () => {
+        const demoId = "hub-a73dba94-32b2-4ef2-89fb-b745c628cd33";
+        setUuid(demoId);
+    };
+
+    const generateDemoSensorId = () => {
+        const demoId = "sensor-27c83111-3225-4b76-a7ad-96d750456163";
+        setUuidSensor(demoId);
+    };
+
     useEffect(() => {
         const getWaterMeter = async () => {
 
@@ -393,6 +403,11 @@ const SensorDetails = () => {
                                         onChange={handleUuid}
                                         style={{ marginTop: '10px' }}
                                     />
+                                    <Box display="flex" justifyContent="center" mt={2}>
+                                        <Button onClick={generateDemoId} variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }}>
+                                            Demo : Générer un ID automatique
+                                        </Button>
+                                    </Box>
                                 </>
                             )}
                         </>
@@ -444,6 +459,11 @@ const SensorDetails = () => {
                                 style={{ marginTop: '10px' }}
                                 required
                             />
+                            <Box display="flex" justifyContent="center" mt={2}>
+                                <Button onClick={generateDemoSensorId} variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }}>
+                                    Demo : Générer un ID automatique
+                                </Button>
+                            </Box>
                         </>
                     )}
                     <Box display="flex" justifyContent="center" mt={2}>

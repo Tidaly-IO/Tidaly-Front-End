@@ -4,8 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import logo  from '../../assets/logoTidaly.png';
-
+import logo from '../../assets/logoTidaly.png';
 
 const WaterMeter = () => {
     const navigate = useNavigate();
@@ -29,16 +28,18 @@ const WaterMeter = () => {
 
             if (response.data === false) {
                 navigate("/WaterMeterSetup");
-
             } else {
                 navigate("/home");
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.error('Erreur lors de la requête:', error);
             setShowAlert(true);
         }
+    };
 
+    const generateDemoId = () => {
+        const demoId = "hub-a73dba94-32b2-4ef2-89fb-b745c628cd33";
+        setHubId(demoId);
     };
 
     return (
@@ -56,11 +57,19 @@ const WaterMeter = () => {
 
             {/* Colonne pour le formulaire de setup */}
             <Grid item xs={8}>
-                <Container maxWidth="sm" style={{ marginTop: '350px' }}>
+                <Container maxWidth="sm" style={{ marginTop: '300px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Typography variant="h1" gutterBottom style={{ color: colors.tidaly[100] }}>
                             Ajout du compteur d'eau
                         </Typography>
+
+                        <Typography variant="body1" gutterBottom style={{ textAlign: 'center', marginBottom: '16px' }}>
+                            Le hub connecté est un dispositif qui se positionnera directement sur votre compteur d'eau.
+                        </Typography>
+                        <Typography variant="body1" gutterBottom style={{ textAlign: 'center', marginBottom: '32px' }}>
+                            Il récupère les informations de votre consommation d'eau. Puis celles-ci vous seront transmises directement via votre application Tidaly.
+                        </Typography>
+
                         {showAlert && (
                             <Alert severity="error" onClose={() => setShowAlert(false)}>
                                 Veuillez saisir un ID existant
@@ -76,6 +85,10 @@ const WaterMeter = () => {
                                 value={hubId}
                                 onChange={(e) => setHubId(e.target.value)}
                             />
+                            {/* Bouton Demo pour générer un ID */}
+                            <Button onClick={generateDemoId} variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }} fullWidth>
+                                Demo : Générer un ID automatique
+                            </Button>
                             <Button type="submit" variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }} fullWidth>
                                 Enregistrer
                             </Button>
@@ -90,4 +103,4 @@ const WaterMeter = () => {
     );
 };
 
-export default  WaterMeter;
+export default WaterMeter;

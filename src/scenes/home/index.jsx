@@ -12,7 +12,8 @@ import { generateWeekBarData } from "../../data/mockData";
 import { useState } from "react";
 import { Transmit } from '@adonisjs/transmit-client';
 import InfoIcon from '@mui/icons-material/Info';
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from '@mui/material/Tooltip'
+import SettingsIcon from "@mui/icons-material/Settings";;
 
 
 function getCurrentDate() {
@@ -352,7 +353,19 @@ const Home = () => {
                     backgroundColor={colors.primary[400]}
                     p="20px"
                     borderRadius="10px"
+                    position="relative"
                 >
+                    <IconButton
+                        onClick={openModal}
+                        style={{
+                            position: "absolute",
+                            top: "10px",
+                            right: "10px",
+                            color: "black",
+                        }}
+                    >
+                        <SettingsIcon />
+                    </IconButton>
                     <Typography variant="h4" fontWeight="600">
                         Consommation du jour en litres :
                     </Typography>

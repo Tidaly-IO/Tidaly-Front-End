@@ -127,7 +127,7 @@ const Statistics = () => {
     };
 
     const calculateCost = (value, pricem3) => {
-        return Math.round((value / 1000) * pricem3);  // Divise par 1000 pour convertir en m³ et arrondir le coût
+        return Math.round((value / 1000) * 4);  // Divise par 1000 pour convertir en m³ et arrondir le coût
     };
 
     return (
