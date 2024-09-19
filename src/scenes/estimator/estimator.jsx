@@ -50,7 +50,7 @@ const Estimator = () => {
             }
         } catch (error) {
             console.error('Erreur:', error);
-            if (error.response.data.message = "You must have a hub to create an accommodation") {
+            if (error.response.data.message === "You must have a hub to create an accommodation") {
                 setMessageSnackbar("Vous devez avoir un hub pour faire une estimation");
                 setSnackbarSeverity('error');
                 setSnackbarOpen(true);

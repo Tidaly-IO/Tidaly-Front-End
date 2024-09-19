@@ -38,7 +38,7 @@ const AccountSetup = () => {
 
             await axios.post('https://tidaly-api-backend.onrender.com/api/v1/user/profile', userData, config);
 
-            navigate("/hearth2");
+            navigate("/WaterMeter");
 
         } catch (error) {
             console.error('Erreur lors de la requête:', error);

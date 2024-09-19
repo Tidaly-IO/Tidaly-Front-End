@@ -36,7 +36,7 @@ const WaterMeterSetup = () => {
 
             await axios.post('https://tidaly-api-backend.onrender.com/api/v1/hub', userData, config);
 
-            navigate("/home");
+            navigate("/hearth2");
 
         }
         catch (error) {
