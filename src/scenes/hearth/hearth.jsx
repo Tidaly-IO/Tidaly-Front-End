@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Container, Button, TextField, MenuItem, Select, FormControl, InputLabel, Typography } from '@mui/material';
+import { Grid, Container, Button, TextField, MenuItem, Select, FormControl, InputLabel, Typography, Snackbar, Alert } from '@mui/material';
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import logo from '../../assets/logoTidaly.png';
@@ -24,37 +24,39 @@ const Hearth = () => {
     const [waterPointInTheHouse, setWaterPointInTheHouse] = useState('');
     const [housingImage, setHousingImage] = useState(house);
     const [hasData, setHasData] = useState(false);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchHubInfo = async () => {
-            try {
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                };
-
-                const response = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/hub/infos/compare', config);
-
-                if (response.data.infos) {
-                    setHasData(true);
-                    setPeapoleInTheHouse(response.data.infos.number_of_people);
-                    setWaterPointInTheHouse(response.data.infos.number_of_water_point);
-                    setRegion(response.data.infos.location_of_home);
-                    const housingType = response.data.infos.housing_type;
-                    setHousingType(housingType);
-                    setHousingImage(housingType === 'House' ? house : apartment);
-                    const comparisonZone = response.data.infos.comparison_zone;
-                    setComparisonArea(comparisonZone === 'country' ? 'feature1' : 'feature2');
-                } else {
-                    setHasData(false);
+    const fetchHubInfo = async () => {
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
-            } catch (error) {
-                console.error('Erreur lors de la requête get:', error);
-            }
-        };
+            };
 
+            const response = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/hub/infos/compare', config);
+
+            if (response.data.infos) {
+                setHasData(true);
+                setPeapoleInTheHouse(response.data.infos.number_of_people);
+                setWaterPointInTheHouse(response.data.infos.number_of_water_point);
+                setRegion(response.data.infos.location_of_home);
+                const housingType = response.data.infos.housing_type;
+                setHousingType(housingType);
+                setHousingImage(housingType === 'House' ? house : apartment);
+                const comparisonZone = response.data.infos.comparison_zone;
+                setComparisonArea(comparisonZone === 'country' ? 'feature1' : 'feature2');
+            } else {
+                setHasData(false);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la requête get:', error);
+        }
+    };
+
+    useEffect(() => {
         fetchHubInfo();
     }, []);
 
@@ -80,6 +82,9 @@ const Hearth = () => {
             } else {
                 await axios.post('https://tidaly-api-backend.onrender.com/api/v1/hub/infos', payload, config);
             }
+            setSuccessMessage("Vos informations ont été enregistrées avec succès");
+            setOpenSnackbar(true);
+            fetchHubInfo()
         } catch (error) {
             console.error('Erreur lors de la requête:', error);
         }
@@ -205,6 +210,16 @@ const Hearth = () => {
                     </form>
                 </Container>
             </Grid>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={() => setOpenSnackbar(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert onClose={() => setOpenSnackbar(false)} severity="success">
+                    {successMessage}
+                </Alert>
+            </Snackbar>
         </Grid>
     );
 };

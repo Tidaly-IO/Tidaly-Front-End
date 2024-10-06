@@ -9,6 +9,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import SensorsIcon from '@mui/icons-material/Sensors';
 import EdgesensorHighIcon from '@mui/icons-material/EdgesensorHigh';
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import axios from "axios";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -166,6 +167,13 @@ const Sidebar = () => {
                             title="Répartition de la consommation des capteurs"
                             to="/sensorConsumption"
                             icon={<SensorsIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Mon profil"
+                            to="/userProfile"
+                            icon={<PersonOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />

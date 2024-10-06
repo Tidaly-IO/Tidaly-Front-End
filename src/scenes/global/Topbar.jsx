@@ -1,4 +1,4 @@
-import { Alert, Box, Button, IconButton, MenuItem, Modal, Select, Typography, useTheme } from "@mui/material";
+import { Alert, Box, Button, IconButton, MenuItem, Modal, Select, TextField, useTheme, FormControl, FormControlLabel, InputLabel, Switch, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { ColorModeContext, tokens } from "../../theme";
@@ -16,13 +16,19 @@ const Topbar = () => {
     const navigate = useNavigate();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
-    const [notificationRecurrence, setNotificationRecurrence] = useState('Jour');
+    const [notificationRecurrence, setNotificationRecurrence] = useState('1min');
+    const [seuilAlerte, setSeuilAlerte] = useState(0);
     const [notifications, setNotifications] = useState([]);
     const [consumption, setConsumption] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [anchor, setAnchor] = useState(null);
     const open = Boolean(anchor);
     const id = open ? 'simple-popover' : undefined;
+    const [receiveNotifications, setReceiveNotifications] = useState(false);
+
+    const handleReceiveNotificationsToggle = (event) => {
+        setReceiveNotifications(event.target.checked);
+    };
 
     const handleLogout = () => {
         localStorage.clear();
@@ -43,7 +49,7 @@ const Topbar = () => {
     const handleClick = (event) => {
       setAnchor(event.currentTarget);
     };
-  
+
     const handleClose = () => {
       setAnchor(null);
     };
@@ -81,6 +87,69 @@ const Topbar = () => {
         );
     };
 
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        console.log("ddsdfds")
+
+        localStorage.setItem('notificationRecurrence', notificationRecurrence);
+        localStorage.setItem('seuilAlerte', seuilAlerte);
+        const config = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem(("token"))}`
+            },
+        };
+
+        try {
+            const consoData = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?day', config);
+            console.log(consoData)
+            const consommationActuelle = 800 // a chnager
+
+            const objectiveData = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/hub', config);
+            console.log(objectiveData.data.water_consumption_target)
+            const objectifConso = objectiveData.data.water_consumption_target;
+
+            const res = objectifConso - consommationActuelle;
+
+            if (res <= seuilAlerte ) {
+                envoyerNotification(res);
+            }
+
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données :", error);
+        }
+    };
+
+    const envoyerNotification = (res) => {
+        const getIntervalMs = (recurrence) => {
+            switch (recurrence) {
+              case "1min":
+                return 60 * 1000; // 1 minute
+              case "30mins":
+                return 30 * 60 * 1000; // 30 minutes
+              case "1h":
+                return 60 * 60 * 1000; // 1 heure
+              case "12h":
+                return 12 * 60 * 60 * 1000; // 12 heures
+              case "Journée":
+                return 24 * 60 * 60 * 1000; // 1 jour
+              default:
+                return 60 * 1000; // Par défaut, 1 minute
+            }
+        };
+        const intervalMs = getIntervalMs(localStorage.getItem(("notificationRecurrence")));
+
+        const checkAndSendNotification = () => {
+            const message = `Il vous reste ${res} litres avant d'atteindre votre objectif de consommation.`
+            console.log("Notification envoyée : ", message);
+            alert(message);
+        };
+
+        // const notificationInterval = setInterval(() => {
+        //     console.log('Intervalle atteint, vérification des seuils...');
+        //     checkAndSendNotification();
+        // }, intervalMs);
+    };
+
     const notificationPopup = () => {
         return ( 
             <Popover
@@ -104,98 +173,114 @@ const Topbar = () => {
                 </Box>
                 <Modal open={isModalOpen} onClose={closeModal}>
                     <Box
-                        sx={{
-                            backgroundColor: 'white',
-                            boxShadow: 24,
-                            padding: 4,
-                            borderRadius: '8px',
-                            width: '600px',
-                            margin: 'auto',
-                            marginTop: '200px',
-                        }}
+                    sx={{
+                        backgroundColor: 'white',
+                        boxShadow: 24,
+                        padding: 4,
+                        width: '600px',
+                        margin: 'auto',
+                        marginTop: '200px',
+                    }}
                     >
-                        <form onSubmit={() => {}}>
-                            <Box display="flex" flexDirection="column">
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={notificationRecurrence}
-                                    label="Récurrence des notifications"
-                                    onChange={handleNotificationRecurrence}>
-                                    <MenuItem value={"Semaine"}>Semaine</MenuItem>
-                                    <MenuItem value={"Mois"}>Mois</MenuItem>
-                                    <MenuItem value={"Année"}>Année</MenuItem>
-                                    <MenuItem value={"Jour"}>Jour</MenuItem>
-                                </Select>
-                                <Button type="submit" variant="contained" style={{backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '10px'}}>
-                                    Changer la récurrence des notifications
-                                </Button>
-                            </Box>
-                        </form>
+                    <Typography variant="h3" component="h3" sx={{ marginBottom: '20px', marginLeft: '100px' }}>
+                        Paramétrage des notifications
+                    </Typography>
+
+                    <form onSubmit={handleFormSubmit}>
+                        <Box display="flex" flexDirection="column">
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Récurrence des notifications</InputLabel>
+                            <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={notificationRecurrence}
+                            onChange={handleNotificationRecurrence}
+                            required
+                            >
+                            <MenuItem value={"1min"}>1min</MenuItem>
+                            <MenuItem value={"30mins"}>30mins</MenuItem>
+                            <MenuItem value={"1h"}>1H</MenuItem>
+                            <MenuItem value={"12h"}>12H</MenuItem>
+                            <MenuItem value={"Journée"}>1J</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <TextField
+                            label="Définissez le seuil d'alerte (litres)"
+                            fullWidth
+                            type="number"
+                            name="currentConsumption"
+                            value={seuilAlerte}
+                            onChange={(e) => setSeuilAlerte(e.target.value)}
+                            style={{ marginTop: '10px' }}
+                            required
+                        />
+
+                        <Button type="submit" variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '10px' }}>
+                            Envoyer
+                        </Button>
+                        </Box>
+                    </form>
                     </Box>
                 </Modal>
                 { notificationList() }
-            </Popover> 
+            </Popover>
         );
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const hub = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/hub', { 
-                    headers: { Authorization: `Bearer ${localStorage.getItem(("token"))}` },
-                });
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const hub = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/hub', { 
+    //                 headers: { Authorization: `Bearer ${localStorage.getItem(("token"))}` },
+    //             });
+    //             console.log(hub)
 
-                setConsumption(hub.data?.water_consumption_target - hub.data?.base_water_consumption);
-                if (!consumption) return;
+    //             setConsumption(hub.data?.water_consumption_target - hub.data?.base_water_consumption);
+    //             if (!consumption) return;
+    //             console.log(consumption)
+    //             console.log(hub.data?.base_water_consumption)
+    //             console.log(hub.data?.water_consumption_target)
+    //             if (hub.data?.base_water_consumption > hub.data?.water_consumption_target) {
+    //                 const today = new Date();
+    //                 console.log(today)
 
-                if (hub.data?.base_water_consumption > hub.data?.water_consumption_target) {
-                    const today = new Date(hub.data?.updated_at);
-                    
-                    switch (notificationRecurrence) {
-                        case "Semaine": 
-                            if (today.toLocaleDateString("fr-EU", { weekday: 'long' }) === 'lundi') {
-                                const message = `Objectif de consommation dépassé de ${consumption}L le ${today.toLocaleDateString("fr-EU")}`;
-                                addNotification({ message: message });
-                            } break;
-                        case "Mois": 
-                            if (today.getDate() === '0') {
-                                const message = `Objectif de consommation dépassé de ${consumption}L le ${today.toLocaleDateString("fr-EU")}`;
-                                addNotification({ message: message });
-                            } break;
-                        case "Année":
-                            if (today.toLocaleDateString("fr-EU", { month: 'long' }) === 'décembre') {
-                                const message = `Objectif de consommation dépassé de ${consumption}L le ${today.toLocaleDateString("fr-EU")}`;
-                                addNotification({ message: message });
-                            } break;
-                        case "Jour": 
-                            const message = `Objectif de consommation dépassé de ${consumption}L le ${today.toLocaleDateString("fr-EU")}`;
-                            addNotification({ message: message });
-                            break;
-                        default: break;
-                    };
-                    
-                }
+    //                 switch (notificationRecurrence) {
+    //                     case "1min":
+    //                         if (today.toLocaleDateString("fr-EU", { weekday: 'long' }) === 'lundi') {
+    //                             const message = `Objectif de consommation dépassé de ${consumption}L le ${today.toLocaleDateString("fr-EU")}`;
+    //                             addNotification({ message: message });
+    //                         } break;
+    //                     case "30mins":
+    //                         if (today.getDate() === '0') {
+    //                             const message = `Objectif de consommation dépassé de ${consumption}L le ${today.toLocaleDateString("fr-EU")}`;
+    //                             addNotification({ message: message });
+    //                         } break;
+    //                     case "1h":
+    //                         if (today.toLocaleDateString("fr-EU", { month: 'long' }) === 'décembre') {
+    //                             const message = `Objectif de consommation dépassé de ${consumption}L le ${today.toLocaleDateString("fr-EU")}`;
+    //                             addNotification({ message: message });
+    //                         } break;
+    //                     case "Journée":
+    //                         const message = `Objectif de consommation dépassé de ${consumption}L le ${today.toLocaleDateString("fr-EU")}`;
+    //                         addNotification({ message: message });
+    //                         break;
+    //                     default: break;
+    //                 };
+    //             }
 
-            } catch (error) {
-                console.log('Unable to fetch notifications data', error);
-            }
-        };
+    //         } catch (error) {
+    //             console.log('Unable to fetch notifications data', error);
+    //         }
+    //     };
 
-        fetchData();
-    }, [consumption, notificationRecurrence]);
+    //     fetchData();
+    // }, [consumption, notificationRecurrence]);
 
     return (
         <Box display="flex" justifyContent="space-between" p={2}>
             <Box display="flex"></Box>
             <Box display="flex">
-                {/* <IconButton onClick={colorMode.toggleColorMode}>
-                  {theme.palette.mode === "dark" ? (
-                    <DarkModeOutlinedIcon />
-                  ) : (
-                    <LightModeOutlinedIcon />
-                  )}
-                </IconButton> */}
                 {notifications.length > 0 ? 
                 <IconButton onClick={handleClick}>
                     <NotificationsIcon />

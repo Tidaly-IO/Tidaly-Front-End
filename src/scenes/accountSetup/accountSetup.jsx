@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, TextField, Container, Typography, Grid, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Button, TextField, Container, Typography, Grid, Select, MenuItem, FormControl, InputLabel, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from "@mui/material";
@@ -17,8 +17,44 @@ const AccountSetup = () => {
     const [address, setAddress] = useState("");
     const [country, setCountry] = useState("");
 
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false);
+    };
+
+    const validateFields = () => {
+        if (name.length < 2) {
+            return "Le nom doit contenir au moins 2 caractères.";
+        }
+        if (firstName.length < 2) {
+            return "Le prénom doit contenir au moins 2 caractères.";
+        }
+        if (address.length < 9) {
+            return "L'adresse doit contenir au moins 9 caractères.";
+        }
+        if (city.length < 3) {
+            return "La ville doit contenir au moins 3 caractères.";
+        }
+        if (!/^[0-9]{5}$/.test(postalCode)) {
+            return "Le code postal doit être un nombre de 5 chiffres.";
+        }
+        if (!country) {
+            return "Veuillez sélectionner un pays.";
+        }
+        return null;
+    };
+
     const handleAccountSetup = async (e) => {
         e.preventDefault();
+
+        const validationError = validateFields();
+        if (validationError) {
+            setErrorMessage(validationError);
+            setOpenSnackbar(true);
+            return;
+        }
 
         try {
             const config = {
@@ -41,7 +77,8 @@ const AccountSetup = () => {
             navigate("/WaterMeter");
 
         } catch (error) {
-            console.error('Erreur lors de la requête:', error);
+            setErrorMessage("Une erreur est survenue lors de la soumission du formulaire.");
+            setOpenSnackbar(true);
         }
     };
 
@@ -131,6 +168,17 @@ const AccountSetup = () => {
                     </div>
                 </Container>
             </Grid>
+
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={5000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </Grid>
     );
 };

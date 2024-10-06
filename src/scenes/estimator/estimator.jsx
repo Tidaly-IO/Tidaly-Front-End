@@ -48,6 +48,7 @@ const Estimator = () => {
                 setSnackbarSeverity('success');
                 setSnackbarOpen(true);
             }
+            getAccomodation();
         } catch (error) {
             console.error('Erreur:', error);
             if (error.response.data.message === "You must have a hub to create an accommodation") {

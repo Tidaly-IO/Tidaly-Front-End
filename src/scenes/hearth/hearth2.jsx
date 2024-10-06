@@ -3,7 +3,6 @@ import { Grid, Container, Button, TextField, MenuItem, Select, FormControl, Inpu
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import logo from '../../assets/logoTidaly.png';
-import house from '../../assets/house.png';
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -15,6 +14,8 @@ const Hearth2 = () => {
     const [region, setRegion] = useState('');
     const [peapoleInTheHouse, setPeapoleInTheHouse] = useState('');
     const [waterPointInTheHouse, setWaterPointInTheHouse] = useState('');
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const regions = [
@@ -41,7 +42,6 @@ const Hearth2 = () => {
     const handleHearth = async (e) => {
         e.preventDefault();
 
-        // Crée un objet avec les données du formulaire
         const hubData = {
             comparisonZone: comparisonArea === 'feature1' ? 'country' : 'region',
             housingType: housingType === 'feature1' ? 'House' : 'Apartment' ,
@@ -56,14 +56,24 @@ const Hearth2 = () => {
         };
         try {
             const response = await axios.post('https://tidaly-api-backend.onrender.com/api/v1/hub/infos', hubData, config);
-            navigate("/home")
+            navigate("/home");
             console.log('Réponse du serveur :', response.data);
         } catch (error) {
             console.error('Erreur lors de la requête :', error);
+            if (error.response && error.response.data.message === "You must have a hub to create hub additional infos") {
+                setErrorMessage("Vous devez créer un hub avant de configurer votre foyer");
+            } else {
+                setErrorMessage("Une erreur est survenue lors de la soumission. Veuillez réessayer.");
+            }
+            setOpenSnackbar(true);
         }
     };
 
-    const handleButton = async (e) => {
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false);
+    };
+
+    const handleButton = () => {
         navigate("/home");
     }
 
@@ -163,6 +173,13 @@ const Hearth2 = () => {
                     </div>
                 </Container>
             </Grid>
+
+            {/* Snackbar pour afficher les erreurs */}
+            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </Grid>
     );
 };

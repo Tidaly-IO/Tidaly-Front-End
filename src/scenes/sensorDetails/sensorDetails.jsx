@@ -257,8 +257,7 @@ const SensorDetails = () => {
 
                     console.log("waterPointConsulption", waterPointConsulption);
                 } else {
-                    const waterPointConsulption = 0;
-                    setWaterPointConsumption(waterPointConsulption)
+                    setWaterPointConsumption(0);
                     console.log("Aucun résultat trouvé dans sensorsResults");
                 }
             } catch (error) {
@@ -266,9 +265,13 @@ const SensorDetails = () => {
             }
         }
 
-        getWaterMeter();
-        getWaterPoint();
-        getConsumptionWaterPoint();
+        const fetchData = () => {
+            getWaterMeter();
+            getWaterPoint();
+            getConsumptionWaterPoint();
+        };
+
+        const interval = setInterval(fetchData, 2000);
     }, []);
 
     const SensorToUserList = () => {
