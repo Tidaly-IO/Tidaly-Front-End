@@ -287,20 +287,44 @@ const SensorDetails = () => {
             <Box gridColumn="span 12" gridRow="span 2" backgroundColor={colors.primary[400]} p="20px" borderRadius="10px" height={660} overflowY="auto">
                 <Box display="flex" flexDirection="row" alignItems="center" mt={2} flexWrap="wrap" style={{ maxHeight: '100%', overflowY: 'auto' }}>
                     {isWaterMeter && (
-                        // <SensorCard typOfSensor={"WaterMeter"} currentConsumption={getCurrentConsumption} consumptionGoal={getConsumptionGoal} city={getCity} postalCode={getPostalCode} SensorToUserList={SensorToUserList} />
-                        !showUserList ? 
-                                <SensorCard typOfSensor={"WaterMeter"} currentConsumption={getCurrentConsumption} consumptionGoal={getConsumptionGoal} city={getCity} postalCode={getPostalCode} SensorToUserList={SensorToUserList} />
-                            : <HubInfo SensorToUserList={SensorToUserList} />
+                        !showUserList ?
+                            <SensorCard typOfSensor={"WaterMeter"} currentConsumption={getCurrentConsumption} consumptionGoal={getConsumptionGoal} city={getCity} postalCode={getPostalCode} SensorToUserList={SensorToUserList} />
+                        : <HubInfo SensorToUserList={SensorToUserList} />
                     )}
-                    {waterPoints.map((waterPoint, index) => (
-                        <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} water_consumption_target={waterPoint.water_consumption_target} waterPointConsumption={waterPointConsumption} WaterPointUuid={waterPoint.uuid} />
-                    ))}
 
+                    {waterPoints.length > 0 ? (
+                        waterPoints.map((waterPoint, index) => (
+                            <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} water_consumption_target={waterPoint.water_consumption_target} waterPointConsumption={waterPointConsumption} WaterPointUuid={waterPoint.uuid} />
+                        ))
+                    ) : (
+                        !isWaterMeter && (
+                            <Box
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                                style={{
+                                    marginTop: "50px",
+                                    minHeight: "200px",   // Hauteur minimale pour centrer le contenu
+                                    width: "100%",         // Occupe toute la largeur disponible
+                                }}
+                            >
+                                <Typography
+                                    variant="h4"
+                                    align="center"
+                                    style={{
+                                        color: colors.grey[100],
+                                    }}
+                                >
+                                    Vous n’avez pour le moment aucun capteur
+                                </Typography>
+                            </Box>
+                        )
+                    )}
                 </Box>
             </Box>
 
             <Box display="flex" justifyContent="center" mt={2}>
-                <Button variant="contained" onClick={handleOpenModal} style={{ backgroundColor: colors.tidaly[100], color: '#fff'}}>Ajouter un capteur</Button>
+                <Button variant="contained" onClick={handleOpenModal} style={{ backgroundColor: colors.tidaly[100], color: '#fff' }}>Ajouter un capteur</Button>
             </Box>
 
             {/* Modal pour ajouter un capteur */}
@@ -312,13 +336,15 @@ const SensorDetails = () => {
             >
                 <Box
                     sx={{
+                        position: 'absolute',
+                        top: '40%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
                         backgroundColor: 'white',
                         boxShadow: 24,
                         padding: 4,
                         borderRadius: '8px',
                         width: '600px',
-                        margin: 'auto',
-                        marginTop: '200px',
                     }}
                 >
                     <Typography id="modal-modal-title" variant="h4">
@@ -333,8 +359,8 @@ const SensorDetails = () => {
                             onChange={handleChange}
                             label="Type du capteur"
                         >
-                            <MenuItem value="Compteur d'eau">Compteur d'eau</MenuItem>
-                            <MenuItem value="Point d'eau">Point d'eau</MenuItem>
+                            {!isWaterMeter && <MenuItem value="Compteur d'eau">Compteur d'eau</MenuItem>}
+                            {isWaterMeter && <MenuItem value="Point d'eau">Point d'eau</MenuItem>}
                         </Select>
                     </FormControl>
 
@@ -429,7 +455,6 @@ const SensorDetails = () => {
                             />
                             <FormControl fullWidth>
                                 <InputLabel id="sensor-location">Emplacement du point d'eau</InputLabel>
-
                                 <Select
                                     labelId="Emplacement du point d'eau"
                                     id="sensor-location"

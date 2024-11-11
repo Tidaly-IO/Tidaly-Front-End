@@ -26,6 +26,10 @@ const Hearth = () => {
     const [hasData, setHasData] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
     const navigate = useNavigate();
 
     const fetchHubInfo = async () => {
@@ -68,7 +72,7 @@ const Hearth = () => {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             };
-
+    
             const payload = {
                 numberOfPeople: peapoleInTheHouse,
                 numberOfWaterPoint: waterPointInTheHouse,
@@ -82,11 +86,21 @@ const Hearth = () => {
             } else {
                 await axios.post('https://tidaly-api-backend.onrender.com/api/v1/hub/infos', payload, config);
             }
-            setSuccessMessage("Vos informations ont été enregistrées avec succès");
+
+            setSnackbarMessage("Vos informations ont été enregistrées avec succès");
+            setSnackbarSeverity("success");
             setOpenSnackbar(true);
-            fetchHubInfo()
+
+            fetchHubInfo();
         } catch (error) {
             console.error('Erreur lors de la requête:', error);
+            setSnackbarSeverity("error");
+            if (error.response && error.response.data.message === "You must have a hub to create hub additional infos") {
+                setSnackbarMessage("Vous devez créer un hub avant de configurer votre foyer");
+            } else {
+                setSnackbarMessage("Une erreur est survenue lors de la soumission. Veuillez réessayer.");
+            }
+            setOpenSnackbar(true);
         }
     };
 
@@ -216,8 +230,8 @@ const Hearth = () => {
                 onClose={() => setOpenSnackbar(false)}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-                <Alert onClose={() => setOpenSnackbar(false)} severity="success">
-                    {successMessage}
+                <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                    {snackbarMessage}
                 </Alert>
             </Snackbar>
         </Grid>

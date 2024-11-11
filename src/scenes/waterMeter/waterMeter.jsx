@@ -98,7 +98,7 @@ const WaterMeter = () => {
                             </Button>
                         </form>
                         <Typography variant="body2" style={{ marginTop: '16px' }}>
-                            Vous n'avez pas encore de hub ? <Link to="/hearth2">Passer cette étape</Link>
+                            Vous n'avez pas encore de hub ? <Link to="/home">Passer cette étape</Link>
                         </Typography>
                     </div>
                 </Container>

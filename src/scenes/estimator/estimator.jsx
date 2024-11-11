@@ -21,7 +21,7 @@ const Estimator = () => {
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
     const handleEstimateClick = async (e) => {
-        e.preventDefault();  // Empêche la soumission par défaut du formulaire
+        e.preventDefault();
 
         const data = {
             howManyToilet: howManyToilet,
@@ -192,15 +192,6 @@ const Estimator = () => {
                 <Typography variant="body1" style={{ marginTop: '20px' }}>
                     {result}
                 </Typography>
-                <Box display="flex" justifyContent="center" mt={2}>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        style={{ backgroundColor: colors.tidaly[100], color: "white" }}
-                    >
-                        PDF
-                    </Button>
-                </Box>
             </Box>
             <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                 <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>

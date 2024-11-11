@@ -83,7 +83,7 @@ const AccountSetup = () => {
     };
 
     return (
-        <Grid container>
+        <Grid container style={{ height: '100vh' }}>
             <Grid item xs={4} style={{ backgroundColor: colors.tidaly[100], height: '100vh', position: 'relative' }}>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
                     <div style={{ width: '18vw', height: '18vw', borderRadius: '50%', backgroundColor: '#fff', position: 'relative' }}>
@@ -98,7 +98,7 @@ const AccountSetup = () => {
                 </div>
             </Grid>
 
-            <Grid item xs={8}>
+            <Grid item xs={8} style={{ height: '100vh', overflowY: 'auto' }}>
                 <Container maxWidth="xs" style={{ marginTop: '160px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Typography variant="h1" gutterBottom style={{ color: colors.tidaly[100] }}>
@@ -142,7 +142,7 @@ const AccountSetup = () => {
                                 onChange={(e) => setCity(e.target.value)}
                             />
                             <TextField
-                                label="Code postale"
+                                label="Code postal"
                                 variant="outlined"
                                 margin="normal"
                                 required

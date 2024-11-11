@@ -7,7 +7,7 @@ import axios from "axios";
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Link } from 'react-router-dom';
-
+import avatarImage from '../../assets/img_avatar.png';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -39,7 +39,7 @@ const UserProfile = () => {
     const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState(false);
     const [deleteAccountConfirmation, setDeleteAccountConfirmation] = useState("");
     const [oldPassword, setOldPassword] = useState("");
-    const [picture, setPicture] = useState("https://www.w3schools.com/howto/img_avatar.png");
+    const [picture, setPicture] = useState(avatarImage);
 
     const handleOpenDeleteAccountModal = () => {
         setOpenDeleteAccountModal(true);
@@ -90,7 +90,8 @@ const UserProfile = () => {
             setCity(response.data.city);
             setCountry(response.data.country_code);
             setPostalCode(response.data.postal_code);
-            setPicture(response.data.picture);
+            if (response.data.picture !== null)
+                setPicture(response.data.picture);
 
 
         } catch (error) {
@@ -201,6 +202,7 @@ const UserProfile = () => {
 
             if (response.status === 201) {
                 alert("L'image de profil a été mise à jour avec succès");
+                getUserInformations()
             }
         } catch (error) {
             console.error("Erreur lors de la mise à jour de l'image de profil: ", error);

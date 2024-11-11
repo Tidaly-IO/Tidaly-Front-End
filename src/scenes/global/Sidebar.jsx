@@ -11,6 +11,7 @@ import SensorsIcon from '@mui/icons-material/Sensors';
 import EdgesensorHighIcon from '@mui/icons-material/EdgesensorHigh';
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import axios from "axios";
+import avatarImage from '../../assets/img_avatar.png';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -37,7 +38,7 @@ const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
     const [userName, setUserName] = useState("");
-    const [picture, setPicture] = useState("https://www.w3schools.com/howto/img_avatar.png");
+    const [picture, setPicture] = useState(avatarImage);
 
     const getUserInformations = async () => {
         try {
@@ -50,7 +51,8 @@ const Sidebar = () => {
             const response = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/user/profile', config);
 
             setUserName(response.data.firstname + " " + response.data.lastname)
-            setPicture(response.data.picture);
+            if (response.data.picture !== null)
+                setPicture(response.data.picture);
 
         } catch (error) {
             console.error("Erreur lors de la récupération des informations: ", error);

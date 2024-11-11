@@ -21,6 +21,8 @@ import monFoyer from "../assets/monFoyer.png";
 import monFoyer2 from "../assets/monFoyer2.png";
 import estimator from "../assets/estimateur.png";
 import feedback from "../assets/vosRetours.png";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const images = [
     {
@@ -82,13 +84,32 @@ function Caroussel() {
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
     const maxSteps = images.length;
+    const navigate = useNavigate();
+
+    const handleButton = async () => {
+        try {
+            const config = {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            };
+            const response = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/user/profile', config);
+            console.log(response);
+            navigate("/userProfile");
+        } catch (error) {
+            console.error('Erreur lors de la requête get:', error);
+            navigate("/AccountSetup");
+        }
+    };
 
     const handleNext = () => {
-        setActiveStep((prevActiveStep) => (prevActiveStep + 1) % maxSteps);
+        if (activeStep === maxSteps - 1) {
+            handleButton();
+        } else {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }
     };
 
     const handleBack = () => {
-        setActiveStep((prevActiveStep) => (prevActiveStep - 1 + maxSteps) % maxSteps);
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
     return (
@@ -123,6 +144,7 @@ function Caroussel() {
                     style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                 />
             </Box>
+
             <MobileStepper
                 variant="progress"
                 steps={maxSteps}
@@ -131,22 +153,14 @@ function Caroussel() {
                 sx={{ maxWidth: 900, flexGrow: 1 }}
                 nextButton={
                     <Button size="small" onClick={handleNext}>
-                        Next
-                        {theme.direction === 'rtl' ? (
-                            <KeyboardArrowLeft />
-                        ) : (
-                            <KeyboardArrowRight />
-                        )}
+                        {activeStep === maxSteps - 1 ? "Terminer le tutoriel" : "Suivant"}
+                        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                     </Button>
                 }
                 backButton={
-                    <Button size="small" onClick={handleBack}>
-                        {theme.direction === 'rtl' ? (
-                            <KeyboardArrowRight />
-                        ) : (
-                            <KeyboardArrowLeft />
-                        )}
-                        Back
+                    <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                        Retour
                     </Button>
                 }
             />
