@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Box, Avatar, Grid, Dialog, DialogTitle, DialogContent, DialogActions, Alert, Snackbar } from '@mui/material';
+import { Button, TextField, Box, Avatar, Grid, Dialog, DialogTitle, DialogContent, DialogActions, Alert, Snackbar, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
@@ -40,6 +40,7 @@ const UserProfile = () => {
     const [deleteAccountConfirmation, setDeleteAccountConfirmation] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [picture, setPicture] = useState(avatarImage);
+    const [errors, setErrors] = useState([]);
 
     const handleOpenDeleteAccountModal = () => {
         setOpenDeleteAccountModal(true);
@@ -107,6 +108,32 @@ const UserProfile = () => {
             countryCode: country,
             city: city,
             postalCode: postalCode
+        };
+
+        let validationErrors = [];
+
+        if (lastName.length < 2) {
+            validationErrors.push("Le nom doit comporter au moins 2 caractères.");
+        }
+        if (firstName.length < 2) {
+            validationErrors.push("Le prénom doit comporter au moins 2 caractères.");
+        }
+        if (address.length < 9) {
+            validationErrors.push("L'adresse doit comporter au moins 9 caractères.");
+        }
+        if (city.length < 3) {
+            validationErrors.push("La ville doit comporter au moins 3 caractères.");
+        }
+        if (!/^[0-9]{5}$/.test(postalCode)) {
+            validationErrors.push("Le code postal doit être composé de 5 chiffres.");
+        }
+        if (!country) {
+            validationErrors.push("Veuillez sélectionner un pays.");
+        }
+
+        if (validationErrors.length > 0) {
+            setErrors(validationErrors);
+            return;
         }
 
         try {
@@ -117,7 +144,7 @@ const UserProfile = () => {
             };
 
             await axios.put('https://tidaly-api-backend.onrender.com/api/v1/user/profile', userData, config);
-
+            getUserInformations();
             setAlertOpen(true);
 
         } catch (error) {
@@ -222,6 +249,18 @@ const UserProfile = () => {
                 </Alert>
             </Snackbar>
 
+            {errors.length > 0 && (
+                <Snackbar open={true} autoHideDuration={6000} onClose={() => setErrors([])} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    <Box sx={{ width: '100%' }}>
+                        {errors.map((error, index) => (
+                            <Alert key={index} severity="error" sx={{ marginBottom: 1 }}>
+                               {error}
+                            </Alert>
+                        ))}
+                    </Box>
+                </Snackbar>
+            )}
+
             <Snackbar open={passwordChangeAlertOpen} autoHideDuration={6000} onClose={() => setPasswordChangeAlertOpen(false)} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                 <Alert onClose={() => setPasswordChangeAlertOpen(false)} severity="success" sx={{ width: '100%' }}>
                     Votre mot de passe a été changé avec succès
@@ -261,7 +300,17 @@ const UserProfile = () => {
                         <TextField label="Code Postal" fullWidth value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
                     </Grid>
                     <Grid item xs={6}>
-                        <TextField label="Pays" fullWidth value={country} onChange={(e) => setCountry(e.target.value)} />
+                        <FormControl fullWidth>
+                            <InputLabel>Pays</InputLabel>
+                            <Select
+                                value={country}
+                                label="Pays"
+                                onChange={(e) => setCountry(e.target.value)}
+                            >
+                                <MenuItem value="FRA">France</MenuItem>
+                                <MenuItem value="BEL">Belgique</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
                 </Grid>
                 <Box display="flex" justifyContent="center" mt={2}>

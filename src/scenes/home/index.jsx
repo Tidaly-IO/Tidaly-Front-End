@@ -295,6 +295,7 @@ const Home = () => {
             await axios.put('https://tidaly-api-backend.onrender.com/api/v1/target', data, config);
             await axios.put('https://tidaly-api-backend.onrender.com/api/v1/hub', hubData, config);
             setIsChangeConsumptionObjective(true)
+            getConsumptionObjective()
         } catch (error) {
             console.error("Erreur lors de la récupération des informations: ", error);
             if (error.response && error.response.data.message === "You must have a hub to update the target") {

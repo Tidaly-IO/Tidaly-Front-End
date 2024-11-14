@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Button, TextField, Container, Typography, Grid } from '@mui/material';
+import { Button, TextField, Container, Typography, Grid, Snackbar, Alert } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import logo  from '../../assets/logoTidaly.png';
-
+import logo from '../../assets/logoTidaly.png';
 
 const WaterMeterSetup = () => {
     const navigate = useNavigate();
@@ -15,6 +14,20 @@ const WaterMeterSetup = () => {
     const [objective, setObjective] = useState();
     const [city, setCity] = useState("");
     const [postalCode, setPostalCode] = useState("");
+
+    const [errors, setErrors] = useState({
+        postalCode: '',
+        city: '',
+        uuid: '',
+    });
+
+    const [errorMessages, setErrorMessages] = useState([]);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+    const handleSnackbarClose = (index) => {
+        setErrorMessages(prev => prev.filter((_, i) => i !== index));
+        if (errorMessages.length === 1) setSnackbarOpen(false);
+    };
 
     const handleWaterMeterSetup = async (e) => {
         e.preventDefault();
@@ -41,8 +54,35 @@ const WaterMeterSetup = () => {
         }
         catch (error) {
             console.error('Erreur lors de la requête:', error);
-        }
 
+            if (error.response && error.response.data && error.response.data.errors) {
+                const apiErrors = error.response.data.errors;
+                const newErrors = { postalCode: '', city: '', uuid: '' };
+                const newErrorMessages = [];
+
+                apiErrors.forEach(err => {
+                    if (err.field === 'postalCode' && err.rule === 'minLength') {
+                        const message = `Le code postal doit avoir au moins ${err.args.minLength} caractères.`;
+                        newErrorMessages.push(message);
+                        newErrors.postalCode = message;
+                    }
+                    if (err.field === 'city' && err.rule === 'minLength') {
+                        const message = `La ville doit avoir au moins ${err.args.minLength} caractères.`;
+                        newErrorMessages.push(message);
+                        newErrors.city = message;
+                    }
+                    if (err.field === 'uuid' && err.rule === 'required') {
+                        const message = `L'UUID est requis.`;
+                        newErrorMessages.push(message);
+                        newErrors.uuid = message;
+                    }
+                });
+
+                setErrors(newErrors);
+                setErrorMessages(newErrorMessages);
+                setSnackbarOpen(true);
+            }
+        }
     };
 
     return (
@@ -99,6 +139,7 @@ const WaterMeterSetup = () => {
                                 label="Code postale"
                                 variant="outlined"
                                 margin="normal"
+                                type="number"
                                 required
                                 fullWidth
                                 value={postalCode}
@@ -109,11 +150,25 @@ const WaterMeterSetup = () => {
                             </Button>
                         </form>
                         <Typography variant="body2" style={{ marginTop: '16px' }}>
-                           Souhaitez-vous revenir à l'étape précédente ? <Link to="/">Cliquez ici</Link>
+                            Souhaitez-vous revenir à l'étape précédente ? <Link to="/">Cliquez ici</Link>
                         </Typography>
                     </div>
                 </Container>
             </Grid>
+
+            {errorMessages.map((message, index) => (
+                <Snackbar
+                    key={index}
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={() => handleSnackbarClose(index)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                    <Alert onClose={() => handleSnackbarClose(index)} severity="error" sx={{ width: '100%' }}>
+                        {message}
+                    </Alert>
+                </Snackbar>
+            ))}
         </Grid>
     );
 };
