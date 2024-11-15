@@ -169,9 +169,10 @@ const SensorConsumption = () => {
                                     alignItems="center"
                                     p="10px 20px"
                                     borderRadius="10px"
+                                    backgroundColor={colors.grey[900]}
                                 >
                                     <Box display="flex" alignItems="center">
-                                        <WaterDamage sx={{ color: colors.blueAccent[400], fontSize: "24px", mr: "10px" }} />
+                                        <WaterDamage sx={{ color: colors.tidaly[100], fontSize: "24px", mr: "10px" }} />
                                         <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
                                             {activity.sensorName}
                                         </Typography>
