@@ -7,6 +7,8 @@ import axios from "axios";
 import SensorCard from "../../components/SensorCard";
 import Typography from "@mui/material/Typography";
 import HubInfo from "../hubInfo/hubInfo";
+import { Snackbar, Alert } from '@mui/material';
+
 
 const SensorDetails = () => {
     const theme = useTheme();
@@ -30,12 +32,33 @@ const SensorDetails = () => {
     const [getWaterPointName, setGetWaterPointName] = useState([]);
     const [waterPoints, setWaterPoints] = useState([]);
     const [showUserList, setShowUserList] = useState(false);
-    const [consumptionGoalWaterPointAdd, setConsumptionGoalWaterPointAdd] = useState(0);
+    const [consumptionGoalWaterPointAdd, setConsumptionGoalWaterPointAdd] = useState('');
     const [waterPointConsumption, setWaterPointConsumption] = useState(0);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+
+
     const handleSensorDetails = async (e) => {
         e.preventDefault();
         console.log(waterPointName, waterPointLocation, selectedSensor, joinWaterMeter, uuid , currentConsumption, consumptionGoal, city, postalCode);
-        if (selectedSensor === "Point d'eau" && waterPointName !== "" && waterPointLocation !== "") {
+        if (selectedSensor === "Point d'eau" ) {
+            if (
+                !selectedSensor ||
+                !waterPointName ||
+                !waterPointLocation ||
+                uuidSensor === "" ||
+                !consumptionGoalWaterPointAdd ||
+                isNaN(consumptionGoalWaterPointAdd)
+            ) {
+                if (!selectedSensor || !waterPointName || !waterPointLocation || uuidSensor === "" || !consumptionGoalWaterPointAdd) {
+                    setSnackbarMessage("Veuillez remplir tous les champs.");
+                } else if (isNaN(consumptionGoalWaterPointAdd)) {
+                    setSnackbarMessage("L'objectif de consommation doit être un nombre.");
+                }
+                setOpenSnackbar(true);
+                return;
+            }
+
             //setNbrOfWaterPoint(nbrOfWaterPoint + 1);
             try {
                 const config = {
@@ -63,10 +86,58 @@ const SensorDetails = () => {
 
                 await axios.post('https://tidaly-api-backend.onrender.com/api/v1/sensor', waterPointData, config);
             } catch (error) {
-                console.error("Erreur lors de l'ajout du point d'eau :", error);
+                if (error.response && error.response.data) {
+                    if (error.response.data.message === "Sensor already exists") {
+                        setSnackbarMessage("Vous ne pouvez pas ajouter un capteur pour un point d'eau qui a déjà été ajouté. Veuillez saisir un UUID unique");
+                        setOpenSnackbar(true);
+                        return
+                    }
+                    if (error.response.data.message ===	"Invalid sensor uuid") {
+                        setSnackbarMessage("Le UUID renseigné n'est pas valide.");
+                        setOpenSnackbar(true);
+                        return
+                    }
+                    else if (error.response.data.errors) {
+                        const validationErrorName = error.response.data.errors.find(err => err.rule === "minLength" && err.field === "name");
+                        const validationErrorUUID = error.response.data.errors.find(err => (err.rule === "minLength" ||  err.rule === "maxLength") && err.field === "uuid");
+                        if (validationErrorName) {
+                            setSnackbarMessage("Le champ nom doit avoir au moins 4 caractères.");
+                            setOpenSnackbar(true);
+                            return
+                        }
+                        if (validationErrorUUID) {
+                            setSnackbarMessage("Le champ UUID doit avoir une longueur valide conformément au format d'un UUID.");
+                            setOpenSnackbar(true);
+                            return
+                        }
+                    } else {
+                        console.error("Erreur lors de l'ajout du point d'eau :", error);
+                    }
+                }
             }
         }
         if (selectedSensor === "Compteur d'eau") {
+            if (
+                !postalCode ||
+                !consumptionGoal ||
+                !city ||
+                uuid === "" ||
+                !currentConsumption ||
+                isNaN(consumptionGoal) ||
+                isNaN(currentConsumption) ||
+                isNaN(postalCode)
+            ) {
+                if (!postalCode || !consumptionGoal || !city || uuid === "" || !currentConsumption) {
+                    setSnackbarMessage("Veuillez remplir tous les champs.");
+                } else if (isNaN(consumptionGoal) || isNaN(currentConsumption)) {
+                    setSnackbarMessage("Les champs consommation actuelle et objectif de consommation doivent être des nombres.");
+                } else if (isNaN(postalCode)) {
+                    setSnackbarMessage("Le code postal doit être un nombre.");
+                }
+                setOpenSnackbar(true);
+                return;
+            }
+
 
             if (joinWaterMeter === "Oui" && uuid !== "") {
                 try {
@@ -110,6 +181,33 @@ const SensorDetails = () => {
                 const response = await axios.post('https://tidaly-api-backend.onrender.com/api/v1/hub', hubData, config);
                 console.log(response);
             } catch (error) {
+                if (error.response.data.message === "Invalid hub uuid") {
+                    setSnackbarMessage("Le UUID renseigné n'est pas valide.");
+                    setOpenSnackbar(true);
+                    return
+                }
+                if (error.response.data) {
+                    if (error.response.data.errors) {
+                        const validationErrorPostalCode = error.response.data.errors.find(err => (err.rule === "minLength" ||  err.rule === "maxLength") && err.field === "postalCode");
+                        const validationErrorCity = error.response.data.errors.find(err => err.rule === "minLength" && err.field === "city");
+                        const validationErrorUUID = error.response.data.errors.find(err => (err.rule === "minLength" ||  err.rule === "maxLength") && err.field === "uuid");
+                        if (validationErrorPostalCode) {
+                            setSnackbarMessage("Le champ code postal doit avoir 5 chiffres.");
+                            setOpenSnackbar(true);
+                            return
+                        }
+                        if (validationErrorCity) {
+                            setSnackbarMessage("Le champ ville doit avoir au moins 3 caractères.");
+                            setOpenSnackbar(true);
+                            return
+                        }
+                        if (validationErrorUUID) {
+                            setSnackbarMessage("Le champ UUID doit avoir une longueur valide conformément au format d'un UUID.");
+                            setOpenSnackbar(true);
+                            return
+                        }
+                    }
+                }
                 console.error("Erreur lors de l'ajout du compteur d'eau :", error);
             }
         }
@@ -393,7 +491,6 @@ const SensorDetails = () => {
                                     <TextField
                                         label="Consommation actuelle"
                                         fullWidth
-                                        type="number"
                                         name="currentConsumption"
                                         value={currentConsumption}
                                         onChange={handleCurrentConsumption}
@@ -402,7 +499,6 @@ const SensorDetails = () => {
                                     <TextField
                                         label="Objectif de consommation"
                                         fullWidth
-                                        type="number"
                                         name="consumptionGoal"
                                         value={consumptionGoal}
                                         onChange={handleConsumptionGoal}
@@ -451,6 +547,7 @@ const SensorDetails = () => {
                                 value={waterPointName}
                                 onChange={handleWaterPointName}
                                 style={{ marginTop: '10px', marginBottom: '10px'}}
+                                inputProps={{ maxLength: 40 }}
                                 required
                             />
                             <FormControl fullWidth>
@@ -499,6 +596,16 @@ const SensorDetails = () => {
                     </Box>
                 </Box>
             </Modal>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={() => setOpenSnackbar(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert onClose={() => setOpenSnackbar(false)} severity="error" sx={{ width: '100%' }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

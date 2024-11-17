@@ -323,6 +323,7 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
                             style={{ marginTop: '10px' }}
+                            inputProps={{ maxLength: 40 }}
                         />
                         <FormControl fullWidth style={{ marginTop: '10px' }}>
                             <InputLabel id="new-location-label">Nouvel emplacement</InputLabel>
