@@ -30,7 +30,7 @@ const images = [
         imgPath: accountSetup,
     },
     {
-        label: 'Une fois vos informations renseignées, vous devrez entrer l\'identifiant de votre hub. Si celui-ci est déjà enregistré, vous serez redirigé vers la page d\'accueil sinon, vous accéderez à la configuration de votre hub.',
+        label: 'Une fois vos informations renseignées, vous devrez entrer l\'identifiant de votre hub. Si celui-ci est déjà enregistré, vous serez redirigé vers la page d\'accueil, sinon, vous accéderez à la configuration de votre hub.',
         imgPath: waterMeter,
     },
     {
@@ -38,11 +38,11 @@ const images = [
         imgPath: waterMeterSetup,
     },
     {
-        label: 'Ici, vous pouvez renseigner les informations de votre foyer pour avoir une comparaions de votre consommation d\'eau par rapport à la consommation moyenne des foyers de votre région.',
+        label: 'Ici, vous pouvez renseigner les informations de votre foyer pour avoir une comparaison de votre consommation d\'eau par rapport à la consommation moyenne des foyers de votre région.',
         imgPath: monFoyer,
     },
     {
-        label: 'Ici, vous pouvez pouvez voir les informations de votre foyer et les modifier si nécessaire. Vous pouvez également ajouter votre foyer si vous avez passé cette étape lors de votre connexion.',
+        label: 'Ici, vous pouvez voir les informations de votre foyer et les modifier si nécessaire. Vous pouvez également ajouter votre foyer si vous avez passé cette étape lors de votre connexion.',
         imgPath: monFoyer2,
     },
     {
@@ -54,11 +54,11 @@ const images = [
         imgPath: profilev2,
     },
     {
-        label: 'La page de estimateur vous permez d\'estimez le nombre de capteur par point d\'eau vous avez besoin selon le nombre de point d\'eau dans votre foyer.',
+        label: 'La page de l\'estimateur vous permet d\'estimer le nombre de capteurs nécessaires selon le nombre de points d\'eau dans votre foyer.',
         imgPath: estimator,
     },
     {
-        label: 'La page de vos retours vous permet de nous faire part de vos retours sur l\'application, de nous dire quelle fonctionnalité vous préférée et pourquoi, celle que vous n\'aimez pas et pourquoi, et de nous faire part de vos suggestions pour améliorer l\'application.',
+        label: 'La page de vos retours vous permet de nous faire part de vos avis sur l\'application, de nous dire quelle fonctionnalité vous préférez et pourquoi, celle que vous n\'aimez pas et pourquoi, et de nous faire part de vos suggestions pour améliorer l\'application.',
         imgPath: feedback,
     },
     {
@@ -70,11 +70,11 @@ const images = [
         imgPath: capteur,
     },
     {
-        label: 'Sur la page de consommation globale des capteurs, vous pourrez consultez votre consommation d\'eau par rapport à votre consommation globale et par capteurs. Vous pourrez également consulter les dernieres cativitées de vos capteurs par point d\'eau.',
+        label: 'Sur la page de consommation globale des capteurs, vous pourrez consulter votre consommation d\'eau par rapport à votre consommation globale et par capteur. Vous pourrez également consulter les dernières activités de vos capteurs par point d\'eau.',
         imgPath: consoGlobaleCapteurs,
     },
     {
-        label: 'Sur la page de répartiton de la consommation des capteurs, vous pourrez consulter la repartition de votre consommation d\'eau par rapport à vos capteurs par point d\'eau. Vous pourrez également consulter les dernieres cativitées de vos capteurs par point d\'eau.',
+        label: 'Sur la page de répartition de la consommation des capteurs, vous pourrez consulter la répartition de votre consommation d\'eau par rapport à vos capteurs par point d\'eau. Vous pourrez également consulter les dernières activités de vos capteurs par point d\'eau.',
         imgPath: repartitionConsoCapteurs,
     },
 ];

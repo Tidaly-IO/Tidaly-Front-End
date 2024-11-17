@@ -442,6 +442,7 @@ const Home = () => {
                                 label="Objectif total de l'année"
                                 fullWidth
                                 type="number"
+                                disabled
                                 name="Objectif total de l'année"
                                 value={consumptionObjectiveYear}
                                 style={{marginTop: '10px'}}

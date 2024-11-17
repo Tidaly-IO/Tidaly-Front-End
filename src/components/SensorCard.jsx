@@ -273,7 +273,7 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
         }
 
         return (
-            <Card sx={{ backgroundColor: cardColor, borderRadius: "10px", marginRight: 2, marginBottom: 2 }}>
+            <Card sx={{ backgroundColor: cardColor, borderRadius: "10px", marginRight: 2, marginBottom: 2, maxWidth: 170, maxHeight: 650 }}>
                 <CardContent style={{ textAlign: 'center' }}>
                     <WaterDamageIcon sx={{ fontSize: 50, mb: 1 }} />
                     <Typography sx={{ fontSize: 12 }} color="text.secondary" style={separatorStyle}>

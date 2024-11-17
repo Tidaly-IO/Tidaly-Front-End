@@ -21,6 +21,7 @@ import Feedback from "./scenes/feedback/feedback";
 import Hearth from "./scenes/hearth/hearth";
 import Hearth2 from "./scenes/hearth/hearth2";
 import Estimator from "./scenes/estimator/estimator";
+import { AppProvider } from './AppContext';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -30,6 +31,7 @@ function App() {
   const shouldShowSidebar = !hideSidebarRoutes.includes(location.pathname);
 
   return (
+    <AppProvider>
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -60,6 +62,7 @@ function App() {
           </div>
         </ThemeProvider>
       </ColorModeContext.Provider>
+    </AppProvider>
   );
 }
 

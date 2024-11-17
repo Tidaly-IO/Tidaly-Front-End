@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button, TextField, Box, Avatar, Grid, Dialog, DialogTitle, DialogContent, DialogActions, Alert, Snackbar, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Link } from 'react-router-dom';
 import avatarImage from '../../assets/img_avatar.png';
+import { AppContext } from '../../AppContext';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -41,6 +42,9 @@ const UserProfile = () => {
     const [oldPassword, setOldPassword] = useState("");
     const [picture, setPicture] = useState(avatarImage);
     const [errors, setErrors] = useState([]);
+    const { sharedVariable, setSharedVariable } = useContext(AppContext);
+    const { refreshName, setRefreshName } = useContext(AppContext);
+
 
     const handleOpenDeleteAccountModal = () => {
         setOpenDeleteAccountModal(true);
@@ -146,6 +150,7 @@ const UserProfile = () => {
             await axios.put('https://tidaly-api-backend.onrender.com/api/v1/user/profile', userData, config);
             getUserInformations();
             setAlertOpen(true);
+            setRefreshName(true)
 
         } catch (error) {
             console.error("Erreur lors de la mise à jour des informations: ", error);
@@ -230,6 +235,7 @@ const UserProfile = () => {
             if (response.status === 201) {
                 alert("L'image de profil a été mise à jour avec succès");
                 getUserInformations()
+                setSharedVariable(true)
             }
         } catch (error) {
             console.error("Erreur lors de la mise à jour de l'image de profil: ", error);

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -12,6 +12,7 @@ import EdgesensorHighIcon from '@mui/icons-material/EdgesensorHigh';
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import axios from "axios";
 import avatarImage from '../../assets/img_avatar.png';
+import { AppContext } from '../../AppContext';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -39,6 +40,8 @@ const Sidebar = () => {
     const [selected, setSelected] = useState("Dashboard");
     const [userName, setUserName] = useState("");
     const [picture, setPicture] = useState(avatarImage);
+    const { sharedVariable } = useContext(AppContext);
+    const { refreshName, setRefreshName } = useContext(AppContext);
 
     const getUserInformations = async () => {
         try {
@@ -61,7 +64,21 @@ const Sidebar = () => {
 
     useEffect(() => {
         getUserInformations();
-    },[]);
+    }, []);
+
+    useEffect(() => {
+        if (sharedVariable) {
+            getUserInformations();
+        }
+    }, [sharedVariable]);
+
+    useEffect(() => {
+        if (refreshName) {
+            getUserInformations();
+            setRefreshName(false)
+        }
+    }, [refreshName]);
+
 
     return (
         <Box
