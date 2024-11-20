@@ -55,14 +55,12 @@ const SensorConsumption = () => {
                 return isSameYear && isSameMonth;
             });
 
-            sensorConsumption.forEach(entry => {
-                // Accumuler la consommation par capteur
-                if (!consumptionData[sensorName]) {
-                    consumptionData[sensorName] = 0;
-                }
-                consumptionData[sensorName] += entry.value;
+            consumptionData[sensorName] = sensorConsumption.reduce(
+                (total, entry) => total + entry.value,
+                0
+            );
 
-                // Ajouter chaque consommation à la liste des activités
+            sensorConsumption.forEach(entry => {
                 activityList.push({
                     sensorName: sensorName,
                     date: new Date(entry.time).toLocaleDateString(),
@@ -71,10 +69,9 @@ const SensorConsumption = () => {
             });
         });
 
-        // Transformer l'objet de consommation en tableau
-        const pieData = Object.entries(consumptionData).map(([sensorName, totalValue]) => ({
-            sensorName,
-            value: totalValue
+        const pieData = sensorData.map(sensor => ({
+            sensorName: sensor.sensor.name,
+            value: consumptionData[sensor.sensor.name] || 0,
         }));
 
         setPieChartData(pieData); // Met à jour les données du Pie Chart
@@ -142,7 +139,13 @@ const SensorConsumption = () => {
                                 borderRadius="10px"
                                 minHeight="250px"
                             >
-                                <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
+                                <Typography
+                                    variant="h4"
+                                    align="center"
+                                    style={{
+                                        color: colors.grey[100],
+                                    }}
+                                >
                                     {noDataMessage}
                                 </Typography>
                             </Box>
@@ -187,7 +190,13 @@ const SensorConsumption = () => {
                                     borderRadius="10px"
                                     minHeight="150px"
                                 >
-                                    <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
+                                <Typography
+                                    variant="h4"
+                                    align="center"
+                                    style={{
+                                        color: colors.grey[100],
+                                    }}
+                                >
                                         {noDataMessage}
                                     </Typography>
                                 </Box>

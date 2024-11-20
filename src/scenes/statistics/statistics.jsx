@@ -169,7 +169,13 @@ const Statistics = () => {
                             alignItems="center"
                             height="250px"
                         >
-                            <Typography variant="h4" fontWeight="600" color="black">
+                                <Typography
+                                    variant="h4"
+                                    align="center"
+                                    style={{
+                                        color: colors.grey[100],
+                                    }}
+                                >
                                 Vous n'avez pas de hub
                             </Typography>
                         </Box>
@@ -191,7 +197,13 @@ const Statistics = () => {
                         p="20px"
                         borderRadius="10px"
                     >
-                        <Typography variant="h4" fontWeight="600" color="black">
+                        <Typography
+                            variant="h4"
+                            align="center"
+                            style={{
+                                color: colors.grey[100],
+                            }}
+                        >
                             Vous n'avez pas de hub
                         </Typography>
                     </Box>
