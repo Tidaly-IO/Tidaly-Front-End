@@ -1,11 +1,20 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 
+function getDaysInCurrentMonth() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const nextMonth = new Date(year, month + 1, 0);
+    return nextMonth.getDate();
+  }
+
 const ProgressCircle = ({ size = 40, currentDayConsumption, consumptionObjective, onClick }) => {
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const consumptionObjectiveByDays = Math.floor(consumptionObjective / 31);
+    const daysInMonth = getDaysInCurrentMonth();
+    const consumptionObjectiveByDays = Math.floor(consumptionObjective / daysInMonth);
     const progress = currentDayConsumption >= consumptionObjectiveByDays ? 1 : currentDayConsumption / consumptionObjectiveByDays;
     const angle = progress * 360;
     const backgroundColor = currentDayConsumption >= consumptionObjectiveByDays ? colors.redAccent[500]: colors.tidaly[100];

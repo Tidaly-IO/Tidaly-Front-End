@@ -99,6 +99,8 @@ const SensorConsumption = () => {
         getConsumptionWaterPoint();
     };
 
+    const noDataMessage = "Vous ne possédez aucun capteur par point d'eau";
+
     return (
         <Box m="20px">
             <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -131,6 +133,20 @@ const SensorConsumption = () => {
                         alignItems="center"
                         mt="25px"
                     >
+                        {sensorData.length === 0 ? (
+                            <Box
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                                p="10px 20px"
+                                borderRadius="10px"
+                                minHeight="250px"
+                            >
+                                <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
+                                    {noDataMessage}
+                                </Typography>
+                            </Box>
+                        ) : (
                         <PieChart
                             series={[
                                 {
@@ -144,6 +160,7 @@ const SensorConsumption = () => {
                             width={800}
                             height={250}
                         />
+                        )}
                     </Box>
                 </Box>
 
@@ -161,27 +178,42 @@ const SensorConsumption = () => {
                         </Typography>
 
                         <Box mt="20px" display="flex" flexDirection="column" gap="10px">
-                            {activityData.map((activity, index) => (
+                            {sensorData.length === 0 ? (
                                 <Box
-                                    key={index}
                                     display="flex"
-                                    justifyContent="space-between"
+                                    justifyContent="center"
                                     alignItems="center"
                                     p="10px 20px"
                                     borderRadius="10px"
-                                    backgroundColor={colors.grey[900]}
+                                    minHeight="150px"
                                 >
-                                    <Box display="flex" alignItems="center">
-                                        <WaterDamage sx={{ color: colors.tidaly[100], fontSize: "24px", mr: "10px" }} />
-                                        <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
-                                            {activity.sensorName}
-                                        </Typography>
-                                    </Box>
                                     <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
-                                        {activity.value} L ({activity.date})
+                                        {noDataMessage}
                                     </Typography>
                                 </Box>
-                            ))}
+                            ) : (
+                                activityData.map((activity, index) => (
+                                    <Box
+                                        key={index}
+                                        display="flex"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        p="10px 20px"
+                                        borderRadius="10px"
+                                        backgroundColor={colors.grey[900]}
+                                    >
+                                        <Box display="flex" alignItems="center">
+                                            <WaterDamage sx={{ color: colors.tidaly[100], fontSize: "24px", mr: "10px" }} />
+                                            <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
+                                                {activity.sensorName}
+                                            </Typography>
+                                        </Box>
+                                        <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
+                                            {activity.value} L ({activity.date})
+                                        </Typography>
+                                    </Box>
+                                ))
+                            )}
                         </Box>
                     </Box>
                 </Box>

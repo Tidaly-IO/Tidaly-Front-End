@@ -162,10 +162,40 @@ const Statistics = () => {
                             Historique de la consommation d'eau
                         </Typography>
                     </Box>
-                    <Box height="250px" m="-20px 0 0 0">
-                        <BarChart data={data} isDashboard={true} />
-                    </Box>
+                    {displayData.length === 0 ? (
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            height="250px"
+                        >
+                            <Typography variant="h4" fontWeight="600" color="black">
+                                Vous n'avez pas de hub
+                            </Typography>
+                        </Box>
+                    ) : (
+                        <Box height="250px" m="-20px 0 0 0">
+                            <BarChart data={data} isDashboard={true} />
+                        </Box>
+                    )}
                 </Box>
+
+                {displayData.length === 0 && (
+                    <Box
+                        gridColumn="span 12"
+                        gridRow="span 2"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        backgroundColor={colors.primary[400]}
+                        p="20px"
+                        borderRadius="10px"
+                    >
+                        <Typography variant="h4" fontWeight="600" color="black">
+                            Vous n'avez pas de hub
+                        </Typography>
+                    </Box>
+                )}
 
                 {/* Conteneur pour les cartes défilantes */}
                 <Box

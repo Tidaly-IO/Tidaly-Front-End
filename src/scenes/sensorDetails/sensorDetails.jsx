@@ -457,7 +457,7 @@ const SensorDetails = () => {
                             onChange={handleChange}
                             label="Type du capteur"
                         >
-                            {!isWaterMeter && <MenuItem value="Compteur d'eau">Compteur d'eau</MenuItem>}
+                            {!isWaterMeter && <MenuItem value="Compteur d'eau">Hub connecté</MenuItem>}
                             {isWaterMeter && <MenuItem value="Point d'eau">Point d'eau</MenuItem>}
                         </Select>
                     </FormControl>

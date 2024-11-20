@@ -29,7 +29,7 @@ const WaterMeter = () => {
             if (response.data === false) {
                 navigate("/WaterMeterSetup");
             } else {
-                navigate("/hearth2");
+                navigate("/home");
             }
         } catch (error) {
             console.error('Erreur lors de la requête:', error);
@@ -64,7 +64,7 @@ const WaterMeter = () => {
                 <Container maxWidth="sm" style={{ marginTop: '300px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Typography variant="h1" gutterBottom style={{ color: colors.tidaly[100] }}>
-                            Ajout du compteur d'eau
+                            Ajout du Hub connecté
                         </Typography>
 
                         <Typography variant="body1" gutterBottom style={{ textAlign: 'center', marginBottom: '16px' }}>

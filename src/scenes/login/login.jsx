@@ -10,6 +10,7 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
     const navigate = useNavigate();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -18,6 +19,12 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+
+        if (password.length < 8) {
+            setAlertMessage('Le mot de passe doit contenir au moins 8 caractères');
+            setShowAlert(true);
+            return;
+        }
 
         try {
             const userData = {
@@ -33,7 +40,23 @@ const Login = () => {
 
         } catch (error) {
             console.error('Erreur lors de la requête post:', error);
+
+            if (error.response && error.response.data) {
+                const errorMessage = error.response.data;
+
+                if (errorMessage === 'E_HTTP_EXCEPTION: Email is not find') {
+                    setAlertMessage('Cet e-mail n’est associé à aucun compte');
+                } else if (errorMessage === 'E_HTTP_EXCEPTION: Password is false') {
+                    setAlertMessage('Mot de passe incorrect');
+                } else {
+                    setAlertMessage("Le format de l'adresse email n'est pas valide");
+                }
+            } else {
+                setAlertMessage('Erreur de connexion, veuillez réessayer');
+            }
+
             setShowAlert(true);
+            return;
         }
 
         if (isLogin === true) {
@@ -95,7 +118,7 @@ const Login = () => {
             {/* Colonne pour le formulaire de connexion */}
             <Snackbar open={showAlert} autoHideDuration={6000} onClose={() => setShowAlert(false)} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
                 <Alert onClose={() => setShowAlert(false)} severity="error" sx={{ width: '100%' }}>
-                    Adresse email ou mot de passe incorrect
+                    {alertMessage}
                 </Alert>
             </Snackbar>
             <Grid item xs={8}>

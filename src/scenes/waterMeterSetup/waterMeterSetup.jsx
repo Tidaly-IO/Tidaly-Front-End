@@ -49,7 +49,7 @@ const WaterMeterSetup = () => {
 
             await axios.post('https://tidaly-api-backend.onrender.com/api/v1/hub', userData, config);
 
-            navigate("/hearth2");
+            navigate("/home");
 
         }
         catch (error) {
@@ -103,7 +103,7 @@ const WaterMeterSetup = () => {
                 <Container maxWidth="sm" style={{ marginTop: '250px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Typography variant="h1" gutterBottom style={{ color: colors.tidaly[100] }}>
-                            Paramétrage du compteur d'eau
+                            Paramétrage du Hub connecté
                         </Typography>
                         <form onSubmit={handleWaterMeterSetup} style={{ width: '100%' }}>
                             <TextField
@@ -150,7 +150,7 @@ const WaterMeterSetup = () => {
                             </Button>
                         </form>
                         <Typography variant="body2" style={{ marginTop: '16px' }}>
-                            Souhaitez-vous revenir à l'étape précédente ? <Link to="/">Cliquez ici</Link>
+                            Souhaitez-vous revenir à l'étape précédente ? <Link to="/WaterMeter">Cliquez ici</Link>
                         </Typography>
                     </div>
                 </Container>

@@ -53,7 +53,7 @@ const RecoverPassword = () => {
             {/* Colonne pour le formulaire de connexion */}
             <Snackbar open={showAlert} autoHideDuration={6000} onClose={() => setShowAlert(false)} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} >
                 <Alert onClose={() => setShowAlert(false)} severity="error" sx={{ width: '100%' }}>
-                    Adresse email incorrect
+                    Nous n’avons pas trouvé cette adresse e-mail. Veuillez vérifier l’adresse et réessayer.
                 </Alert>
             </Snackbar>
             

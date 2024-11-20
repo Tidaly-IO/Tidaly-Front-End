@@ -78,7 +78,7 @@ const Hearth = () => {
                 numberOfWaterPoint: waterPointInTheHouse,
                 locationOfHome: region,
                 housingType: housingType,
-                comparisonZone: comparisonArea === 'feature1' ? 'country' : 'region'
+                comparisonZone: 'country'
             };
 
             if (hasData) {
@@ -128,7 +128,7 @@ const Hearth = () => {
                 <Container
                     maxWidth="sm"
                     style={{
-                        marginTop: hasData ? '50px' : '20vh', // Adjusts the top margin based on hasData
+                        marginTop: hasData ? '12vh' : '20vh', // Adjusts the top margin based on hasData
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -142,30 +142,10 @@ const Hearth = () => {
                         <>
                             <img src={housingImage} alt="Housing" style={{ width: '100%', maxWidth: '150px', marginTop: '16px' }} />
 
-                            <Typography variant="h4" style={{ marginTop: '16px' }}>Votre consommation</Typography>
-                            <Typography variant="h4">2024</Typography>
-                            <Typography variant="h5" style={{ marginTop: '10px' }}>9 192 084 L</Typography>
-                            <Typography variant="h5" style={{ marginTop: '10px' }}>Votre place</Typography>
-                            <Typography variant="h5">20000/100000</Typography>
-                            <Typography variant="h5" style={{ marginTop: '10px', textAlign: "center" }}>
-                                Félicitation selon les litres consommés sur cette année-là, vous figurez en 20000èmes position sur 100000 autres foyers de votre région similaire au vôtre !
-                            </Typography>
                         </>
                     )}
 
                     <form onSubmit={handleHearth} style={{ width: '100%' }}>
-                        <FormControl variant="outlined" margin="normal" fullWidth>
-                            <InputLabel>Zone de comparaison</InputLabel>
-                            <Select
-                                value={comparisonArea}
-                                onChange={(e) => setComparisonArea(e.target.value)}
-                                label="Zone de comparaison"
-                                required
-                            >
-                                <MenuItem value="feature1">National</MenuItem>
-                                <MenuItem value="feature2">Régional</MenuItem>
-                            </Select>
-                        </FormControl>
                         <FormControl variant="outlined" margin="normal" fullWidth>
                             <InputLabel>Type de logement</InputLabel>
                             <Select
