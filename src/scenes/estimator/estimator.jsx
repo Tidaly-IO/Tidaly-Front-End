@@ -27,7 +27,7 @@ const Estimator = () => {
             howManyToilet: howManyToilet,
             howManyFaucet: howManyFaucet,
             howManyShower: howManyShower,
-            userReview: userReview
+            userReview: "userReview"
         };
 
         const config = {
@@ -154,18 +154,6 @@ const Estimator = () => {
                                     required
                                 />
                             </FormControl>
-                        </Box>
-                        <Box flexBasis="45%" mb={2}>
-                            <TextField
-                                fullWidth
-                                label="Pouvez-vous nous en dire plus sur l'utilisation de vos points d'eau ?"
-                                variant="outlined"
-                                multiline
-                                rows={1}
-                                value={userReview}
-                                onChange={(e) => setUserReview(e.target.value)}
-                                required
-                            />
                         </Box>
                     </Box>
 

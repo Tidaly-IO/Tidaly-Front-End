@@ -227,6 +227,8 @@ const SensorDetails = () => {
         setCity('');
         setPostalCode('');
         setUuid('');
+        setUuidSensor('');
+        setConsumptionGoalWaterPointAdd('');
     }
 
     const handleChange = (event) => {

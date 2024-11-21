@@ -186,7 +186,7 @@ const Statistics = () => {
                     )}
                 </Box>
 
-                {displayData.length === 0 && (
+                {displayData.length === 0 ? (
                     <Box
                         gridColumn="span 12"
                         gridRow="span 2"
@@ -207,10 +207,8 @@ const Statistics = () => {
                             Vous n'avez pas de hub
                         </Typography>
                     </Box>
-                )}
-
-                {/* Conteneur pour les cartes défilantes */}
-                <Box
+                ):(
+                    <Box
                     gridColumn="span 12"
                     gridRow="span 2"
                     backgroundColor={colors.primary[400]}
@@ -256,6 +254,7 @@ const Statistics = () => {
                         ))}
                     </Box>
                 </Box>
+                )}
             </Box>
         </Box>
     );
