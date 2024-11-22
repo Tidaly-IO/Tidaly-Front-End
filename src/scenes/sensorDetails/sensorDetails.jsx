@@ -36,6 +36,8 @@ const SensorDetails = () => {
     const [waterPointConsumption, setWaterPointConsumption] = useState(0);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [waterMeterAlreadySetup, setwaterMeterAlreadySetup] = useState(false);
+    const [checkSetup, setCheckSetup] = useState(false);
 
 
     const handleSensorDetails = async (e) => {
@@ -85,6 +87,7 @@ const SensorDetails = () => {
                 }
 
                 await axios.post('https://tidaly-api-backend.onrender.com/api/v1/sensor', waterPointData, config);
+                handleCloseModal(true)
             } catch (error) {
                 if (error.response && error.response.data) {
                     if (error.response.data.message === "Sensor already exists") {
@@ -117,30 +120,39 @@ const SensorDetails = () => {
             }
         }
         if (selectedSensor === "Compteur d'eau") {
-            if (
-                !postalCode ||
-                !consumptionGoal ||
-                !city ||
-                uuid === "" ||
-                !currentConsumption ||
-                isNaN(consumptionGoal) ||
-                isNaN(currentConsumption) ||
-                isNaN(postalCode)
-            ) {
-                if (!postalCode || !consumptionGoal || !city || uuid === "" || !currentConsumption) {
-                    setSnackbarMessage("Veuillez remplir tous les champs.");
-                } else if (isNaN(consumptionGoal) || isNaN(currentConsumption)) {
-                    setSnackbarMessage("Les champs consommation actuelle et objectif de consommation doivent être des nombres.");
-                } else if (isNaN(postalCode)) {
-                    setSnackbarMessage("Le code postal doit être un nombre.");
-                }
+
+            if (uuid !== "") {
+                isWaterMeterAlreadySetup()
+            } else {
+                setSnackbarMessage("Veuillez remplir le champs UUID.");
                 setOpenSnackbar(true);
                 return;
             }
 
+            if (waterMeterAlreadySetup === false && checkSetup === true) {
+                if (
+                    !postalCode ||
+                    !consumptionGoal ||
+                    !city ||
+                    uuid === "" ||
+                    !currentConsumption ||
+                    isNaN(consumptionGoal) ||
+                    isNaN(currentConsumption) ||
+                    isNaN(postalCode)
+                ) {
+                    if (!postalCode || !consumptionGoal || !city || uuid === "" || !currentConsumption) {
+                        setSnackbarMessage("Veuillez remplir tous les champs.");
+                    } else if (isNaN(consumptionGoal) || isNaN(currentConsumption)) {
+                        setSnackbarMessage("Les champs consommation actuelle et objectif de consommation doivent être des nombres.");
+                    } else if (isNaN(postalCode)) {
+                        setSnackbarMessage("Le code postal doit être un nombre.");
+                    }
+                    setOpenSnackbar(true);
+                    return;
+                }
 
-            if (joinWaterMeter === "Oui" && uuid !== "") {
                 try {
+
                     const config = {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem(("token"))}`
@@ -149,70 +161,81 @@ const SensorDetails = () => {
 
                     const hubData = {
                         uuid: uuid,
-                        waterConsumptionTarget: 0,
-                        baseWaterConsumption: 0,
-                        city: "     ",
-                        postalCode: "     "
+                        waterConsumptionTarget: consumptionGoal,
+                        baseWaterConsumption: currentConsumption,
+                        city: city,
+                        postalCode: postalCode
                     }
 
-                    await axios.post('https://tidaly-api-backend.onrender.com/api/v1/hub/', hubData, config);
-
+                    const response = await axios.post('https://tidaly-api-backend.onrender.com/api/v1/hub', hubData, config);
+                    console.log(response);
                 } catch (error) {
-                    console.error("Erreur lors de l'ajout dun compteur d'eau :", error);
-                }
-
-            }
-            try {
-
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(("token"))}`
-                    },
-                };
-
-                const hubData = {
-                    uuid: uuid,
-                    waterConsumptionTarget: consumptionGoal,
-                    baseWaterConsumption: currentConsumption,
-                    city: city,
-                    postalCode: postalCode
-                }
-
-                const response = await axios.post('https://tidaly-api-backend.onrender.com/api/v1/hub', hubData, config);
-                console.log(response);
-            } catch (error) {
-                if (error.response.data.message === "Invalid hub uuid") {
-                    setSnackbarMessage("Le UUID renseigné n'est pas valide.");
-                    setOpenSnackbar(true);
-                    return
-                }
-                if (error.response.data) {
-                    if (error.response.data.errors) {
-                        const validationErrorPostalCode = error.response.data.errors.find(err => (err.rule === "minLength" ||  err.rule === "maxLength") && err.field === "postalCode");
-                        const validationErrorCity = error.response.data.errors.find(err => err.rule === "minLength" && err.field === "city");
-                        const validationErrorUUID = error.response.data.errors.find(err => (err.rule === "minLength" ||  err.rule === "maxLength") && err.field === "uuid");
-                        if (validationErrorPostalCode) {
-                            setSnackbarMessage("Le champ code postal doit avoir 5 chiffres.");
-                            setOpenSnackbar(true);
-                            return
-                        }
-                        if (validationErrorCity) {
-                            setSnackbarMessage("Le champ ville doit avoir au moins 3 caractères.");
-                            setOpenSnackbar(true);
-                            return
-                        }
-                        if (validationErrorUUID) {
-                            setSnackbarMessage("Le champ UUID doit avoir une longueur valide conformément au format d'un UUID.");
-                            setOpenSnackbar(true);
-                            return
+                    if (error.response.data.message === "Invalid hub uuid") {
+                        setSnackbarMessage("Le UUID renseigné n'est pas valide.");
+                        setOpenSnackbar(true);
+                        return
+                    }
+                    if (error.response.data) {
+                        if (error.response.data.errors) {
+                            const validationErrorPostalCode = error.response.data.errors.find(err => (err.rule === "minLength" ||  err.rule === "maxLength") && err.field === "postalCode");
+                            const validationErrorCity = error.response.data.errors.find(err => err.rule === "minLength" && err.field === "city");
+                            const validationErrorUUID = error.response.data.errors.find(err => (err.rule === "minLength" ||  err.rule === "maxLength") && err.field === "uuid");
+                            if (validationErrorPostalCode) {
+                                setSnackbarMessage("Le champ code postal doit avoir 5 chiffres.");
+                                setOpenSnackbar(true);
+                                return
+                            }
+                            if (validationErrorCity) {
+                                setSnackbarMessage("Le champ ville doit avoir au moins 3 caractères.");
+                                setOpenSnackbar(true);
+                                return
+                            }
+                            if (validationErrorUUID) {
+                                setSnackbarMessage("Le champ UUID doit avoir une longueur valide conformément au format d'un UUID.");
+                                setOpenSnackbar(true);
+                                return
+                            }
                         }
                     }
+                    console.error("Erreur lors de l'ajout du compteur d'eau :", error);
                 }
-                console.error("Erreur lors de l'ajout du compteur d'eau :", error);
+                handleCloseModal(true);
+            }
+            if (waterMeterAlreadySetup === true && checkSetup === true) {
+                handleCloseModal(true);
             }
         }
-        handleCloseModal(true);
+    };
 
+    function checkWordInString(str, word) {
+        return str.includes(word);
+    }
+
+    const isWaterMeterAlreadySetup = async (e) => {
+
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(("token"))}`
+                },
+            };
+
+            const response = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/hub/' + uuid, config);
+            console.log("rersponse", response)
+
+            if (response.data === true) {
+                setwaterMeterAlreadySetup(true)
+                handleCloseModal(true)
+            }
+            setCheckSetup(true)
+        } catch (error) {
+            if (error.response.data.message === "Invalid hub uuid" || checkWordInString(error.response.data.message, "E_ROUTE_NOT_FOUND") === true ) {
+                setSnackbarMessage("Le UUID renseigné n'est pas valide.");
+                setOpenSnackbar(true);
+                return
+            }
+            console.error('Erreur lors de la requête:', error);
+        }
     };
 
     const handleOpenModal = () => setOpenModal(true);
@@ -229,6 +252,7 @@ const SensorDetails = () => {
         setUuid('');
         setUuidSensor('');
         setConsumptionGoalWaterPointAdd('');
+        setCheckSetup(false)
     }
 
     const handleChange = (event) => {
@@ -466,29 +490,7 @@ const SensorDetails = () => {
 
                     {selectedSensor === 'Compteur d\'eau' && (
                         <>
-                            <FormControl fullWidth style={{ marginTop: '10px' }}>
-                                <InputLabel id="joinWaterMeter">Rejoindre un compteur ?</InputLabel>
-                                <Select
-                                    labelId="joinWaterMeter"
-                                    id="joinWaterMeter-select"
-                                    value={joinWaterMeter}
-                                    onChange={handleJoinWaterMeter}
-                                >
-                                    <MenuItem value="Oui">Oui</MenuItem>
-                                    <MenuItem value="Non">Non</MenuItem>
-                                </Select>
-                            </FormControl>
-                            {joinWaterMeter === 'Oui' && (
-                                <TextField
-                                    label="UUID"
-                                    fullWidth
-                                    name="uuid"
-                                    value={uuid}
-                                    onChange={handleUuid}
-                                    style={{ marginTop: '10px' }}
-                                />
-                            )}
-                            {joinWaterMeter === 'Non' && (
+                            {waterMeterAlreadySetup === false && checkSetup === true ? (
                                 <>
                                     <TextField
                                         label="Consommation actuelle"
@@ -530,14 +532,19 @@ const SensorDetails = () => {
                                         onChange={handleUuid}
                                         style={{ marginTop: '10px' }}
                                     />
-                                    <Box display="flex" justifyContent="center" mt={2}>
-                                        <Button onClick={generateDemoId} variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }}>
-                                            Demo : Générer un ID automatique
-                                        </Button>
-                                    </Box>
                                 </>
+                            ) : (
+                                <TextField
+                                    label="UUID"
+                                    fullWidth
+                                    name="uuid"
+                                    value={uuid}
+                                    onChange={handleUuid}
+                                    style={{ marginTop: '10px' }}
+                                />
                             )}
                         </>
+
                     )}
 
                     {selectedSensor === 'Point d\'eau' && (
@@ -586,11 +593,6 @@ const SensorDetails = () => {
                                 style={{ marginTop: '10px' }}
                                 required
                             />
-                            <Box display="flex" justifyContent="center" mt={2}>
-                                <Button onClick={generateDemoSensorId} variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }}>
-                                    Demo : Générer un ID automatique
-                                </Button>
-                            </Box>
                         </>
                     )}
                     <Box display="flex" justifyContent="center" mt={2}>
