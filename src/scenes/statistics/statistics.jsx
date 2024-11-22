@@ -26,67 +26,82 @@ const Statistics = () => {
         };
 
         try {
-            const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year', config);
-            const consumptionData = response.data.consumption;
-            const pricem3 = response.data.priceM3;
-
             if (selectedView === 'Année') {
-                const uniqueData = {};
-                consumptionData.forEach(item => {
-                    const year = new Date(item.time).getFullYear();
-                    if (year.toString() === selectedYear) {
-                        const key = new Date(item.time).toISOString();
-                        if (!uniqueData[key]) {
-                            uniqueData[key] = item.value;
-                        }
-                    }
+                const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year&year=' + selectedYear, config);
+                console.log("response", response)
+                const monthNames = {
+                    january: "Janvier",
+                    february: "Février",
+                    march: "Mars",
+                    april: "Avril",
+                    may: "Mai",
+                    june: "Juin",
+                    july: "Juillet",
+                    august: "Août",
+                    september: "Septembre",
+                    october: "Octobre",
+                    november: "Novembre",
+                    december: "Décembre",
+                };
+
+                const data = response.data.results.map((monthData) => {
+                    const monthName = monthNames[monthData.name];
+                    const waterConsumption = monthData.total / 1000;
+                    const price = waterConsumption * response.data.priceM3;
+
+                    return {
+                      time: monthName,
+                      "Eau en M3": waterConsumption,
+                      "Prix en €":  Math.round(price),
+                    };
                 });
 
-                const monthlyTotals = Array(12).fill(0);
-                Object.keys(uniqueData).forEach(key => {
-                    const month = new Date(key).getMonth();
-                    monthlyTotals[month] += uniqueData[key];
-                });
+                console.log("data", data);
+                setData(data)
 
-                setData(generateYearsStatsBarData(monthlyTotals, pricem3));
-                setDisplayData(monthlyTotals.map((value, index) => ({
-                    label: getMonthName(index),
-                    value: Math.round(value),  // Arrondi des litres consommés
-                    cost: calculateCost(value, pricem3),
+                setDisplayData(data.map((item) => ({
+                    label: item.time,
+                    value: Math.round(item["Eau en M3"] * 1000),
+                    cost:  Math.round(item["Prix en €"]),
                 })));
 
             } else if (selectedView === 'Mois') {
-                const monthIndex = getMonthIndex(selectedMonth);
-                const uniqueData = {};
+                const frenchToEnglishMonths = {
+                    Janvier: "january",
+                    Février: "february",
+                    Mars: "march",
+                    Avril: "april",
+                    Mai: "may",
+                    Juin: "june",
+                    Juillet: "july",
+                    Août: "august",
+                    Septembre: "september",
+                    Octobre: "october",
+                    Novembre: "november",
+                    Décembre: "december",
+                };
+                const selectedMonthInEnglish = frenchToEnglishMonths[selectedMonth];
 
-                consumptionData.forEach(item => {
-                    const date = new Date(item.time);
-                    const year = date.getFullYear();
-                    const month = date.getMonth();
+                const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=month&year=' + selectedYear + '&month=' + selectedMonthInEnglish, config);
+                console.log("response2", response)
 
-                    if (year.toString() === selectedYear && month === monthIndex) {
-                        const week = getWeekOfMonth(date);
-                        const key = `${year}-${month}-${week}`;
-                        if (!uniqueData[key]) {
-                            uniqueData[key] = 0;
-                        }
-                        uniqueData[key] += item.value;
-                    }
+                const data = response.data.weeks.map((weekData) => {
+                    const weekName = weekData.week;
+                    const waterConsumption = weekData.total / 1000;
+                    const price = waterConsumption * response.data.priceM3;
+
+                    return {
+                      time: weekName,
+                      "Eau en M3": waterConsumption,
+                      "Prix en €":  Math.round(price),
+                    };
                 });
 
-                const weeksInMonth = getWeeksInMonth(selectedYear, monthIndex);
-                const weeklyTotals = Array.from({ length: weeksInMonth }, () => 0);
-
-                Object.keys(uniqueData).forEach(key => {
-                    const [, , week] = key.split('-').map(Number);
-                    weeklyTotals[week - 1] += uniqueData[key];
-                });
-
-                setData(generateWeeksStatsBarData(weeklyTotals, pricem3));
-                setDisplayData(weeklyTotals.map((value, index) => ({
+                setData(data);
+                setDisplayData(data.map((value, index) => ({
                     label: `Semaine ${index + 1}`,
-                    value: Math.round(value),  // Arrondi des litres consommés
-                    cost: calculateCost(value, pricem3),
+                    value: Math.round(value["Eau en M3"] * 1000),
+                    cost:  Math.round(value["Prix en €"]),
                 })));
             }
 
@@ -98,43 +113,6 @@ const Statistics = () => {
     useEffect(() => {
         fetchData();
     }, [selectedYear, selectedMonth, selectedView]);
-
-    const getMonthIndex = (monthName) => {
-        const months = [
-            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-        ];
-        return months.indexOf(monthName);
-    };
-
-    const getMonthName = (monthIndex) => {
-        const months = [
-            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-        ];
-        return months[monthIndex];
-    };
-
-    const getWeekOfMonth = (date) => {
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-        return Math.ceil((date.getDate() + firstDay) / 7);
-    };
-
-    const getWeeksInMonth = (year, month) => {
-        const firstDay = new Date(year, month, 1).getDay();
-        const lastDate = new Date(year, month + 1, 0).getDate();
-        return Math.ceil((lastDate + firstDay) / 7);
-    };
-
-    const calculateCost = (value, pricem3) => {
-        let price = 0
-        if (pricem3 === 0) {
-            price = 4
-        } else {
-            price = pricem3
-        }
-        return Math.round((value / 1000) * price);  // Divise par 1000 pour convertir en m³ et arrondir le coût
-    };
 
     return (
         <Box m="20px">
