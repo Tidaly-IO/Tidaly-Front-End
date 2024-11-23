@@ -173,7 +173,7 @@ const Home = () => {
                     const price = waterConsumption * 2.5; // 4 = prix du m3 a changer
 
                     return {
-                      time: weekName,
+                      time: "Semaine " + weekName,
                       "Eau en M3": waterConsumption,
                       "Prix en €":  Math.round(price),
                     };

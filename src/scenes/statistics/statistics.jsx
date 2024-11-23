@@ -91,7 +91,7 @@ const Statistics = () => {
                     const price = waterConsumption * response.data.priceM3;
 
                     return {
-                      time: weekName,
+                      time:  "Semaine " + weekName,
                       "Eau en M3": waterConsumption,
                       "Prix en €":  Math.round(price),
                     };
