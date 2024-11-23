@@ -130,7 +130,7 @@ const Home = () => {
                 const data = consumptionData.map((days) => {
                     const daysName = days.day;
                     const waterConsumption = days.value / 1000;
-                    const price = waterConsumption * 2.5; // 4 = prix du m3 a changer
+                    const price = waterConsumption * 4; // 4 = prix du m3 a changer
 
                     return {
                       time: daysName,
@@ -170,7 +170,7 @@ const Home = () => {
                 const data = consumptionData.map((week) => {
                     const weekName = week.week;
                     const waterConsumption = week.total / 1000;
-                    const price = waterConsumption * 2.5; // 4 = prix du m3 a changer
+                    const price = waterConsumption * 4; // 4 = prix du m3 a changer
 
                     return {
                       time: "Semaine " + weekName,
