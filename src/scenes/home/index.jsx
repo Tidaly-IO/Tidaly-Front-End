@@ -13,7 +13,12 @@ import { useState } from "react";
 import { Transmit } from '@adonisjs/transmit-client';
 import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip'
-import SettingsIcon from "@mui/icons-material/Settings";;
+import SettingsIcon from "@mui/icons-material/Settings";
+import * as React from 'react';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 
 function getCurrentDate() {
@@ -56,13 +61,14 @@ const Home = () => {
     const [consumptionObjectiveYear, setConsumptionObjectiveYear] = useState(0);
     const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [selectedView, setSelectedView] = useState('La semaine actuelle');
 
 
     useEffect(() => {
-        setupSSE();
+        //setupSSE();
         fetchData();
         getConsumptionObjective();
-    }, []);
+    }, [selectedView]);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -82,7 +88,12 @@ const Home = () => {
         setSnackbarMessage("");
     };
 
-    const fetchData = async () => {
+    const handleSelectedView = (event) => {
+        setSelectedView(event.target.value);
+    };
+
+
+    const getConsumptionOfTheDay = async () => {
         try {
             const config = {
                 headers: {
@@ -90,67 +101,91 @@ const Home = () => {
                 },
             };
 
-            const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year', config);
-            const consumptionData = response.data.consumption;
-            const priceM3 = response.data.priceM3;
-
-            console.log(consumptionData);
-
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear();
-            const currentMonth = currentDate.getMonth() + 1
-
-            const valuesAndDatesOfMonth = consumptionData.filter(item => {
-                const itemDate = new Date(item.time);
-                const itemYear = itemDate.getFullYear();
-                const itemMonth = itemDate.getMonth() + 1;
-                return itemYear === currentYear && itemMonth === currentMonth;
-            }).map(item => ({ value: item.value, date: new Date(item.time) }));
-
-            console.log(valuesAndDatesOfMonth);
-
-            const currentDay = currentDate.getDate();
-            const currentDayData = valuesAndDatesOfMonth.find(item => item.date.getDate() === currentDay);
-
-            if (currentDayData === undefined || currentDayData.value === undefined) {
-                setCurrentDayConsumption(0);
-            } else {
-                setCurrentDayConsumption(currentDayData.value);
-            }
-
-            let weeks = [];
-            let week = [];
-
-            const firstDayOfWeek = valuesAndDatesOfMonth[0].date.getDay();
-
-            const nullValuesToAdd = (firstDayOfWeek + 6) % 7;
-
-            for (let j = 0; j < nullValuesToAdd; j++) {
-                week.push(0);
-            }
-
-            for (let i = 0; i < valuesAndDatesOfMonth.length; i++) {
-                week.push(valuesAndDatesOfMonth[i].value);
-
-                if (week.length === 7 || i === valuesAndDatesOfMonth.length - 1) {
-                    weeks.push(week);
-                    week = [];
-                }
-            }
-
-            console.log(weeks);
-
-            setMaxWeekIndex(weeks.length - 1);
-            setCurrentWeekIndex(weeks.length - 1);
-            setPriceM3(priceM3);
-            console.log("ici", generateWeekBarData(weeks[weeks.length - 1], priceM3))
-            setData(generateWeekBarData(weeks[weeks.length - 1], priceM3));
-            setWeeks(weeks);
-            //console.log(priceM3);
+            const currentDay = new Date().getDay() - 1;
+            const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=currentWeek', config);
+            const consumptionData = response.data.data[currentDay].value;
+            setCurrentDayConsumption(consumptionData)
 
         } catch (error) {
             console.error("Erreur lors de la récupération des informations: ", error);
         }
+    };
+
+    const fetchData = async () => {
+        getConsumptionOfTheDay()
+
+        if (selectedView === 'La semaine actuelle') {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(("token"))}`
+                    },
+                };
+
+                const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=currentWeek', config);
+                console.log("response", response)
+                const consumptionData = response.data.data;
+                console.log("consumption", consumptionData)
+
+                const data = consumptionData.map((days) => {
+                    const daysName = days.day;
+                    const waterConsumption = days.value / 1000;
+                    const price = waterConsumption * 2.5; // 4 = prix du m3 a changer
+
+                    return {
+                      time: daysName,
+                      "Eau en M3": waterConsumption,
+                      "Prix en €":  Math.round(price),
+                    };
+                });
+
+                console.log("data", data)
+                setData(data)
+
+            } catch (error) {
+                console.error("Erreur lors de la récupération des informations: ", error);
+            }
+        } else {
+            const monthNamesInEnglish = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            const currentMonth = new Date().getMonth() + 1;
+            const monthNameInEnglish = monthNamesInEnglish[currentMonth - 1];
+            const currentYear = new Date().getFullYear();
+
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(("token"))}`
+                    },
+                };
+
+                const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=month&year=' + currentYear + '&month=' + monthNameInEnglish, config);
+                console.log("response", response)
+                const consumptionData = response.data.weeks;
+                console.log("consumption", consumptionData)
+
+                const data = consumptionData.map((week) => {
+                    const weekName = week.week;
+                    const waterConsumption = week.total / 1000;
+                    const price = waterConsumption * 2.5; // 4 = prix du m3 a changer
+
+                    return {
+                      time: weekName,
+                      "Eau en M3": waterConsumption,
+                      "Prix en €":  Math.round(price),
+                    };
+                });
+
+                setData(data)
+
+            } catch (error) {
+                console.error("Erreur lors de la récupération des informations: ", error);
+            }
+        }
+
     }
 
     const transmit = new Transmit({
@@ -307,27 +342,6 @@ const Home = () => {
         }
     }
 
-
-    const goToPreviousWeek = () => {
-        if (currentWeekIndex > 0) {
-            setCurrentWeekIndex(prevWeekIndex => {
-                const newWeekIndex = prevWeekIndex - 1;
-                setData(generateWeekBarData(weeks[newWeekIndex], priceM3));
-                return newWeekIndex; // Met à jour l'index de la semaine actuelle
-            });
-        }
-    };
-
-    const goToNextWeek = () => {
-        if (currentWeekIndex < maxWeekIndex) {
-            setCurrentWeekIndex(prevWeekIndex => {
-                const newWeekIndex = prevWeekIndex + 1;
-                setData(generateWeekBarData(weeks[newWeekIndex], priceM3));
-                return newWeekIndex;
-            });
-        }
-    };
-
     const isMonthPast = (month) => {
         const currentMonth = new Date().getMonth() + 1;
         return month < currentMonth && month !== currentMonth;
@@ -338,6 +352,21 @@ const Home = () => {
             {/* HEADER */}
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Header title="ACCUEIL" subtitle="Bienvenue sur Tidaly" />
+                <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Vue</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={selectedView}
+                            label="Vue"
+                            onChange={handleSelectedView}
+                        >
+                            <MenuItem value={"La semaine actuelle"}>La semaine actuelle</MenuItem>
+                            <MenuItem value={"Les semaines du mois"}>Les semaines du mois</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
             </Box>
 
             {/* GRID & CHARTS */}
@@ -406,14 +435,6 @@ const Home = () => {
                             >
                                 Historique de la consommation d'eau
                             </Typography>
-                        </Box>
-                        <Box mt={2} display="flex" justifyContent="right">
-                            <IconButton onClick={goToPreviousWeek}>
-                                <ChevronLeftIcon />
-                            </IconButton>
-                            <IconButton onClick={goToNextWeek}>
-                                <ChevronRightIcon />
-                            </IconButton>
                         </Box>
                     </Box>
                     <Box height="250px" m="-20px 0 0 0">
