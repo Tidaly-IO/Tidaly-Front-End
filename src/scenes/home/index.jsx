@@ -135,7 +135,7 @@ const Home = () => {
                     return {
                       time: daysName,
                       "Eau en M3": waterConsumption,
-                      "Prix en €":  Math.round(price),
+                      "Prix en €":  Number(price.toFixed(2)),
                     };
                 });
 
@@ -175,7 +175,7 @@ const Home = () => {
                     return {
                       time: "Semaine " + weekName,
                       "Eau en M3": waterConsumption,
-                      "Prix en €":  Math.round(price),
+                      "Prix en €":  Number(price.toFixed(2)),
                     };
                 });
 

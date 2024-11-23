@@ -52,7 +52,7 @@ const Statistics = () => {
                     return {
                       time: monthName,
                       "Eau en M3": waterConsumption,
-                      "Prix en €":  Math.round(price),
+                      "Prix en €":  Number(price.toFixed(2)),
                     };
                 });
 
@@ -62,7 +62,7 @@ const Statistics = () => {
                 setDisplayData(data.map((item) => ({
                     label: item.time,
                     value: Math.round(item["Eau en M3"] * 1000),
-                    cost:  Math.round(item["Prix en €"]),
+                    cost:  item["Prix en €"],
                 })));
 
             } else if (selectedView === 'Mois') {
@@ -93,7 +93,7 @@ const Statistics = () => {
                     return {
                       time:  "Semaine " + weekName,
                       "Eau en M3": waterConsumption,
-                      "Prix en €":  Math.round(price),
+                      "Prix en €":  Number(price.toFixed(2)),
                     };
                 });
 
@@ -101,7 +101,7 @@ const Statistics = () => {
                 setDisplayData(data.map((value, index) => ({
                     label: `Semaine ${index + 1}`,
                     value: Math.round(value["Eau en M3"] * 1000),
-                    cost:  Math.round(value["Prix en €"]),
+                    cost:  value["Prix en €"]
                 })));
             }
 
