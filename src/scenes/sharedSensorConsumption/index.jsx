@@ -17,6 +17,7 @@ const SharedSensorConsumption = () => {
     const [globalConsumption, setGlobalConsumption] = useState([]);
     const [sensorsGlobalConsumption, setSensorsGlobalConsumption] = useState([]);
     const [activityData, setActivityData] = useState([]);
+    const [selectedView, setSelectedView] = useState('Année');
 
     const getGlobalConsumption = async () => {
         const config = {
@@ -26,79 +27,87 @@ const SharedSensorConsumption = () => {
         };
 
         try {
-            const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year', config);
-            const getGlobalConsumption = response.data.consumption;
-            const getGlobalConsumptionSensors = response.data.sensorsResults;
+            const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=year&year=' + selectedYear , config);
+            console.log(response)
+            if (selectedView === "Année") {
+                setTotalConsumption(response.data.totalConsumption)
+                const monthMap = {
+                    "Janvier": 0, "Février": 1, "Mars": 2, "Avril": 3,
+                    "Mai": 4, "Juin": 5, "Juillet": 6, "Août": 7,
+                    "Septembre": 8, "Octobre": 9, "Novembre": 10, "Décembre": 11
+                };
 
-            setGlobalConsumption(getGlobalConsumption);
-            setSensorsGlobalConsumption(getGlobalConsumptionSensors);
+                const monthNum = monthMap[selectedMonth];
+                const activityList = [];
+
+                const sensorsConsumption = response.data.sensorsResults.map(sensorObj => {
+                    const { sensor, data } = sensorObj;
+                    const filteredData = data.filter(item => {
+                        const date = new Date(item.time);
+                        const itemYear = date.getFullYear();
+                        const itemMonth = date.getMonth();
+
+                        return itemYear === selectedYear && (selectedMonth === '' || itemMonth === monthNum);
+                    });
+
+                    filteredData.forEach(entry => {
+                        activityList.push({
+                            sensorName: sensor.name,
+                            date: new Date(entry.time).toLocaleDateString(),
+                            value: entry.value
+                        });
+                    });
+
+                    return filteredData.reduce((sum, item) => sum + item.value, 0);
+                });
+
+                setActivityData(activityList);
+                setTotalConsumptionSensors(sensorsConsumption.reduce((sum, consumption) => sum + consumption, 0));
+            } else {
+                const monthMap = {
+                    "Janvier": 0, "Février": 1, "Mars": 2, "Avril": 3,
+                    "Mai": 4, "Juin": 5, "Juillet": 6, "Août": 7,
+                    "Septembre": 8, "Octobre": 9, "Novembre": 10, "Décembre": 11
+                };
+
+                const currentMonth = monthMap[selectedMonth]
+                setTotalConsumption(response.data.results[currentMonth].total)
+
+                const activityList = [];
+
+                const sensorsConsumption = response.data.sensorsResults.map(sensorObj => {
+                    const { sensor, data } = sensorObj;
+                    const filteredData = data.filter(item => {
+                        const date = new Date(item.time);
+                        const itemYear = date.getFullYear();
+                        const itemMonth = date.getMonth();
+
+                        return itemYear === selectedYear && (selectedMonth === '' || itemMonth === currentMonth);
+                    });
+
+                    filteredData.forEach(entry => {
+                        activityList.push({
+                            sensorName: sensor.name,
+                            date: new Date(entry.time).toLocaleDateString(),
+                            value: entry.value
+                        });
+                    });
+
+                    return filteredData.reduce((sum, item) => sum + item.value, 0);
+                });
+
+                setActivityData(activityList);
+                setTotalConsumptionSensors(sensorsConsumption.reduce((sum, consumption) => sum + consumption, 0));
+            }
+
         } catch (error) {
             console.error("Erreur lors de la récupération des informations :", error);
         }
     };
 
-    const calculateTotalConsumption = () => {
-        const monthMap = {
-            "Janvier": 0, "Février": 1, "Mars": 2, "Avril": 3,
-            "Mai": 4, "Juin": 5, "Juillet": 6, "Août": 7,
-            "Septembre": 8, "Octobre": 9, "Novembre": 10, "Décembre": 11
-        };
-
-        const monthNum = monthMap[selectedMonth];
-        const filteredConsumption = globalConsumption.filter(item => {
-            const date = new Date(item.time);
-            const itemYear = date.getFullYear();
-            const itemMonth = date.getMonth();
-
-            return itemYear === selectedYear && (selectedMonth === '' || itemMonth === monthNum);
-        });
-
-        setTotalConsumption(filteredConsumption.reduce((sum, item) => sum + item.value, 0));
-    };
-
-    const calculateTotalConsumptionOfSensors = () => {
-        const monthMap = {
-            "Janvier": 0, "Février": 1, "Mars": 2, "Avril": 3,
-            "Mai": 4, "Juin": 5, "Juillet": 6, "Août": 7,
-            "Septembre": 8, "Octobre": 9, "Novembre": 10, "Décembre": 11
-        };
-
-        const monthNum = monthMap[selectedMonth];
-        const activityList = [];
-
-        const sensorsConsumption = sensorsGlobalConsumption.map(sensorObj => {
-            const { sensor, data } = sensorObj;
-            const filteredData = data.filter(item => {
-                const date = new Date(item.time);
-                const itemYear = date.getFullYear();
-                const itemMonth = date.getMonth();
-
-                return itemYear === selectedYear && (selectedMonth === '' || itemMonth === monthNum);
-            });
-
-            filteredData.forEach(entry => {
-                activityList.push({
-                    sensorName: sensor.name,
-                    date: new Date(entry.time).toLocaleDateString(),
-                    value: entry.value
-                });
-            });
-
-            return filteredData.reduce((sum, item) => sum + item.value, 0);
-        });
-
-        setActivityData(activityList); // Met à jour l'activité
-        setTotalConsumptionSensors(sensorsConsumption.reduce((sum, consumption) => sum + consumption, 0));
-    };
-
     useEffect(() => {
         getGlobalConsumption();
-    }, []);
-
-    useEffect(() => {
-        calculateTotalConsumption();
-        calculateTotalConsumptionOfSensors();
-    }, [selectedYear, selectedMonth, sensorsGlobalConsumption]);
+    }, [selectedYear, selectedMonth, selectedView]);
 
     const handleYearChange = (year) => {
         setSelectedYear(Number(year));
@@ -117,6 +126,7 @@ const SharedSensorConsumption = () => {
                     <SelectButton
                         onYearChange={handleYearChange}
                         onMonthChange={handleMonthChange}
+                        onViewChange={setSelectedView}
                     />
                 </Box>
             </Box>
