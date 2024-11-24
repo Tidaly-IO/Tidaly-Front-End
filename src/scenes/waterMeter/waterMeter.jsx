@@ -89,10 +89,6 @@ const WaterMeter = () => {
                                 value={hubId}
                                 onChange={(e) => setHubId(e.target.value)}
                             />
-                            {/* Bouton Demo pour générer un ID */}
-                            <Button onClick={generateDemoId} variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }} fullWidth>
-                                Demo : Générer un ID automatique
-                            </Button>
                             <Button type="submit" variant="contained" style={{ backgroundColor: colors.tidaly[100], color: '#fff', marginTop: '16px' }} fullWidth>
                                 Enregistrer
                             </Button>

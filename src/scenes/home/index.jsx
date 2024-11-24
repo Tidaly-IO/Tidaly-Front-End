@@ -101,7 +101,10 @@ const Home = () => {
                 },
             };
 
-            const currentDay = new Date().getDay() - 1;
+            let currentDay = new Date().getDay() - 1;
+            if (currentDay === -1)
+                currentDay = 6
+            console.log("currentDay", currentDay)
             const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=currentWeek', config);
             const consumptionData = response.data.data[currentDay].value;
             setCurrentDayConsumption(consumptionData)
