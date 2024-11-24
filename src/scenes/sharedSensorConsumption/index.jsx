@@ -18,6 +18,7 @@ const SharedSensorConsumption = () => {
     const [sensorsGlobalConsumption, setSensorsGlobalConsumption] = useState([]);
     const [activityData, setActivityData] = useState([]);
     const [selectedView, setSelectedView] = useState('Année');
+    const [haveSensor, setHaveSensor] = useState(true);
 
     const getGlobalConsumption = async () => {
         const config = {
@@ -101,6 +102,9 @@ const SharedSensorConsumption = () => {
             }
 
         } catch (error) {
+            if (error.response.data.message === "Hub not found") {
+                setHaveSensor(false)
+            }
             console.error("Erreur lors de la récupération des informations :", error);
         }
     };
@@ -145,18 +149,39 @@ const SharedSensorConsumption = () => {
                     borderRadius="10px"
                 >
                     <Box display="flex" flexDirection="column" alignItems="center" mt="25px">
-                        <PieChart
-                            series={[
-                                {
-                                    data: [
-                                        { id: 0, value: totalConsumption, label: 'Consommation globale' },
-                                        { id: 1, value: totalConsumptionSensors, label: 'Consommation des capteurs' },
-                                    ],
-                                },
-                            ]}
-                            width={800}
-                            height={250}
-                        />
+                        {haveSensor === false ? (
+                            <Box
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                                p="10px 20px"
+                                borderRadius="10px"
+                                minHeight="250px"
+                            >
+                                <Typography
+                                    variant="h4"
+                                    align="center"
+                                    style={{
+                                        color: colors.grey[100],
+                                    }}
+                                >
+                                    Vous n'avez pas de hub
+                                </Typography>
+                            </Box>
+                        ) : (
+                            <PieChart
+                                series={[
+                                    {
+                                        data: [
+                                            { id: 0, value: totalConsumption, label: 'Consommation globale' },
+                                            { id: 1, value: totalConsumptionSensors, label: 'Consommation des capteurs' },
+                                        ],
+                                    },
+                                ]}
+                                width={800}
+                                height={250}
+                            />
+                        )}
                     </Box>
                 </Box>
 
@@ -174,27 +199,48 @@ const SharedSensorConsumption = () => {
                     </Typography>
 
                     <Box mt="20px" display="flex" flexDirection="column" gap="10px" style={{ maxHeight: '250px', overflow: 'auto' }}>
-                        {activityData.map((activity, index) => (
+                        {haveSensor === false ? (
                             <Box
-                                key={index}
                                 display="flex"
-                                justifyContent="space-between"
+                                justifyContent="center"
                                 alignItems="center"
                                 p="10px 20px"
                                 borderRadius="10px"
-                                backgroundColor={colors.grey[900]}
+                                minHeight="250px"
                             >
-                                <Box display="flex" alignItems="center">
-                                    <WaterDamage sx={{ color: colors.tidaly[100], fontSize: "24px", mr: "10px" }} />
-                                    <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
-                                        {activity.sensorName}
-                                    </Typography>
-                                </Box>
-                                <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
-                                    {activity.value} L ({activity.date})
+                                <Typography
+                                    variant="h4"
+                                    align="center"
+                                    style={{
+                                        color: colors.grey[100],
+                                    }}
+                                >
+                                    Vous n'avez pas de hub
                                 </Typography>
                             </Box>
-                        ))}
+                            ) : (
+                                activityData.map((activity, index) => (
+                                    <Box
+                                        key={index}
+                                        display="flex"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        p="10px 20px"
+                                        borderRadius="10px"
+                                        backgroundColor={colors.grey[900]}
+                                    >
+                                        <Box display="flex" alignItems="center">
+                                            <WaterDamage sx={{ color: colors.tidaly[100], fontSize: "24px", mr: "10px" }} />
+                                            <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
+                                                {activity.sensorName}
+                                            </Typography>
+                                        </Box>
+                                        <Typography variant="h6" fontWeight="600" color={colors.grey[100]}>
+                                            {activity.value} L ({activity.date})
+                                        </Typography>
+                                    </Box>
+                                ))
+                            )}
                     </Box>
                 </Box>
             </Box>

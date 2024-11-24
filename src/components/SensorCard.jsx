@@ -291,12 +291,7 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
                     <Typography sx={{ fontSize: 10 }} variant="body2" style={separatorStyle}>
                         {waterPointConsumption}
                     </Typography>
-                    <Typography sx={{ fontSize: 12 }} color="text.secondary">
-                        Consommation moyenne
-                    </Typography>
-                    <Typography sx={{ fontSize: 10 }} variant="body2" style={separatorStyle}>
-                        12345
-                    </Typography>
+
                     <Typography sx={{ fontSize: 12 }} color="text.secondary">
                         Objectif de consommation
                     </Typography>
