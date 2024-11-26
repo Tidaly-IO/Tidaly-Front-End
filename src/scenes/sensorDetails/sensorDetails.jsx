@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Box, TextField, Button, Modal, Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
@@ -8,6 +8,7 @@ import SensorCard from "../../components/SensorCard";
 import Typography from "@mui/material/Typography";
 import HubInfo from "../hubInfo/hubInfo";
 import { Snackbar, Alert } from '@mui/material';
+import { WebSocketContext } from '../../WebSocketContext';
 
 
 const SensorDetails = () => {
@@ -38,6 +39,7 @@ const SensorDetails = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [waterMeterAlreadySetup, setwaterMeterAlreadySetup] = useState(false);
     const [checkSetup, setCheckSetup] = useState(false);
+    const { updateHub, setUpdateHub } = useContext(WebSocketContext);
 
 
     const handleSensorDetails = async (e) => {
@@ -395,8 +397,15 @@ const SensorDetails = () => {
             getConsumptionWaterPoint();
         };
 
-        const interval = setInterval(fetchData, 2000);
-    }, []);
+        //const interval = setInterval(fetchData, 2000);
+        fetchData()
+        if (updateHub) {
+            console.log("Message recu updateHub")
+            fetchData()
+            setUpdateHub(false)
+        }
+
+    }, [updateHub]);
 
     const SensorToUserList = () => {
         setShowUserList(!showUserList);

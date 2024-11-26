@@ -9,7 +9,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useEffect } from "react";
 import axios from "axios";
 import { generateWeekBarData } from "../../data/mockData";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Transmit } from '@adonisjs/transmit-client';
 import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip'
@@ -19,6 +19,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { WebSocketContext } from '../../WebSocketContext';
 
 
 function getCurrentDate() {
@@ -62,13 +63,21 @@ const Home = () => {
     const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [selectedView, setSelectedView] = useState('La semaine actuelle');
+    const { notificationReceived, setNotificationReceived } = useContext(WebSocketContext);
 
 
     useEffect(() => {
         //setupSSE();
         fetchData();
         getConsumptionObjective();
-    }, [selectedView]);
+        if (notificationReceived) {
+            console.log("MESSAGE RECU")
+            fetchData();
+            getConsumptionObjective();
+
+            setNotificationReceived(false);
+        }
+    }, [selectedView, notificationReceived]);
 
     const openModal = () => {
         setIsModalOpen(true);

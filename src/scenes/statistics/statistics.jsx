@@ -4,9 +4,10 @@ import Header from "../../components/Header";
 import SelectButton from "../../components/SelectButton";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import BarChart from "../../components/BarChart";
 import { generateYearsStatsBarData, generateWeeksStatsBarData } from "../../data/mockData";
+import { WebSocketContext } from '../../WebSocketContext';
 
 const Statistics = () => {
     const theme = useTheme();
@@ -17,6 +18,7 @@ const Statistics = () => {
     const [selectedView, setSelectedView] = useState('Année');
     const [data, setData] = useState([]);
     const [displayData, setDisplayData] = useState([]);
+    const { notificationReceived, setNotificationReceived } = useContext(WebSocketContext);
 
     const fetchData = async () => {
         const config = {
@@ -112,7 +114,12 @@ const Statistics = () => {
 
     useEffect(() => {
         fetchData();
-    }, [selectedYear, selectedMonth, selectedView]);
+        if (notificationReceived) {
+            console.log("RECU STATS")
+            fetchData();
+            setNotificationReceived(false);
+        }
+    }, [selectedYear, selectedMonth, selectedView, notificationReceived]);
 
     return (
         <Box m="20px">

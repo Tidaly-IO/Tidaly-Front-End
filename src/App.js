@@ -22,6 +22,7 @@ import Hearth from "./scenes/hearth/hearth";
 import Hearth2 from "./scenes/hearth/hearth2";
 import Estimator from "./scenes/estimator/estimator";
 import { AppProvider } from './AppContext';
+import { WebSocketProvider } from './WebSocketContext';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -31,38 +32,40 @@ function App() {
   const shouldShowSidebar = !hideSidebarRoutes.includes(location.pathname);
 
   return (
-    <AppProvider>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <div className="app">
-            {shouldShowSidebar && <Sidebar isSidebar={isSidebar} />}
-            <main className="content">
-              {shouldShowSidebar && <Topbar setIsSidebar={setIsSidebar} />}
-              <Routes>
-                <Route path="/" element={<SignIn />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/recoverPassword" element={<RecoverPassword />} />
-                <Route path="/accountSetup" element={<AccountSetup />} />
-                <Route path="/waterMeter" element={<WaterMeter />} />
-                <Route path="/waterMeterSetup" element={<WaterMeterSetup />} />
-                <Route path="/userProfile" element={<UserProfile />} />
-                <Route path="/sensorConsumption" element={<SensorConsumption />} />
-                <Route path={"/sensorDetails"} element={<SensorDetails />} />
-                <Route path="/sharedSensorConsumption" element={<SharedSensorConsumption />} />
-                <Route path="/statistics" element={<Statistics/>} />
-                <Route path="/tutorial" element={<Tutorial/>} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/feedback" element={<Feedback />} />
-                <Route path="/hearth" element={<Hearth />} />
-                <Route path="/hearth2" element={<Hearth2 />} />
-                <Route path="/estimator" element={<Estimator />} />
-              </Routes>
-            </main>
-          </div>
-        </ThemeProvider>
-      </ColorModeContext.Provider>
-    </AppProvider>
+    <WebSocketProvider>
+      <AppProvider>
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <div className="app">
+              {shouldShowSidebar && <Sidebar isSidebar={isSidebar} />}
+              <main className="content">
+                {shouldShowSidebar && <Topbar setIsSidebar={setIsSidebar} />}
+                <Routes>
+                  <Route path="/" element={<SignIn />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/recoverPassword" element={<RecoverPassword />} />
+                  <Route path="/accountSetup" element={<AccountSetup />} />
+                  <Route path="/waterMeter" element={<WaterMeter />} />
+                  <Route path="/waterMeterSetup" element={<WaterMeterSetup />} />
+                  <Route path="/userProfile" element={<UserProfile />} />
+                  <Route path="/sensorConsumption" element={<SensorConsumption />} />
+                  <Route path={"/sensorDetails"} element={<SensorDetails />} />
+                  <Route path="/sharedSensorConsumption" element={<SharedSensorConsumption />} />
+                  <Route path="/statistics" element={<Statistics/>} />
+                  <Route path="/tutorial" element={<Tutorial/>} />
+                  <Route path="/home" element={<Home />} />
+                  <Route path="/feedback" element={<Feedback />} />
+                  <Route path="/hearth" element={<Hearth />} />
+                  <Route path="/hearth2" element={<Hearth2 />} />
+                  <Route path="/estimator" element={<Estimator />} />
+                </Routes>
+              </main>
+            </div>
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      </AppProvider>
+    </WebSocketProvider>
   );
 }
 
