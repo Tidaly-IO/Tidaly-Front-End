@@ -1,11 +1,12 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { PieChart } from '@mui/x-charts/PieChart';
 import Header from "../../components/Header";
 import SelectButton from "../../components/SelectButton";
 import { tokens } from "../../theme";
 import { WaterDamage } from "@mui/icons-material";
 import axios from "axios";
+import { WebSocketContext } from '../../WebSocketContext';
 
 const SensorConsumption = () => {
     const theme = useTheme();
@@ -16,6 +17,7 @@ const SensorConsumption = () => {
     const [selectedMonth, setSelectedMonth] = useState('');
     const [pieChartData, setPieChartData] = useState([]);
     const [activityData, setActivityData] = useState([]);
+    const { notificationReceived, setNotificationReceived } = useContext(WebSocketContext);
 
     const getConsumptionWaterPoint = async () => {
         const config = {
@@ -80,7 +82,12 @@ const SensorConsumption = () => {
 
     useEffect(() => {
         getConsumptionWaterPoint();
-    }, []);
+        if (notificationReceived) {
+            console.log("MESSAGE RECU")
+            getConsumptionWaterPoint();
+            setNotificationReceived(false);
+        }
+    }, [notificationReceived]);
 
     useEffect(() => {
         calculateConsumptionData();

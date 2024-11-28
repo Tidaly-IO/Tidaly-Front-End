@@ -40,6 +40,7 @@ const SensorDetails = () => {
     const [waterMeterAlreadySetup, setwaterMeterAlreadySetup] = useState(false);
     const [checkSetup, setCheckSetup] = useState(false);
     const { updateHub, setUpdateHub } = useContext(WebSocketContext);
+    const [test, setTest] = useState('');
 
 
     const handleSensorDetails = async (e) => {
@@ -375,6 +376,30 @@ const SensorDetails = () => {
                 const sensorsResults = response.data.sensorsResults;
 
                 if (sensorsResults && sensorsResults.length > 0) {
+
+                    const currentDate = new Date();
+                    const currentMonth = currentDate.getMonth() -1;
+                    const currentYear = currentDate.getFullYear();
+
+                    const currentMonthConsumption = {};
+
+                    sensorsResults.forEach(element => {
+                        const sensorName = element.sensor.name;
+                        const sensorData = element.data;
+
+                        const currentMonthData = sensorData.filter(data => {
+                            const dataDate = new Date(data.time);
+                            return dataDate.getMonth() === currentMonth && dataDate.getFullYear() === currentYear;
+                        });
+
+                        const totalConsumption = currentMonthData.reduce((sum, data) => sum + data.value, 0);
+
+
+                        currentMonthConsumption[sensorName] = totalConsumption;
+                    });
+
+                    setTest(currentMonthConsumption)
+
                     const firstResult = sensorsResults[0];
 
                     const waterPointConsulption = firstResult.data[0].value;
@@ -427,7 +452,7 @@ const SensorDetails = () => {
 
                     {waterPoints.length > 0 ? (
                         waterPoints.map((waterPoint, index) => (
-                            <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} water_consumption_target={waterPoint.water_consumption_target} waterPointConsumption={waterPointConsumption} WaterPointUuid={waterPoint.uuid} />
+                            <SensorCard key={index} typeOfSensor={"WaterPoint"} nameOfWaterPoint={waterPoint.name} waterPointLocation={waterPoint.location} sensorId={waterPoint.id} water_consumption_target={waterPoint.water_consumption_target} waterPointConsumption={waterPointConsumption} WaterPointUuid={waterPoint.uuid} test={test} />
                         ))
                     ) : (
                         !isWaterMeter && (

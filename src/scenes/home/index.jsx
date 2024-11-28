@@ -67,7 +67,6 @@ const Home = () => {
 
 
     useEffect(() => {
-        //setupSSE();
         fetchData();
         getConsumptionObjective();
         if (notificationReceived) {
@@ -81,6 +80,7 @@ const Home = () => {
 
     const openModal = () => {
         setIsModalOpen(true);
+        console.log('cici')
         getAllConsumptionObjective()
     };
     const closeModal = () => {
@@ -200,28 +200,6 @@ const Home = () => {
 
     }
 
-    const transmit = new Transmit({
-        baseUrl: 'https://tidaly-sse.onrender.com',
-        maxReconnectionAttempts: 5,
-    });
-
-    const setupSSE = async () => {
-        const subscription = transmit.subscription('notify');
-
-        await subscription.create();
-
-        subscription.onMessage((message) => {
-            console.log("SSE", message);
-            setTimeout(fetchData, 100000);
-            //setTest(JSON.parse(message.data));
-        });
-
-        /*return () => {
-            subscription.delete();
-        };*/
-    }
-
-
     const getConsumptionObjective = async () => {
         try {
             const config = {
@@ -252,27 +230,65 @@ const Home = () => {
 
             const response = await axios.get('https://tidaly-api-backend.onrender.com/api/v1/target', config);
 
-            setConsumptionObjectiveJanuary(response.data[0].target);
-            setConsumptionObjectiveFebruary(response.data[1].target);
-            setConsumptionObjectiveMarch(response.data[2].target);
-            setConsumptionObjectiveApril(response.data[3].target);
-            setConsumptionObjectiveMay(response.data[4].target);
-            setConsumptionObjectiveJune(response.data[5].target);
-            setConsumptionObjectiveJuly(response.data[6].target);
-            setConsumptionObjectiveAugust(response.data[7].target);
-            setConsumptionObjectiveSeptember(response.data[8].target);
-            setConsumptionObjectiveOctober(response.data[9].target);
-            setConsumptionObjectiveNovember(response.data[10].target);
-            setConsumptionObjectiveDecember(response.data[11].target);
+            if (response.data.length !== 0) {
+                console.log("kak", response)
 
-            let sum = 0;
-            for (let i = 0; i < response.data.length; i++) {
-                sum += response.data[i].target;
+
+                response.data.forEach(element => {
+                    if (element.month === 1) {
+                        setConsumptionObjectiveJanuary(element.target);
+                    } else if (element.month === 2) {
+                        setConsumptionObjectiveFebruary(element.target);
+                    } else if (element.month === 3) {
+                        setConsumptionObjectiveMarch(element.target);
+                    } else if (element.month === 4) {
+                        setConsumptionObjectiveApril(element.target);
+                    } else if (element.month === 5) {
+                        setConsumptionObjectiveMay(element.target);
+                    } else if (element.month === 6) {
+                        setConsumptionObjectiveJune(element.target);
+                    } else if (element.month === 7) {
+                        setConsumptionObjectiveJuly(element.target);
+                    } else if (element.month === 8) {
+                        setConsumptionObjectiveAugust(element.target);
+                    } else if (element.month === 9) {
+                        setConsumptionObjectiveSeptember(element.target);
+                    } else if (element.month === 10) {
+                        setConsumptionObjectiveOctober(element.target);
+                    } else if (element.month === 11) {
+                        setConsumptionObjectiveNovember(consumptionObjective);
+                    } else if (element.month === 12) {
+                        setConsumptionObjectiveDecember(element.target);
+                    }
+                });
+
+                // setConsumptionObjectiveJanuary(response.data[0].target);
+                // setConsumptionObjectiveFebruary(response.data[1].target);
+                // setConsumptionObjectiveMarch(response.data[2].target);
+                // setConsumptionObjectiveApril(response.data[3].target);
+                // setConsumptionObjectiveMay(response.data[4].target);
+                // setConsumptionObjectiveJune(response.data[5].target);
+                // setConsumptionObjectiveJuly(response.data[6].target);
+                // setConsumptionObjectiveAugust(response.data[7].target);
+                // setConsumptionObjectiveSeptember(response.data[8].target);
+                // setConsumptionObjectiveOctober(response.data[9].target);
+                // //setConsumptionObjectiveNovember(response.data[10].target);
+                // setConsumptionObjectiveNovember(consumptionObjective)
+                // setConsumptionObjectiveDecember(response.data[11].target);
+
+                let sum = 0;
+                for (let i = 0; i < response.data.length; i++) {
+                    if (response.data[i].month !== 11)
+                        sum += response.data[i].target;
+                }
+                sum += consumptionObjective
+
+                setConsumptionObjectiveYear(sum)
+                console.log("sum", sum)
+            } else {
+                setConsumptionObjectiveNovember(consumptionObjective)
+                setConsumptionObjectiveYear(consumptionObjective)
             }
-
-            setConsumptionObjectiveYear(sum)
-
-
 
         } catch (error) {
             console.error("Erreur lors de la récupération des informations: ", error);
@@ -336,7 +352,7 @@ const Home = () => {
                     consumptionObjectiveJanuary, consumptionObjectiveFebruary, consumptionObjectiveMarch,
                     consumptionObjectiveApril, consumptionObjectiveMay, consumptionObjectiveJune,
                     consumptionObjectiveJuly, consumptionObjectiveAugust, consumptionObjectiveSeptember,
-                    consumptionObjectiveOctober, consumptionObjectiveNovember, consumptionObjectiveDecember
+                    consumptionObjectiveOctober, consumptionObjective, consumptionObjectiveDecember
                 ]
             }
             await axios.put('https://tidaly-api-backend.onrender.com/api/v1/target', data, config);

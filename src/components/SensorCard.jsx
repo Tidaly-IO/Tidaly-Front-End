@@ -20,7 +20,7 @@ const separatorStyle = {
     marginBottom: '8px',
 };
 
-export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId, SensorToUserList, water_consumption_target, waterPointConsumption, WaterPointUuid }) {
+export default function SensorCard({ typOfSensor, currentConsumption, consumptionGoal, city, postalCode, waterPointLocation, nameOfWaterPoint, sensorId, SensorToUserList, water_consumption_target, waterPointConsumption, WaterPointUuid, test }) {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [openModal, setOpenModal] = React.useState(false);
@@ -32,6 +32,7 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
     const [newName, setNewName] = useState('');
     var [newLocation, setNewLocation] = useState('')
     const [consumptionGoalWaterPoint, setConsumptionGoalWaterPoint] = useState(0);
+    console.log("test", test)
 
 
     if (waterPointLocation === "toilet") {
@@ -272,6 +273,9 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
                 cardColor = 'white';
         }
 
+        if (test.hasOwnProperty(nameOfWaterPoint)) {
+            waterPointConsumption = test[nameOfWaterPoint]
+        }
         return (
             <Card sx={{ backgroundColor: cardColor, borderRadius: "10px", marginRight: 2, marginBottom: 2, maxWidth: 170, maxHeight: 650 }}>
                 <CardContent style={{ textAlign: 'center' }}>
