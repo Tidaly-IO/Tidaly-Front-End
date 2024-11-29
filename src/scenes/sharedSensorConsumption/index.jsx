@@ -5,7 +5,8 @@ import SelectButton from "../../components/SelectButton";
 import { tokens } from "../../theme";
 import { WaterDamage } from "@mui/icons-material";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { WebSocketContext } from '../../WebSocketContext';
 
 const SharedSensorConsumption = () => {
     const theme = useTheme();
@@ -19,6 +20,8 @@ const SharedSensorConsumption = () => {
     const [activityData, setActivityData] = useState([]);
     const [selectedView, setSelectedView] = useState('Année');
     const [haveSensor, setHaveSensor] = useState(true);
+    const { notificationReceived, setNotificationReceived } = useContext(WebSocketContext);
+    const { updateHub, setUpdateHub } = useContext(WebSocketContext);
 
     const getGlobalConsumption = async () => {
         const config = {
@@ -111,7 +114,15 @@ const SharedSensorConsumption = () => {
 
     useEffect(() => {
         getGlobalConsumption();
-    }, [selectedYear, selectedMonth, selectedView]);
+        if (notificationReceived) {
+            getGlobalConsumption();
+            setNotificationReceived(false);
+        }
+        if (updateHub) {
+            getGlobalConsumption();
+            setUpdateHub(false)
+        }
+    }, [selectedYear, selectedMonth, selectedView, notificationReceived, updateHub]);
 
     const handleYearChange = (year) => {
         setSelectedYear(Number(year));

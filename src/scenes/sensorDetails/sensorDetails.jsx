@@ -41,6 +41,7 @@ const SensorDetails = () => {
     const [checkSetup, setCheckSetup] = useState(false);
     const { updateHub, setUpdateHub } = useContext(WebSocketContext);
     const [test, setTest] = useState('');
+    const { notificationReceived, setNotificationReceived } = useContext(WebSocketContext);
 
 
     const handleSensorDetails = async (e) => {
@@ -429,8 +430,12 @@ const SensorDetails = () => {
             fetchData()
             setUpdateHub(false)
         }
+        if (notificationReceived) {
+            fetchData()
+            setNotificationReceived(false)
+        }
 
-    }, [updateHub]);
+    }, [updateHub, notificationReceived]);
 
     const SensorToUserList = () => {
         setShowUserList(!showUserList);
