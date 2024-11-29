@@ -206,13 +206,13 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
 
     if (typOfSensor === 'WaterMeter') {
         return (
-            <Card sx={{ backgroundColor: colors.tidaly[100], borderRadius: "10px", marginRight: 2, marginBottom: 2 }}>
+            <Card sx={{ backgroundColor: colors.tidaly[100], borderRadius: "10px", marginRight: 2, marginBottom: 2, maxWidth: 200 }}>
                 <CardContent style={{ textAlign: 'center' }}>
                     <Button onClick={SensorToUserList}>
                         <GasMeterIcon sx={{ fontSize: 50, mb: 1 }} />
                     </Button>
                     <Typography sx={{ fontSize: 12 }} color="text.secondary">
-                        Consommation actuelle
+                        Consommation initiale du compteur d’eau
                     </Typography>
                     <Typography sx={{ fontSize: 10 }} variant="body2" style={separatorStyle}>
                         {currentConsumption}
