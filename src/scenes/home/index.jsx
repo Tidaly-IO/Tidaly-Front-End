@@ -64,6 +64,7 @@ const Home = () => {
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [selectedView, setSelectedView] = useState('La semaine actuelle');
     const { notificationReceived, setNotificationReceived } = useContext(WebSocketContext);
+    const { updateHub, setUpdateHub } = useContext(WebSocketContext);
 
 
     useEffect(() => {
@@ -76,7 +77,11 @@ const Home = () => {
 
             setNotificationReceived(false);
         }
-    }, [selectedView, notificationReceived]);
+        if (updateHub) {
+            getConsumptionObjective();
+            setUpdateHub(false);
+        }
+    }, [selectedView, notificationReceived, updateHub]);
 
     const openModal = () => {
         setIsModalOpen(true);
