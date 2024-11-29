@@ -18,6 +18,7 @@ const SensorConsumption = () => {
     const [pieChartData, setPieChartData] = useState([]);
     const [activityData, setActivityData] = useState([]);
     const { notificationReceived, setNotificationReceived } = useContext(WebSocketContext);
+    const { updateHub, setUpdateHub } = useContext(WebSocketContext);
 
     const getConsumptionWaterPoint = async () => {
         const config = {
@@ -87,7 +88,11 @@ const SensorConsumption = () => {
             getConsumptionWaterPoint();
             setNotificationReceived(false);
         }
-    }, [notificationReceived]);
+        if (updateHub) {
+            getConsumptionWaterPoint();
+            setUpdateHub(false)
+        }
+    }, [notificationReceived, updateHub]);
 
     useEffect(() => {
         calculateConsumptionData();
