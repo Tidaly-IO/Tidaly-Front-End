@@ -47,6 +47,10 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
 
     const handleOpenModal = () => {
         setOpenModal(true);
+        setCurrentConsumption(currentConsumption)
+        setConsumptionGoal(consumptionGoal)
+        setCity(city)
+        setPostalCode(postalCode)
     };
 
     const handleCloseModal = () => {
@@ -55,6 +59,9 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
 
     const handleOpenModalSensor = () => {
         setOpenModalSensor(true);
+        setNewName(nameOfWaterPoint)
+        setNewLocation(waterPointLocation)
+        setConsumptionGoalWaterPoint(water_consumption_target)
     };
 
     const handleCloseModalSensor = () => {
@@ -103,6 +110,24 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
     };
 
     const handleSaveChanges = async () => {
+        if (modifyPostalCode.length === 0 || modifyCity.length === 0 || modifyConsumptionGoal.length === 0 || modifyCurrentConsumption.length === 0) {
+            alert("Veuillez remplir tous les champs.")
+            return
+        }
+        else if (isNaN(modifyConsumptionGoal) || isNaN(modifyCurrentConsumption)) {
+            alert("Les champs consommation actuelle et objectif de consommation doivent être des nombres.")
+            return
+        }
+        else if (isNaN(modifyPostalCode)) {
+            alert("Le code postal doit être un nombre.");
+            return
+        } else if (modifyPostalCode.length < 5) {
+            alert ("Le champ code postal doit avoir 5 chiffres.")
+            return
+        } else if (modifyCity.length < 3) {
+            alert("Le champ ville doit avoir au moins 3 caractères.")
+            return
+        }
         try {
             const config = {
                 headers: {
@@ -128,6 +153,18 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
     }
 
     const handleSaveChangesSensor = async () => {
+        if (!newName || !newLocation || !consumptionGoalWaterPoint) {
+            alert("Veuillez remplir tous les champs.")
+            return
+        }
+        if (newName.length < 4) {
+            alert("Le champ nom doit avoir au moins 4 caractères.")
+            return
+        }
+        if (isNaN(consumptionGoalWaterPoint)) {
+            alert("Le champs objectif de consommation doit être un nombre.")
+            return
+        }
         try {
             const config = {
                 headers: {
@@ -216,7 +253,6 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
                             <TextField
                                 label="Consommation actuelle"
                                 fullWidth
-                                type="number"
                                 name="currentConsumption"
                                 value={modifyCurrentConsumption}
                                 onChange={handleCurrentConsumption}
@@ -225,7 +261,6 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
                             <TextField
                                 label="Objectif de consommation"
                                 fullWidth
-                                type="number"
                                 name="consumptionGoal"
                                 value={modifyConsumptionGoal}
                                 onChange={handleConsumptionGoal}

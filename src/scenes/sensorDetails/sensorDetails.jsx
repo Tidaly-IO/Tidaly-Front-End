@@ -378,7 +378,7 @@ const SensorDetails = () => {
                 if (sensorsResults && sensorsResults.length > 0) {
 
                     const currentDate = new Date();
-                    const currentMonth = currentDate.getMonth() -1;
+                    const currentMonth = currentDate.getMonth();
                     const currentYear = currentDate.getFullYear();
 
                     const currentMonthConsumption = {};
