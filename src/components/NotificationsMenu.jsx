@@ -1,23 +1,32 @@
 import { IconButton, Popover, Box, Typography, Badge, useTheme } from "@mui/material";
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { tokens } from "../theme";
+import { WebSocketContext } from '../WebSocketContext';
 
 const NotificationsMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true); // État pour suivre les notifications non lues
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [notifications, setNotifications] = useState([
-    "Attention: Il ne vous reste que 12 jours avant la fin du mois et vous avez dépassé 80% de votre objectif de consommation",
-    "Nouvelle notification 2",
-    "Nouvelle notification 3",
-  ]);
+  const [notifications, setNotifications] = useState([]);
+  const { notifConsumption, setNotifConsumption } = useContext(WebSocketContext);
+
+  useEffect(() => {
+    if (notifConsumption) {
+      setNotifications((prevNotifications) => [
+        ...prevNotifications,
+        `Vous avez consommé ${notifConsumption} L aujourd'hui.`,
+      ]);
+      setNotifConsumption('');
+      setHasUnreadNotifications(true);
+    }
+  }, [notifConsumption]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setHasUnreadNotifications(false); // Marque les notifications comme lues
+    setHasUnreadNotifications(false);
   };
 
   const handleClose = () => {
@@ -25,7 +34,7 @@ const NotificationsMenu = () => {
   };
 
   const handleDelete = (index) => {
-    setNotifications(prevNotifications =>
+    setNotifications((prevNotifications) =>
       prevNotifications.filter((_, i) => i !== index)
     );
   };
@@ -39,7 +48,7 @@ const NotificationsMenu = () => {
         <Badge
           color="error"
           variant="dot"
-          invisible={!hasUnreadNotifications || notifications.length === 0} // Masque le point rouge si les notifications sont lues ou inexistantes
+          invisible={!hasUnreadNotifications || notifications.length === 0}
         >
           <NotificationsNoneOutlinedIcon />
         </Badge>
