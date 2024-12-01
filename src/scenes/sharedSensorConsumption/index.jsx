@@ -184,7 +184,7 @@ const SharedSensorConsumption = () => {
                                 series={[
                                     {
                                         data: [
-                                            { id: 0, value: totalConsumption, label: 'Consommation globale' },
+                                            { id: 0, value: totalConsumption - totalConsumptionSensors, label: 'Consommation globale' },
                                             { id: 1, value: totalConsumptionSensors, label: 'Consommation des capteurs' },
                                         ],
                                     },
