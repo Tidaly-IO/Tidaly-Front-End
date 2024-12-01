@@ -251,7 +251,7 @@ export default function SensorCard({ typOfSensor, currentConsumption, consumptio
                         </Typography>
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                             <TextField
-                                label="Consommation actuelle"
+                                label="Consommation initiale du compteur d’eau"
                                 fullWidth
                                 name="currentConsumption"
                                 value={modifyCurrentConsumption}

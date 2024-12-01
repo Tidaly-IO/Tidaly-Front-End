@@ -120,6 +120,7 @@ const Home = () => {
                 currentDay = 6
             console.log("currentDay", currentDay)
             const response = await axios.get('https://tidaly-api-backend.onrender.com/consumption/global?period=currentWeek', config);
+            console.log("res", response)
             const consumptionData = response.data.data[currentDay].value;
             setCurrentDayConsumption(consumptionData)
 
@@ -261,9 +262,9 @@ const Home = () => {
                     } else if (element.month === 10) {
                         setConsumptionObjectiveOctober(element.target);
                     } else if (element.month === 11) {
-                        setConsumptionObjectiveNovember(consumptionObjective);
+                        setConsumptionObjectiveNovember(element.target);
                     } else if (element.month === 12) {
-                        setConsumptionObjectiveDecember(element.target);
+                        setConsumptionObjectiveDecember(consumptionObjective);
                     }
                 });
 
@@ -283,7 +284,7 @@ const Home = () => {
 
                 let sum = 0;
                 for (let i = 0; i < response.data.length; i++) {
-                    if (response.data[i].month !== 11)
+                    if (response.data[i].month !== 12)
                         sum += response.data[i].target;
                 }
                 sum += consumptionObjective
@@ -291,7 +292,7 @@ const Home = () => {
                 setConsumptionObjectiveYear(sum)
                 console.log("sum", sum)
             } else {
-                setConsumptionObjectiveNovember(consumptionObjective)
+                setConsumptionObjectiveDecember(consumptionObjective)
                 setConsumptionObjectiveYear(consumptionObjective)
             }
 
@@ -357,7 +358,7 @@ const Home = () => {
                     consumptionObjectiveJanuary, consumptionObjectiveFebruary, consumptionObjectiveMarch,
                     consumptionObjectiveApril, consumptionObjectiveMay, consumptionObjectiveJune,
                     consumptionObjectiveJuly, consumptionObjectiveAugust, consumptionObjectiveSeptember,
-                    consumptionObjectiveOctober, consumptionObjective, consumptionObjectiveDecember
+                    consumptionObjectiveOctober, consumptionObjectiveNovember, consumptionObjective
                 ]
             }
             await axios.put('https://tidaly-api-backend.onrender.com/api/v1/target', data, config);

@@ -107,7 +107,7 @@ const WaterMeterSetup = () => {
                         </Typography>
                         <form onSubmit={handleWaterMeterSetup} style={{ width: '100%' }}>
                             <TextField
-                                label="Consommation actuelle"
+                                label="Consommation initiale du compteur d’eau"
                                 variant="outlined"
                                 margin="normal"
                                 type="number"

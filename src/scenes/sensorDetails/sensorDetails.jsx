@@ -532,7 +532,7 @@ const SensorDetails = () => {
                             {waterMeterAlreadySetup === false && checkSetup === true ? (
                                 <>
                                     <TextField
-                                        label="Consommation actuelle"
+                                        label="Consommation initiale du compteur d’eau"
                                         fullWidth
                                         name="currentConsumption"
                                         value={currentConsumption}
