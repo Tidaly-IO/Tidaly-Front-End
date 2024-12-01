@@ -6,6 +6,7 @@ import { tokens } from "../theme";
 
 const NotificationsMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true); // État pour suivre les notifications non lues
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [notifications, setNotifications] = useState([
@@ -16,6 +17,7 @@ const NotificationsMenu = () => {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    setHasUnreadNotifications(false); // Marque les notifications comme lues
   };
 
   const handleClose = () => {
@@ -32,11 +34,12 @@ const NotificationsMenu = () => {
 
   return (
     <>
+      {/* IconButton avec un Badge conditionnel */}
       <IconButton onClick={handleClick}>
         <Badge
           color="error"
           variant="dot"
-          invisible={notifications.length === 0} // Masque le point rouge si aucune notification
+          invisible={!hasUnreadNotifications || notifications.length === 0} // Masque le point rouge si les notifications sont lues ou inexistantes
         >
           <NotificationsNoneOutlinedIcon />
         </Badge>
