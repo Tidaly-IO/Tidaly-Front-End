@@ -1,4 +1,4 @@
-import { IconButton, Popover, Box, Typography, useTheme } from "@mui/material";
+import { IconButton, Popover, Box, Typography, Badge, useTheme } from "@mui/material";
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
@@ -33,7 +33,13 @@ const NotificationsMenu = () => {
   return (
     <>
       <IconButton onClick={handleClick}>
-        <NotificationsNoneOutlinedIcon />
+        <Badge
+          color="error"
+          variant="dot"
+          invisible={notifications.length === 0} // Masque le point rouge si aucune notification
+        >
+          <NotificationsNoneOutlinedIcon />
+        </Badge>
       </IconButton>
 
       <Popover
@@ -50,7 +56,7 @@ const NotificationsMenu = () => {
         }}
       >
         <Box p={2} maxWidth={300}>
-        <Typography variant="h6" sx={{ marginBottom: 2, fontWeight: 'bold', textAlign: 'center' }}>
+          <Typography variant="h6" sx={{ marginBottom: 2, fontWeight: 'bold', textAlign: 'center' }}>
             Mes notifications
           </Typography>
           {notifications.length > 0 ? (
