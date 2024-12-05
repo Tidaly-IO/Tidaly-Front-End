@@ -178,7 +178,6 @@ const Estimator = () => {
                     </Box>
                 </Box>
                 <Typography variant="body1" style={{ marginTop: '20px' }}>
-                    {result}
                 </Typography>
             </Box>
             <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
