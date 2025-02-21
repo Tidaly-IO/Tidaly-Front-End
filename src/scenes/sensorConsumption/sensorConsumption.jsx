@@ -13,7 +13,7 @@ const SensorConsumption = () => {
     const colors = tokens(theme.palette.mode);
 
     const [sensorData, setSensorData] = useState([]);
-    const [selectedYear, setSelectedYear] = useState(2024);
+    const [selectedYear, setSelectedYear] = useState(2025);
     const [selectedMonth, setSelectedMonth] = useState('');
     const [pieChartData, setPieChartData] = useState([]);
     const [activityData, setActivityData] = useState([]);

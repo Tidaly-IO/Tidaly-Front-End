@@ -13,7 +13,7 @@ const Statistics = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-    const [selectedYear, setSelectedYear] = useState('2024');
+    const [selectedYear, setSelectedYear] = useState('2025');
     const [selectedMonth, setSelectedMonth] = useState('Janvier');
     const [selectedView, setSelectedView] = useState('Année');
     const [data, setData] = useState([]);

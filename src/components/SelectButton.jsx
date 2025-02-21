@@ -9,7 +9,7 @@ import { useState } from 'react';
 const SelectButton = ({ onYearChange, onMonthChange, onViewChange }) => {
     const [view, setView] = useState('Année');
     const [month, setMonth] = useState('');
-    const [year, setYear] = useState('2024');
+    const [year, setYear] = useState('2025');
 
     const handleViewChange = (event) => {
         const newView = event.target.value;
@@ -91,6 +91,7 @@ const SelectButton = ({ onYearChange, onMonthChange, onViewChange }) => {
                         >
                             <MenuItem value="2023">2023</MenuItem>
                             <MenuItem value="2024">2024</MenuItem>
+                            <MenuItem value="2025">2025</MenuItem>
                         </Select>
                     </FormControl>
                 </Box>

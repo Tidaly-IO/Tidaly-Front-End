@@ -11,7 +11,7 @@ import { WebSocketContext } from '../../WebSocketContext';
 const SharedSensorConsumption = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const [selectedYear, setSelectedYear] = useState(2024);
+    const [selectedYear, setSelectedYear] = useState(2025);
     const [selectedMonth, setSelectedMonth] = useState('');
     const [totalConsumption, setTotalConsumption] = useState('');
     const [totalConsumptionSensors, setTotalConsumptionSensors] = useState('');
